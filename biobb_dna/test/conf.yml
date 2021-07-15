@@ -1,0 +1,98 @@
+working_dir_path: /tmp/biobb/unitests
+
+timeseries:
+  paths:
+    input_serfile_path: file:test_data_dir/template/shift.ser
+    output_file_path: timeseries_output.zip
+    ref_output_file_path: file:test_reference_dir/template/timeseries_output.zip
+  properties:
+    strand1: "GCAACGTGCTATGGAAGC"
+    strand2: "GCTTCCATAGCACGTTGC"
+    helpar_name: "shift"
+    usecols: [4,5,6]
+  
+averages:
+  paths:
+    input_serfile_path: file:test_data_dir/template/shift.ser
+    output_file_path: averages_test_output.zip
+    ref_output_file_path: file:test_reference_dir/template/averages_output.zip
+  properties:
+    strand1: "GCAACGTGCTATGGAAGC"
+    strand2: "GCTTCCATAGCACGTTGC"
+    helpar_name: "shift"
+    usecols: [4,5,6]
+
+bimodality:
+  paths:
+    input_filename: file:test_data_dir/template/bimod_input.zip
+    inner_file: file:series.shift.GTAC.csv
+    output_file_path: bimod_output.csv
+    ref_output_file_path: file:test_reference_dir/template/bimod_output.csv
+  properties:
+    confidence_level: 5.0
+    max_iter: 400
+    tol: 0.00001
+
+stiffness:
+  paths:
+    input_filename_shift: file:test_data_dir/template/csvinput/series.shift.GTAC.csv
+    input_filename_slide: file:test_data_dir/template/csvinput/series.slide.GTAC.csv
+    input_filename_rise: file:test_data_dir/template/csvinput/series.rise.GTAC.csv
+    input_filename_tilt: file:test_data_dir/template/csvinput/series.tilt.GTAC.csv
+    input_filename_roll: file:test_data_dir/template/csvinput/series.roll.GTAC.csv
+    input_filename_twist: file:test_data_dir/template/csvinput/series.twist.GTAC.csv
+    output_covariance_path: output_cov.csv
+    output_stiffness_path: output_stiffness.csv
+    output_fctes_path: output_fctes.csv
+    output_averages_path: output_averages.csv
+    ref_output_covariance_path: file:test_reference_dir/template/stiffness/output_cov.csv
+    ref_output_stiffness_path: file:test_reference_dir/template/stiffness/output_stiffness.csv
+    ref_output_fctes_path: file:test_reference_dir/template/stiffness/output_fctes.csv
+    ref_output_averages_path: file:test_reference_dir/template/stiffness/output_averages.csv
+  properties:
+    scaling: [1, 1, 1, 10.6, 10.6, 10.6]
+
+correlation:
+  paths:
+    input_filename_shift: file:test_data_dir/template/csvinput/series.shift.GTAC.csv
+    input_filename_slide: file:test_data_dir/template/csvinput/series.slide.GTAC.csv
+    input_filename_rise: file:test_data_dir/template/csvinput/series.rise.GTAC.csv
+    input_filename_tilt: file:test_data_dir/template/csvinput/series.tilt.GTAC.csv
+    input_filename_roll: file:test_data_dir/template/csvinput/series.roll.GTAC.csv
+    input_filename_twist: file:test_data_dir/template/csvinput/series.twist.GTAC.csv
+    output_file_path: output_corr.csv
+    ref_output_file_path: file:test_reference_dir/template/output_corr.csv
+  properties:
+
+template_container:
+  paths:
+    input_file_path1: file:test_data_dir/template/topology.top
+    input_file_path2: file:test_data_dir/template/trajectory.dcd
+    output_file_path: output.zip
+    ref_output_file_path: file:test_reference_dir/template/output.container.zip
+  properties:
+    boolean_property: false
+    remove_tmp: true
+    container_path: docker
+    container_image: mmbirb/zip:latest
+    container_volume_path: /tmp
+
+template_singularity:
+  paths:
+    input_file_path1: file:test_data_dir/template/topology.top
+    input_file_path2: file:test_data_dir/template/trajectory.dcd
+    output_file_path: output.zip
+    ref_output_file_path: file:test_reference_dir/template/output.container.zip
+  properties:
+    boolean_property: false
+    remove_tmp: false
+    executable_binary_property: /opt/conda/bin/zip
+    container_path: singularity
+    container_image: bioexcel-zip_container-master-latest.simg
+    container_volume_path: /tmp
+
+
+
+
+
+
