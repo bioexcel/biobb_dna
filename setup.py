@@ -25,6 +25,17 @@ setuptools.setup(
         'numpy>=1.20',
         'scikit-learn>=0.24'],
     python_requires='==3.7.*',
+    entry_points={
+        "console_scripts": [
+            "averages = biobb_dna.dna.averages:main",
+            "timeseries = biobb_dna.dna.timeseries:main",
+            "bimodality = biobb_dna.dna.bimodality:main",
+            "stiffness = biobb_dna.dna.stiffness:main",
+            "correlation = biobb_dna.dna.correlation:main",
+            "curves = biobb_dna.curvesplus.curves:main",
+            "canal = biobb_dna.curvesplus.canal:main"
+        ] 
+    },
     classifiers=(
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3.7",
