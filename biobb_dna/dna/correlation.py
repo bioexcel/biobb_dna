@@ -25,7 +25,7 @@ class HelParCorrelation():
         input_filename_tilt (str): Path to .csv file with data for helical parameter 'tilt'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_roll (str): Path to .csv file with data for helical parameter 'roll'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_twist (str): Path to .csv file with data for helical parameter 'twist'. File type: input. Accepted formats: csv (edam:format_3752).
-        output_file_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
+        output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         properties (dict):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -42,7 +42,7 @@ class HelParCorrelation():
                 input_filename_tilt='path/to/tilt.csv',
                 input_filename_roll='path/to/roll.csv',
                 input_filename_twist='path/to/twist.csv',
-                output_file_path='path/to/output/file.csv',
+                output_csv_path='path/to/output/file.csv',
                 properties=prop)
 
         * ontology:
@@ -54,7 +54,7 @@ class HelParCorrelation():
     def __init__(self, input_filename_shift, input_filename_slide,
                  input_filename_rise, input_filename_tilt,
                  input_filename_roll, input_filename_twist,
-                 output_file_path, properties=None, **kwargs) -> None:
+                 output_csv_path, properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -68,7 +68,7 @@ class HelParCorrelation():
                 'input_filename_twist': input_filename_twist
             },
             'out': {
-                'output_file_path': output_file_path,
+                'output_csv_path': output_csv_path,
             }
         }
 
@@ -97,7 +97,7 @@ class HelParCorrelation():
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['output_file_path']]
+            output_file_list = [self.io_dict['out']['output_csv_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
@@ -173,7 +173,7 @@ class HelParCorrelation():
         corr_matrix["twist"]["roll"] = corr_matrix["roll"]["twist"]
 
         # save csv data
-        corr_matrix.to_csv(Path(self.io_dict["out"]["output_file_path"]))
+        corr_matrix.to_csv(Path(self.io_dict["out"]["output_csv_path"]))
 
         return 0
 
@@ -216,7 +216,7 @@ def helparcorrelation(
         input_filename_shift: str, input_filename_slide: str,
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
-        output_file_path: str, properties: dict = None, **kwargs) -> int:
+        output_csv_path: str, properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParCorrelation <dna.correlation.HelParCorrelation>` class and
     execute the :meth:`launch() <dna.correlation.HelParCorrelation.launch>` method."""
 
@@ -227,7 +227,7 @@ def helparcorrelation(
         input_filename_tilt=input_filename_tilt,
         input_filename_roll=input_filename_roll,
         input_filename_twist=input_filename_twist,
-        output_file_path=output_file_path,
+        output_csv_path=output_csv_path,
         properties=properties, **kwargs).launch()
 
 
@@ -250,7 +250,7 @@ def main():
                                help='Path to csv file with inputs. Accepted formats: csv.')
     required_args.add_argument('--input_filename_twist', required=True,
                                help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--output_file_path', required=True,
+    required_args.add_argument('--output_csv_path', required=True,
                                help='Path to output file. Accepted formats: csv.')
 
     args = parser.parse_args()
@@ -264,7 +264,7 @@ def main():
         input_filename_tilt=args.input_filename_tilt,
         input_filename_roll=args.input_filename_roll,
         input_filename_twist=args.input_filename_twist,
-        output_file_path=args.output_file_path,
+        output_csv_path=args.output_csv_path,
         properties=properties)
 
 

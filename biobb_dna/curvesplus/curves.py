@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-"""Module containing the Template class and the command line interface."""
-import os
+"""Module containing the Curves class and the command line interface."""
+import zipfile
 import argparse
 import shutil
-from platform import system as platform_system
+from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -17,28 +17,30 @@ class Curves():
     | Wrapper for the Cur+ executable  that is part of the Curves+ software suite. 
 
     Args:        
-        filename (str): Trajectory or PDB input file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
-        ftop (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: top (edam:format_3881).
-        curves_exec (str): Path to Cur+ executable.
-        outfile (str): Filename for output .lis files. File type: output. `Sample file <https://urlto.sample>`_. Accepted formats: str.
-        properties (dic):
-            * **stdlib_path** (*path*) - (None) Path to Curves' standard library files for nucleotides.
+        input_struc_path (str): Trajectory or PDB input file. File type: input. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
+        input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. Accepted formats: top (edam:format_3881).
+        output_zip_path (str): Filename for .zip files containing Curve+ output. File type: output. Accepted formats: zip (edam:format_3987).
+        properties (dict):
+            * **stdlib_path** (*path*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
             * **itst** (*int*) - (0) Iteration start index.
             * **itnd** (*int*) - (0) Iteration end index.
             * **itdel** (*int*) - (1) Iteration delimiter. 
             * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end". 
             * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
+            * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
-            from biobb_template.template.template import template
+            from biobb_dna.curvesplus.curves import curves
             prop = { 
-                'boolean_property': True 
+                's1range': '1:12',
+                's2range': '24:13', 
             }
-            template(input_file_path1='/path/to/myTopology.top',
-                    output_file_path='/path/to/newCompressedFile.zip',
-                    input_file_path2='/path/to/mytrajectory.dcd',
-                    properties=prop)
+            curves(
+                input_struc_path='/path/to/structure/file.trj',
+                input_top_path='/path/to/topology.top',
+                output_zip_path='/path/to/output/root/filename',
+                properties=prop)
     Info:
         * wrapped_software:
             * name: Curves
@@ -49,18 +51,17 @@ class Curves():
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, curves_exec, filename, outfile, ftop=None,
-                 properties=None, **kwargs) -> None:
+    def __init__(self, input_struc_path, output_zip_path,
+                 input_top_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = {
             'in': {
-                'filename': filename,
-                'ftop': ftop,
-                'curves_exec': curves_exec
+                'input_struc_path': input_struc_path,
+                'input_top_path': input_top_path
             },
-            'out': {'outfile': outfile}
+            'out': {'output_zip_path': output_zip_path}
         }
 
         # Properties specific for BB
@@ -70,7 +71,8 @@ class Curves():
         self.ions = properties.get('ions', '.f.')
         self.s1range = properties.get('s1range', None)
         self.s2range = properties.get('s2range', None)
-        self.stdlib_path = properties.get('stdlib_path', None)
+        self.curves_exec = properties.get('curves_exec', 'Cur+')
+        self.stdlib_path = properties.get('stdlib_path', 'standard')
         self.properties = properties
 
         # Properties common in all BB
@@ -85,7 +87,7 @@ class Curves():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`Template <template.template.Template>` object."""
+        """Execute the :class:`Curves <biobb_dna.curvesplus.Curves>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -93,8 +95,6 @@ class Curves():
 
         # Check the properties
         fu.check_properties(self, self.properties)
-        if self.stdlib_path is None:
-            raise ValueError("property 'stdlib_path' must be specified!")
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
         if self.s2range is None:
@@ -102,7 +102,7 @@ class Curves():
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['outfile']]
+            output_file_list = [self.io_dict['out']['output_zip_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
@@ -112,31 +112,25 @@ class Curves():
         self.tmp_folder = fu.create_unique_dir()
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
-        shutil.copy(self.io_dict['in']['filename'], self.tmp_folder)
-        if self.io_dict['in']['ftop'] is not None:
-            shutil.copy(self.io_dict['in']['ftop'], self.tmp_folder)
+        shutil.copy(self.io_dict['in']['input_struc_path'], self.tmp_folder)
+        if self.io_dict['in']['input_top_path'] is not None:
+            shutil.copy(self.io_dict['in']['input_top_path'], self.tmp_folder)
 
-        # If platform is Darwin (MacOS) then set dylib environment variable
-        set_envvar = []
-        if platform_system().lower() == "darwin":
-            # AMBERHOME environment variable must exist
-            # since it was part of the installation
-            envpath = os.getenv("AMBERHOME")
-            set_envvar = [f"export DYLD_LIBRARY_PATH='{envpath}/lib';"]
-
-        # create intructions
+       # create intructions
         instructions = [
-            f"{self.io_dict['in']['curves_exec']} <<! ",
+            "export DYLD_LIBRARY_PATH=$AMBERHOME/lib; ",
+            f"{self.curves_exec} <<! ",
             "&inp",
-            f"  file={self.io_dict['in']['filename']},"]
-        if self.io_dict['in']['ftop'] is not None:
+            f"  file={self.io_dict['in']['input_struc_path']},"]
+        if self.io_dict['in']['input_top_path'] is not None:
             # add topology file if needed
             fu.log('Appending provided topology to command',
                    out_log, self.global_log)
-            instructions.append(f"  ftop={self.io_dict['in']['ftop']},")
+            instructions.append(
+                f"  ftop={self.io_dict['in']['input_top_path']},")
 
-        instructions = set_envvar + instructions + [
-            f"  lis={self.io_dict['out']['outfile']},",
+        instructions = instructions + [
+            f"  lis={Path(self.tmp_folder) / 'curves_output'},",
             f"  lib={self.stdlib_path},",
             f"  ions={self.ions},",
             f"  itst={self.itst},itnd={self.itnd},itdel={self.itdel},",
@@ -153,6 +147,16 @@ class Curves():
         returncode = cmd_wrapper.CmdWrapper(
             cmd, out_log, err_log, self.global_log).launch()
 
+        # create zipfile and wirte output inside
+        zf = zipfile.ZipFile(
+            Path(self.io_dict["out"]["output_zip_path"]),
+            "w")
+        for curves_outfile in Path(self.tmp_folder).glob("curves_output*"):
+            zf.write(
+                curves_outfile,
+                arcname=curves_outfile.name)
+        zf.close()
+
         # Remove temporary file(s)
         if self.remove_tmp:
             fu.rm(self.tmp_folder)
@@ -161,15 +165,14 @@ class Curves():
         return returncode
 
 
-def curves(curves_exec: str, filename: str, ftop: str, outfile: str = None, properties: dict = None, **kwargs) -> int:
+def curves(input_struc_path: str, input_top_path: str, output_zip_path: str = None, properties: dict = None, **kwargs) -> int:
     """Create :class:`Curves <biobb_dna.curvesplus.curves.Curves>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.curves.Curves.launch>` method."""
 
     return Curves(
-        curves_exec=curves_exec,
-        filename=filename,
-        ftop=ftop,
-        outfile=outfile,
+        input_struc_path=input_struc_path,
+        input_top_path=input_top_path,
+        output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
 
 
@@ -180,13 +183,11 @@ def main():
     parser.add_argument('--config', required=False, help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--curves_exec', required=True,
-                               help='Path to Curves+ executable.')
-    required_args.add_argument('--filename', required=True,
+    required_args.add_argument('--input_struc_path', required=True,
                                help='Trajectory or PDB input file. Accepted formats: trj, pdb.')
-    parser.add_argument('--ftop', required=False,
+    parser.add_argument('--input_top_path', required=False,
                         help='Topology file, needed along with .trj file (optional). Accepted formats: top.')
-    required_args.add_argument('--outfile', required=True,
+    required_args.add_argument('--output_zip_path', required=True,
                                help='Filename to give to output .lis files (without the .lis extension). Accepted formats: str.')
 
     args = parser.parse_args()
@@ -194,10 +195,9 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     curves(
-        curves_exec=args.curves_exec,
-        filename=args.filename,
-        ftop=args.ftop,
-        outfile=args.outfile,
+        input_struc_path=args.input_struc_path,
+        input_top_path=args.input_top_path,
+        output_zip_path=args.output_zip_path,
         properties=properties)
 
 

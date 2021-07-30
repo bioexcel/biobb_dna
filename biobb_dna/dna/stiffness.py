@@ -25,10 +25,10 @@ class HelParStiffness():
         input_filename_tilt (str): Path to .csv file with data for helical parameter 'tilt'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_roll (str): Path to .csv file with data for helical parameter 'roll'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_twist (str): Path to .csv file with data for helical parameter 'twist'. File type: input. Accepted formats: csv (edam:format_3752).
-        output_covariance_path (str): Path to directory where covariance output file is saved. File type: output. Accepted formats: csv (edam:format_3752).
-        output_stiffness_path (str): Path to directory where stiffness output file is saved. File type: output. Accepted formats: csv (edam:format_3752).
-        output_fctes_path (str): Path to directory where force constants output file is saved. File type: output. Accepted formats: csv (edam:format_3752).
-        output_averages_path (str): Path to directory where averages output file is saved. File type: output. Accepted formats: csv (edam:format_3752).
+        output_covariance_path (str): Path to directory where covariance output file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752).
+        output_stiffness_path (str): Path to directory where stiffness output file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752).
+        output_fctes_path (str): Path to directory where force constants output file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752).
+        output_averages_path (str): Path to directory where averages output file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752).
         properties (dict):
             * **KT** (*float*) - (0.592186827) Value of Boltzmann temperature factor.
             * **scaling** (*list*) - ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist.

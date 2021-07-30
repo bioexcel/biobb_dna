@@ -32,9 +32,9 @@ setuptools.setup(
             "bimodality = biobb_dna.dna.bimodality:main",
             "stiffness = biobb_dna.dna.stiffness:main",
             "correlation = biobb_dna.dna.correlation:main",
-            "curves = biobb_dna.curvesplus.curves:main",
-            "canal = biobb_dna.curvesplus.canal:main"
-        ] 
+            "curves_bb = biobb_dna.curvesplus.curves:main",
+            "canal_bb = biobb_dna.curvesplus.canal:main"
+        ]
     },
     classifiers=(
         "Development Status :: 3 - Alpha",

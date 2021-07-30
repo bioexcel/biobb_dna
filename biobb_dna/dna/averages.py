@@ -1,18 +1,17 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
+from biobb_dna.dna.loader import read_series
+from biobb_common.tools.file_utils import launchlogger
+from biobb_common.tools import file_utils as fu
+from biobb_common.configuration import settings
+import matplotlib.pyplot as plt
+import pandas as pd
+from pathlib import Path
+import zipfile
+import shutil
+import argparse
+
 
 """Module containing the HelParAverages class and the command line interface."""
-import argparse
-import shutil
-import zipfile
-from pathlib import Path
-
-import pandas as pd
-import matplotlib.pyplot as plt
-
-from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.dna.loader import read_series
 
 
 class HelParAverages():
@@ -21,8 +20,9 @@ class HelParAverages():
     | Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.
 
     Args:        
-        input_serfile_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
-        output_file_path (str): Path to .zip file where output is saved. File type: output. Accepted formats: zip (edam:format_3987).
+        input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
+        output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
+        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **strand2** (*str*) - Nucleic acid sequence for the second strand corresponding to the input .ser file.
@@ -39,13 +39,14 @@ class HelParAverages():
 
             prop = { 
                 'helpar_name': 'twist',
-                'usecols': [1,2,3,4,5],
-                 strand1: 'strand1',
-                strand2: 'strand2'
+                'usecols': [1,2],
+                'strand1': 'GCAT',
+                'strand2': 'ATGC'
             }
             HelParAverages(
-                input_serfile_path='/path/to/twist.ser',
-                output_file_path='/path/to/newCompressedFile.zip',
+                input_ser_path='/path/to/twist.ser',
+                output_csv_path='/path/to/table/output.csv',
+                output_jpg_path='/path/to/table/output.jpg',
                 properties=prop)
 
         * ontology:
@@ -54,17 +55,18 @@ class HelParAverages():
 
     """
 
-    def __init__(self, input_serfile_path, output_file_path,
+    def __init__(self, input_ser_path, output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = {
             'in': {
-                'input_serfile_path': input_serfile_path,
+                'input_ser_path': input_ser_path,
             },
             'out': {
-                'output_file_path': output_file_path,
+                'output_csv_path': output_csv_path,
+                'output_jpg_path': output_jpg_path
             }
         }
 
@@ -84,7 +86,7 @@ class HelParAverages():
                     "tilt", "roll", "twist",
                     "buckle", "opening", "propel",
                     "shear", "stagger", "stretch"]:
-                if hp in input_serfile_path:
+                if hp in input_ser_path:
                     helpar_name = hp
             if helpar_name is None:
                 raise ValueError("Helical Parameter name must be specified!")
@@ -113,7 +115,9 @@ class HelParAverages():
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['output_file_path']]
+            output_file_list = [
+                self.io_dict['out']['output_csv_path'],
+                self.io_dict['out']['output_jpg_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
@@ -124,30 +128,41 @@ class HelParAverages():
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_serfile_path'], self.tmp_folder)
+        shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
 
         # read input .ser file
         ser_data = read_series(
-            self.io_dict['in']['input_serfile_path'],
+            self.io_dict['in']['input_ser_path'],
             self.usecols)
+        # discard first and last column
+        ser_data = ser_data[ser_data.columns[1:-1]]
 
         hp_basepairs = ["shift", "slide", "rise", "tilt", "roll", "twist"]
         hp_singlebases = [
-            "buckle", "opening", "propel", "shear", "stagger", "stretch"]
+            "shear", "stagger", "stretch", "buckle", "opening", "propel"]
         if self.helpar_name in hp_basepairs:
             step = 1
+            if self.helpar_name in ["shift", "slide", "rise"]:
+                hp_unit = "Angstroms"
+            else:
+                hp_unit = "Degrees"
         elif self.helpar_name in hp_singlebases:
             step = 0
-        strand1 = self.strand1
-        strand2 = self.strand2[::-1]
+            if self.helpar_name in ["shear", "stagger", "stretch"]:
+                hp_unit = "Angstroms"
+            else:
+                hp_unit = "Degrees"
+
+        # discard first and last base(pairs) from strands
+        strand1 = self.strand1[1:-1]
+        strand2 = self.strand2[::-1][1:-1]
         xlabels = [
-            f"{strand1[col-step-1:col]}{strand2[col-step-1:col][::-1]}"
-            for col in ser_data.columns]
+            f"{strand1[i:i+1+step]}{strand2[i:i+1+step][::-1]}"
+            for i in range(len(ser_data.columns) - step)]
 
         # write output files for all selected bases
-        zf = zipfile.ZipFile(self.io_dict["out"]["output_file_path"], "w")
-        means = ser_data.mean(axis=0)
-        stds = ser_data.std(axis=0)
+        means = ser_data.mean(axis=0).iloc[:len(xlabels)]
+        stds = ser_data.std(axis=0).iloc[:len(xlabels)]
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -157,31 +172,27 @@ class HelParAverages():
             yerr=stds.to_numpy(),
             marker="o",
             capsize=5)
-        axs.set_xticks(ser_data.columns)
+        axs.set_xticks(means.index)
         axs.set_xticklabels(xlabels, rotation=90)
-        axs.set_xlabel(f"Sequence Base {'Pair' if step==1 else ''}")
-        axs.set_ylabel(f"Average value for parameter {self.helpar_name}")
+        axs.set_xlabel(f"Sequence Base Pair {'Step' if step==1 else ''}")
+        axs.set_ylabel(f"{self.helpar_name} ({hp_unit})")
+        axs.set_title(
+            f"Base Pair {'Step' if step==1 else ''} "
+            f"Helical Parameter: {self.helpar_name}")
         fig.savefig(
-            Path(self.tmp_folder) / f"avg_{self.helpar_name}.jpg",
+            self.io_dict['out']['output_jpg_path'],
             format="jpg")
-        zf.write(
-            Path(self.tmp_folder) / f"avg_{self.helpar_name}.jpg",
-            arcname=f"avg_{self.helpar_name}.jpg")
 
         # save table
         dataset = pd.DataFrame({
-            "nucleotide_number": means.index,
+            f"Base Pair {'Step' if step==1 else ''}": xlabels,
             "mean": means.to_numpy(),
             "std": stds.to_numpy()})
         dataset.to_csv(
-            Path(self.tmp_folder) / f"avg_{self.helpar_name}.csv",
+            self.io_dict['out']['output_csv_path'],
             index=False)
-        zf.write(
-            Path(self.tmp_folder) / f"avg_{self.helpar_name}.csv",
-            arcname=f"avg_{self.helpar_name}.csv")
 
         plt.close()
-        zf.close()
 
         # Remove temporary file(s)
         if self.remove_tmp:
@@ -192,13 +203,14 @@ class HelParAverages():
 
 
 def helparaverages(
-        input_serfile_path: str, output_file_path: str,
+        input_ser_path: str, output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParAverages <dna.averages.HelParAverages>` class and
     execute the :meth:`launch() <dna.averages.HelParAverages.launch>` method."""
 
-    return HelParAverages(input_serfile_path=input_serfile_path,
-                          output_file_path=output_file_path,
+    return HelParAverages(input_ser_path=input_ser_path,
+                          output_csv_path=output_csv_path,
+                          output_jpg_path=output_jpg_path,
                           properties=properties, **kwargs).launch()
 
 
@@ -209,18 +221,21 @@ def main():
     parser.add_argument('--config', required=False, help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_serfile_path', required=True,
+    required_args.add_argument('--input_ser_path', required=True,
                                help='Helical parameter input ser file path. Accepted formats: ser.')
-    required_args.add_argument('--output_file_path', required=True,
-                               help='Path to output zip file.')
+    required_args.add_argument('--output_csv_path', required=True,
+                               help='Path to output csv file. Accepted formats: csv.')
+    required_args.add_argument('--output_jpg_path', required=True,
+                               help='Path to output jpg file. Accepted formats: jpg.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     helparaverages(
-        input_serfile_path=args.input_serfile_path,
-        output_file_path=args.output_file_path,
+        input_ser_path=args.input_ser_path,
+        output_csv_path=args.output_csv_path,
+        output_jpg_path=args.output_jpg_path,
         properties=properties)
 
 

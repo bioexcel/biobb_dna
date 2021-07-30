@@ -21,8 +21,8 @@ class HelParTimeSeries():
     | Load .ser file for a given helical parameter, read and analyze each column corresponding to a base. Created time series and histogram plots for each base.
 
     Args:
-        input_serfile_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
-        output_file_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
+        input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
+        output_zip_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
         properties (dict):
             * **strand1** (*str*) - Nucleic acid sequence for the first strand (5'->3') corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **strand2** (*str*) - Nucleic acid sequence for the second strand (3'->5') corresponding to the input .ser file.
@@ -45,8 +45,8 @@ class HelParTimeSeries():
                 'strand2': 'GCTTCCATAGCACGTTGC'
             }
             HelParTimeSeries(
-                input_serfile_path='/path/to/twist.ser',
-                output_file_path='/path/to/output/file.zip'
+                input_ser_path='/path/to/twist.ser',
+                output_zip_path='/path/to/output/file.zip'
                 properties=prop)
 
         * ontology:
@@ -55,17 +55,17 @@ class HelParTimeSeries():
 
     """
 
-    def __init__(self, input_serfile_path, output_file_path,
+    def __init__(self, input_ser_path, output_zip_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = {
             'in': {
-                'input_serfile_path': input_serfile_path,
+                'input_ser_path': input_ser_path,
             },
             'out': {
-                'output_file_path': output_file_path
+                'output_zip_path': output_zip_path
             }
         }
 
@@ -86,7 +86,7 @@ class HelParTimeSeries():
                     "tilt", "roll", "twist",
                     "buckle", "opening", "propel",
                     "shear", "stagger", "stretch"]:
-                if hp in input_serfile_path:
+                if hp in input_ser_path:
                     helpar_name = hp
             if helpar_name is None:
                 raise ValueError("Helical Parameter name must be specified!")
@@ -115,7 +115,7 @@ class HelParTimeSeries():
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['output_file_path']]
+            output_file_list = [self.io_dict['out']['output_zip_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
@@ -125,47 +125,78 @@ class HelParTimeSeries():
         self.tmp_folder = fu.create_unique_dir(prefix="timeseries_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
-        # Copy input_serfile_path to temporary folder
-        shutil.copy(self.io_dict['in']['input_serfile_path'], self.tmp_folder)
+        # Copy input_ser_path to temporary folder
+        shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
 
-        # read input .ser file and create dataframe
-        ser_data = read_series(
-            self.io_dict['in']['input_serfile_path'], self.usecols)
         hp_basepairs = ["shift", "slide", "rise", "tilt", "roll", "twist"]
         hp_singlebases = [
             "buckle", "opening", "propel", "shear", "stagger", "stretch"]
         if self.helpar_name in hp_basepairs:
             step = 1
+            if self.helpar_name in ["shift", "slide", "rise"]:
+                hp_unit = "Angstroms"
+            else:
+                hp_unit = "Degrees"
         elif self.helpar_name in hp_singlebases:
             step = 0
+            if self.helpar_name in ["shear", "stagger", "stretch"]:
+                hp_unit = "Angstroms"
+            else:
+                hp_unit = "Degrees"
+
+        # discard first and last base(pairs) from strands
         strand1 = self.strand1
         strand2 = self.strand2[::-1]
-        ser_data.columns = [
-            f"{strand1[col-step-1:col]}{strand2[col-step-1:col][::-1]}"
-            for col in ser_data.columns]
+
+        # read input .ser file and create dataframe
+        ser_data = read_series(
+            self.io_dict['in']['input_ser_path'])
+        if self.usecols is None:
+            # discard first and last column
+            ser_data = ser_data[ser_data.columns[1:-1]]
+            strand1 = strand1[1:-1]
+            strand2 = strand2[1:-1]
+            subunits = [
+                f"{strand1[i:i+1+step]}{strand2[i:i+1+step][::-1]}"
+                for i in range(len(ser_data.columns) - step)]
+            ser_data = ser_data[ser_data.columns[:len(subunits)]]
+            ser_data.columns = subunits
+        else:
+            ser_data = ser_data[self.usecols]
+            subunits = [
+                f"{strand1[i:i+1+step]}{strand2[i:i+1+step][::-1]}"
+                for i in [c-step for c in self.usecols]]
+            ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)
         zf = zipfile.ZipFile(
-            Path(self.io_dict["out"]["output_file_path"]), "w")
+            Path(self.io_dict["out"]["output_zip_path"]), "w")
         for col in ser_data.columns:
+            # unstack columns to prevent errors from repeated base pairs
+            column_data = (
+                ser_data[[col]]
+                .unstack()
+                .dropna()
+                .reset_index(drop=True))
+            column_data.name = col
             fu.log(f"Computing base number {col}...")
 
             # column series
-            series_colfn = f"series.{self.helpar_name}.{col}"
-            ser_data.to_csv(
-                Path(self.tmp_folder) / f"{series_colfn}.csv", columns=[col])
+            series_colfn = f"series_{self.helpar_name}_{col}"
+            column_data.to_csv(
+                Path(self.tmp_folder) / f"{series_colfn}.csv")
             # save table
             zf.write(
                 Path(self.tmp_folder) / f"{series_colfn}.csv", arcname=f"{series_colfn}.csv")
 
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
-            reduced_data = ser_data[col].loc[::self.stride]
+            reduced_data = column_data.iloc[::self.stride]
             axs.plot(reduced_data.index, reduced_data.to_numpy())
             axs.set_xlabel("Time (Snapshots)")
-            axs.set_ylabel(self.helpar_name)
+            axs.set_ylabel(f"{self.helpar_name} ({hp_unit})")
             axs.set_title(
                 f"Helical Parameter vs Time: {self.helpar_name} "
-                f"(base {col})")
+                f"(base pair {'step' if step==1 else ''} {col})")
             fig.savefig(
                 Path(self.tmp_folder) / f"{series_colfn}.jpg", format="jpg")
             # save plot
@@ -174,10 +205,10 @@ class HelParTimeSeries():
             plt.close()
 
             # columns histogram
-            hist_colfn = f"hist.{self.helpar_name}.{col}"
+            hist_colfn = f"hist_{self.helpar_name}_{col}"
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
-            ybins, x, _ = axs.hist(ser_data[col], bins=self.bins)
-            pd.DataFrame({"bins": x[:-1], "value": ybins}).to_csv(
+            ybins, x, _ = axs.hist(column_data, bins=self.bins)
+            pd.DataFrame({self.helpar_name: x[:-1], "density": ybins}).to_csv(
                 Path(self.tmp_folder) / f"{hist_colfn}.csv",
                 index=False)
             # save table
@@ -186,6 +217,7 @@ class HelParTimeSeries():
                 arcname=f"{hist_colfn}.csv")
 
             axs.set_ylabel("density")
+            axs.set_xlabel(f"{self.helpar_name} ({hp_unit})")
             fig.savefig(
                 Path(self.tmp_folder) / f"{hist_colfn}.jpg",
                 format="jpg")
@@ -205,14 +237,14 @@ class HelParTimeSeries():
 
 
 def helpartimeseries(
-        input_serfile_path: str, output_file_path: str,
+        input_ser_path: str, output_zip_path: str,
         properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParTimeSeries <dna.timeseries.HelParTimeSeries>` class and
     execute the :meth:`launch() <dna.timeseries.HelParTimeSeries.launch>` method."""
 
     return HelParTimeSeries(
-        input_serfile_path=input_serfile_path,
-        output_file_path=output_file_path,
+        input_ser_path=input_ser_path,
+        output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
 
 
@@ -224,9 +256,9 @@ def main():
                         help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_serfile_path', required=True,
+    required_args.add_argument('--input_ser_path', required=True,
                                help='Helical parameter input ser file path. Accepted formats: ser.')
-    required_args.add_argument('--output_file_path', required=True,
+    required_args.add_argument('--output_zip_path', required=True,
                                help='Path to output directory.')
 
     args = parser.parse_args()
@@ -234,8 +266,8 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     helpartimeseries(
-        input_serfile_path=args.input_serfile_path,
-        output_file_path=args.output_file_path,
+        input_ser_path=args.input_ser_path,
+        output_zip_path=args.output_zip_path,
         properties=properties)
 
 
