@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from biobb_dna.dna import constants
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -27,7 +27,7 @@ class HelParTimeSeries():
             * **strand1** (*str*) - Nucleic acid sequence for the first strand (5'->3') corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **strand2** (*str*) - Nucleic acid sequence for the second strand (3'->5') corresponding to the input .ser file.
             * **bins** (*int* or *sequence* or *str*) - Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
-            * **helpar_name** (*str*) - (helical_parameter) helical parameter name.
+            * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
             * **usecols** (*list*) - (None) list of column indices to use.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -80,17 +80,32 @@ class HelParTimeSeries():
         helpar_name = properties.get(
             "helpar_name", None)
 
-        if helpar_name is None:
-            for hp in [
-                    "shift", "slide", "rise",
-                    "tilt", "roll", "twist",
-                    "buckle", "opening", "propel",
-                    "shear", "stagger", "stretch"]:
-                if hp in input_ser_path:
-                    helpar_name = hp
-            if helpar_name is None:
-                raise ValueError("Helical Parameter name must be specified!")
         self.helpar_name = helpar_name
+        # get helical parameter from filename if not specified
+        if self.helpar_name is None:
+            for hp in constants.helical_parameters:
+                if hp.lower() in Path(input_ser_path).name.lower():
+                    self.helpar_name = hp
+            if self.helpar_name is None:
+                raise ValueError(
+                    "Helical parameter name can't be inferred from file, "
+                    "so it must be specified!")
+
+            # get base length and unit from helical parameter name
+            if self.helpar_name.lower() in constants.hp_basepairs:
+                self.baselen = 1
+                if self.helpar_name in ["roll", "tilt", "twist"]:
+                    self.hp_unit = "Degrees"
+                else:
+                    self.hp_unit = "Angstroms"
+            elif self.helpar_name.lower() in constants.hp_singlebases:
+                self.baselen = 0
+                if self.helpar_name in [
+                        "buckle", "opening", "propel",
+                        "inclin", "tip"]:
+                    self.hp_unit = "Degrees"
+                else:
+                    self.hp_unit = "Angstroms"
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -128,22 +143,6 @@ class HelParTimeSeries():
         # Copy input_ser_path to temporary folder
         shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
 
-        hp_basepairs = ["shift", "slide", "rise", "tilt", "roll", "twist"]
-        hp_singlebases = [
-            "buckle", "opening", "propel", "shear", "stagger", "stretch"]
-        if self.helpar_name in hp_basepairs:
-            step = 1
-            if self.helpar_name in ["shift", "slide", "rise"]:
-                hp_unit = "Angstroms"
-            else:
-                hp_unit = "Degrees"
-        elif self.helpar_name in hp_singlebases:
-            step = 0
-            if self.helpar_name in ["shear", "stagger", "stretch"]:
-                hp_unit = "Angstroms"
-            else:
-                hp_unit = "Degrees"
-
         # discard first and last base(pairs) from strands
         strand1 = self.strand1
         strand2 = self.strand2[::-1]
@@ -157,15 +156,15 @@ class HelParTimeSeries():
             strand1 = strand1[1:-1]
             strand2 = strand2[1:-1]
             subunits = [
-                f"{strand1[i:i+1+step]}{strand2[i:i+1+step][::-1]}"
-                for i in range(len(ser_data.columns) - step)]
+                f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
+                for i in range(len(ser_data.columns) - self.baselen)]
             ser_data = ser_data[ser_data.columns[:len(subunits)]]
             ser_data.columns = subunits
         else:
             ser_data = ser_data[self.usecols]
             subunits = [
-                f"{strand1[i:i+1+step]}{strand2[i:i+1+step][::-1]}"
-                for i in [c-step for c in self.usecols]]
+                f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
+                for i in [c-self.baselen for c in self.usecols]]
             ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)
@@ -193,10 +192,11 @@ class HelParTimeSeries():
             reduced_data = column_data.iloc[::self.stride]
             axs.plot(reduced_data.index, reduced_data.to_numpy())
             axs.set_xlabel("Time (Snapshots)")
-            axs.set_ylabel(f"{self.helpar_name} ({hp_unit})")
+            axs.set_ylabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
             axs.set_title(
-                f"Helical Parameter vs Time: {self.helpar_name} "
-                f"(base pair {'step' if step==1 else ''} {col})")
+                f"Helical Parameter vs Time: {self.helpar_name.capitalize()} "
+                "(base pair "
+                f"{'step' if self.baselen==1 else ''} {col})")
             fig.savefig(
                 Path(self.tmp_folder) / f"{series_colfn}.jpg", format="jpg")
             # save plot
@@ -216,8 +216,8 @@ class HelParTimeSeries():
                 Path(self.tmp_folder) / f"{hist_colfn}.csv",
                 arcname=f"{hist_colfn}.csv")
 
-            axs.set_ylabel("density")
-            axs.set_xlabel(f"{self.helpar_name} ({hp_unit})")
+            axs.set_ylabel("Density")
+            axs.set_xlabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
             fig.savefig(
                 Path(self.tmp_folder) / f"{hist_colfn}.jpg",
                 format="jpg")

@@ -118,6 +118,7 @@ class Curves():
 
        # create intructions
         instructions = [
+            "export DYLD_LIBRARY_PATH=$AMBERHOME/lib; ",
             f"{self.curves_exec} <<! ",
             "&inp",
             f"  file={self.io_dict['in']['input_struc_path']},"]
