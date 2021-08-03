@@ -115,7 +115,7 @@ class Canal():
                 return 0
 
         # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir()
+        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # create intructions

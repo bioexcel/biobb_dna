@@ -103,6 +103,10 @@ class HelParCorrelation():
                        self.step, out_log, self.global_log)
                 return 0
 
+        # Creating temporary folder
+        self.tmp_folder = fu.create_unique_dir(prefix="correlation_")
+        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+
         # read input
         shift = load_data(self.io_dict["in"]["input_filename_shift"])
         slide = load_data(self.io_dict["in"]["input_filename_slide"])
@@ -174,6 +178,11 @@ class HelParCorrelation():
 
         # save csv data
         corr_matrix.to_csv(Path(self.io_dict["out"]["output_csv_path"]))
+
+        # Remove temporary file(s)
+        if self.remove_tmp:
+            fu.rm(self.tmp_folder)
+            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
 
         return 0
 

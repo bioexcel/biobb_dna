@@ -124,6 +124,10 @@ class HelParStiffness():
                        self.step, out_log, self.global_log)
                 return 0
 
+        # Creating temporary folder
+        self.tmp_folder = fu.create_unique_dir(prefix="stiffness_")
+        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+
         # read input
         shift = load_data(
             self.io_dict["in"]["input_filename_shift"])
@@ -175,7 +179,12 @@ class HelParStiffness():
         cov_df.to_csv(Path(self.io_dict["out"]["output_covariance_path"]))
         stiff_df.to_csv(Path(self.io_dict["out"]["output_stiffness_path"]))
         stiff_diag_df.to_csv(Path(self.io_dict["out"]["output_fctes_path"]))
-        avg_df.to_csv(Path(self.io_dict["out"]["output_averages_path"]))
+        # avg_df.to_csv(Path(self.io_dict["out"]["output_averages_path"]))
+
+        # Remove temporary file(s)
+        if self.remove_tmp:
+            fu.rm(self.tmp_folder)
+            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
 
         return 0
 
