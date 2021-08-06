@@ -130,27 +130,27 @@ class Puckering():
         phaseW = self.fix_angles(phaseW)
 
         # calculate difference between epsil and zeta parameters
-        Npop, Epop, Wpop, Spop = self.check_puckering(
+        Npop, Epop, Wpop, Spop, xlabels = self.check_puckering(
             self.strand1, self.strand2, phaseC, phaseW)
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         axs.bar(
-            Npop.index,
+            range(len(xlabels)),
             Npop,
             label="North")
         axs.bar(
-            Epop.index,
+            range(len(xlabels)),
             Epop,
             bottom=Npop,
             label="East")
         axs.bar(
-            Spop.index,
+            range(len(xlabels)),
             Spop,
             bottom=Npop+Epop,
             label="South")
         axs.bar(
-            Wpop.index,
+            range(len(xlabels)),
             Wpop,
             bottom=Npop+Epop+Spop,
             label="West")
@@ -161,7 +161,8 @@ class Puckering():
             color='white',
             label=None)
         axs.legend()
-        axs.set_xticklabels(Npop.index, rotation=90)
+        axs.set_xticks(range(len(xlabels)))
+        axs.set_xticklabels(xlabels, rotation=90)
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Puckering (%)")
         axs.set_title("Nucleotide parameter: Puckering")
@@ -171,11 +172,14 @@ class Puckering():
 
         # save table
         populations = pd.DataFrame({
+            "Nucleotide": xlabels,
             "North": Npop,
             "East": Epop,
             "West": Wpop,
             "South": Spop})
-        populations.to_csv(self.io_dict['out']['output_csv_path'])
+        populations.to_csv(
+            self.io_dict['out']['output_csv_path'],
+            index=False)
 
         plt.close()
 
@@ -198,7 +202,7 @@ class Puckering():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        columns = labelsW + ['-'] + labelsC
+        xlabels = labelsW + ['-'] + labelsC
 
         separator_df = pd.DataFrame({"-": np.nan}, index=range(1, len(phaseC)))
         phase = pd.concat([
@@ -206,13 +210,13 @@ class Puckering():
             separator_df,
             phaseC[phaseC.columns[::-1]]],
             axis=1)
-        phase.columns = columns
+        # phase.columns = columns
 
         Npop = np.logical_or(phase > 315, phase < 45).mean() * 100
         Epop = np.logical_and(phase > 45, phase < 135).mean() * 100
         Wpop = np.logical_and(phase > 225, phase < 315).mean() * 100
         Spop = np.logical_and(phase > 135, phase < 225).mean() * 100
-        return Npop, Epop, Wpop, Spop
+        return Npop, Epop, Wpop, Spop, xlabels
 
     def fix_angles(self, dataset):
         values = np.where(dataset < 0, dataset + 360, dataset)
@@ -238,7 +242,7 @@ def puckering(
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
+    parser = argparse.ArgumentParser(description='Calculate North/East/West/South distribution of sugar puckering backbone torsions.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 

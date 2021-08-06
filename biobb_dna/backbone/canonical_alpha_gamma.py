@@ -142,7 +142,7 @@ class CanonicalAG():
         gammaW = self.fix_angles(gammaW)
 
         # calculate difference between epsil and zeta parameters
-        canonical_populations = self.check_alpha_gamma(
+        canonical_populations, xlabels = self.check_alpha_gamma(
             self.strand1,
             self.strand2,
             alphaC,
@@ -153,11 +153,11 @@ class CanonicalAG():
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         axs.bar(
-            canonical_populations.index,
+            range(len(xlabels)),
             canonical_populations,
             label="canonical alpha/gamma")
         axs.bar(
-            canonical_populations.index,
+            range(len(xlabels)),
             100 - canonical_populations,
             bottom=canonical_populations,
             label=None)
@@ -168,7 +168,8 @@ class CanonicalAG():
             color='white',
             label=None)
         axs.legend()
-        axs.set_xticklabels(canonical_populations.index, rotation=90)
+        axs.set_xticks(range(len(xlabels)))
+        axs.set_xticklabels(xlabels, rotation=90)
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Canonical Alpha-Gamma (%)")
         axs.set_title("Nucleotide parameter: Canonical Alpha-Gamma")
@@ -178,7 +179,12 @@ class CanonicalAG():
 
         # save table
         canonical_populations.name = "Canonical alpha/gamma"
-        canonical_populations.to_csv(self.io_dict['out']['output_csv_path'])
+        ag_populations_df = pd.DataFrame({
+            "Nucleotide": xlabels,
+            "Canonical alpha/gamma": canonical_populations})
+        ag_populations_df.to_csv(
+            self.io_dict['out']['output_csv_path'],
+            index=False)
 
         plt.close()
 
@@ -201,7 +207,7 @@ class CanonicalAG():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        columns = labelsW + ['-'] + labelsC
+        xlabels = labelsW + ['-'] + labelsC
 
         separator_df = pd.DataFrame({"-": np.nan}, index=range(len(gammaW)))
         gamma = pd.concat([
@@ -209,20 +215,18 @@ class CanonicalAG():
             separator_df,
             gammaC[gammaC.columns[::-1]]],
             axis=1)
-        gamma.columns = columns
         alpha = pd.concat([
             alphaW,
             separator_df,
             alphaC[alphaC.columns[::-1]]],
             axis=1)
-        alpha.columns = columns
 
         alpha_filter = np.logical_and(alpha > 240, alpha < 360)
         gamma_filter = np.logical_and(gamma > 0, gamma < 120)
         canonical_alpha_gamma = np.logical_and(
             alpha_filter, gamma_filter).mean() * 100
 
-        return canonical_alpha_gamma
+        return canonical_alpha_gamma, xlabels
 
     def fix_angles(self, dataset):
         values = np.where(dataset < 0, dataset + 360, dataset)
@@ -251,7 +255,7 @@ def canonicalag(
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
+    parser = argparse.ArgumentParser(description='Calculate Canonical Alpha/Gamma distributions.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 

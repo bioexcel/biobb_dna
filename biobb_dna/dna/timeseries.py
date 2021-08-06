@@ -18,7 +18,7 @@ from biobb_dna.dna.loader import read_series
 class HelParTimeSeries():
     """
     | biobb_dna HelParTimeSeries
-    | Load .ser file for a given helical parameter, read and analyze each column corresponding to a base. Created time series and histogram plots for each base.
+    | Created time series and histogram plots for each base pair from a helical parameter series file.
 
     Args:
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
@@ -29,7 +29,7 @@ class HelParTimeSeries():
             * **bins** (*int* or *sequence* or *str*) - Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **usecols** (*list*) - (None) list of column indices to use.
+            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -40,11 +40,11 @@ class HelParTimeSeries():
 
             prop = {
                 'helpar_name': 'twist',
-                'usecols': [1,2,3,4,5],
+                'seqpos': [1,2,3,4,5],
                 'strand1': 'GCAACGTGCTATGGAAGC',
                 'strand2': 'GCTTCCATAGCACGTTGC'
             }
-            HelParTimeSeries(
+            helpartimeseries(
                 input_ser_path='/path/to/twist.ser',
                 output_zip_path='/path/to/output/file.zip'
                 properties=prop)
@@ -75,8 +75,8 @@ class HelParTimeSeries():
         self.bins = properties.get("bins", "auto")
         self.stride = properties.get(
             "stride", 10)
-        self.usecols = properties.get(
-            "usecols", None)
+        self.seqpos = properties.get(
+            "seqpos", None)
         helpar_name = properties.get(
             "helpar_name", None)
 
@@ -143,29 +143,32 @@ class HelParTimeSeries():
         # Copy input_ser_path to temporary folder
         shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
 
-        # discard first and last base(pairs) from strands
-        strand1 = self.strand1
-        strand2 = self.strand2[::-1]
-
-        # read input .ser file and create dataframe
+        # read input .ser file
         ser_data = read_series(
-            self.io_dict['in']['input_ser_path'])
-        if self.usecols is None:
-            # discard first and last column
+            self.io_dict['in']['input_ser_path'],
+            usecols=self.seqpos)
+        if self.seqpos is None:
             ser_data = ser_data[ser_data.columns[1:-1]]
-            strand1 = strand1[1:-1]
-            strand2 = strand2[1:-1]
+            # discard first and last base(pairs) from strands
+            strand1 = self.strand1[1:]
+            strand2 = self.strand2[::-1][1:]
             subunits = [
                 f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
-                for i in range(len(ser_data.columns) - self.baselen)]
-            ser_data = ser_data[ser_data.columns[:len(subunits)]]
-            ser_data.columns = subunits
+                for i in range(len(ser_data.columns))]
         else:
-            ser_data = ser_data[self.usecols]
+            strand1 = self.strand1
+            strand2 = self.strand2[::-1]
             subunits = [
                 f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
-                for i in [c-self.baselen for c in self.usecols]]
-            ser_data.columns = subunits
+                for i in [c for c in self.seqpos]]
+        ser_data.columns = subunits
+
+        # rename duplicated subunits
+        while any(ser_data.columns.duplicated()):
+            ser_data.columns = [
+                name if not duplicated else name + "_dup"
+                for duplicated, name
+                in zip(ser_data.columns.duplicated(), ser_data.columns)]
 
         # write output files for all selected bases (one per column)
         zf = zipfile.ZipFile(
@@ -250,7 +253,7 @@ def helpartimeseries(
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
+    parser = argparse.ArgumentParser(description='Created time series and histogram plots for each base pair from a helical parameter series file.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False,
                         help='Configuration file')

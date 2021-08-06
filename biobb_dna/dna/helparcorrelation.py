@@ -2,10 +2,10 @@
 
 """Module containing the HelParCorrelation class and the command line interface."""
 import argparse
-from pathlib import Path
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -26,6 +26,7 @@ class HelParCorrelation():
         input_filename_roll (str): Path to .csv file with data for helical parameter 'roll'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_twist (str): Path to .csv file with data for helical parameter 'twist'. File type: input. Accepted formats: csv (edam:format_3752).
         output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
+        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -33,9 +34,9 @@ class HelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.correlation import HelParCorrelation
+            from biobb_dna.dna.helparcorrelation import HelParCorrelation
 
-            HelParCorrelation(
+            helparcorrelation(
                 input_filename_shift='path/to/shift.csv',
                 input_filename_slide='path/to/slide.csv',
                 input_filename_rise='path/to/rise.csv',
@@ -51,10 +52,12 @@ class HelParCorrelation():
 
     """
 
-    def __init__(self, input_filename_shift, input_filename_slide,
-                 input_filename_rise, input_filename_tilt,
-                 input_filename_roll, input_filename_twist,
-                 output_csv_path, properties=None, **kwargs) -> None:
+    def __init__(
+            self, input_filename_shift, input_filename_slide,
+            input_filename_rise, input_filename_tilt,
+            input_filename_roll, input_filename_twist,
+            output_csv_path, output_jpg_path,
+            properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -69,10 +72,12 @@ class HelParCorrelation():
             },
             'out': {
                 'output_csv_path': output_csv_path,
+                'output_jpg_path': output_jpg_path
             }
         }
 
         self.properties = properties
+        self.basepairname = properties.get("basepairname", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -86,7 +91,7 @@ class HelParCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <dna.correlation.HelParCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <dna.helparcorrelation.HelParCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -97,14 +102,16 @@ class HelParCorrelation():
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['output_csv_path']]
+            output_file_list = [
+                self.io_dict['out']['output_csv_path'],
+                self.io_dict['out']['output_jpg_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
                 return 0
 
         # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="correlation_")
+        self.tmp_folder = fu.create_unique_dir(prefix="hpcorrelation_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # read input
@@ -114,6 +121,10 @@ class HelParCorrelation():
         tilt = load_data(self.io_dict["in"]["input_filename_tilt"])
         roll = load_data(self.io_dict["in"]["input_filename_roll"])
         twist = load_data(self.io_dict["in"]["input_filename_twist"])
+
+        # get basepairname
+        if self.basepairname is None:
+            self.basepairname = shift.columns[0]
 
         # make matrix
         coordinates = ["shift", "slide", "rise", "tilt", "roll", "twist"]
@@ -177,7 +188,32 @@ class HelParCorrelation():
         corr_matrix["twist"]["roll"] = corr_matrix["roll"]["twist"]
 
         # save csv data
-        corr_matrix.to_csv(Path(self.io_dict["out"]["output_csv_path"]))
+        corr_matrix.to_csv(self.io_dict["out"]["output_csv_path"])
+
+        # create heatmap
+        fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
+        axs.pcolor(corr_matrix)
+        # Loop over data dimensions and create text annotations.
+        for i in range(len(corr_matrix)):
+            for j in range(len(corr_matrix)):
+                axs.text(
+                    j+.5,
+                    i+.5,
+                    f"{corr_matrix[coordinates[j]].loc[coordinates[i]]:.2f}",
+                    ha="center",
+                    va="center",
+                    color="w")
+        axs.set_xticks([i + 0.5 for i in range(len(corr_matrix))])
+        axs.set_xticklabels(corr_matrix.columns, rotation=90)
+        axs.set_yticks([i+0.5 for i in range(len(corr_matrix))])
+        axs.set_yticklabels(corr_matrix.index)
+        axs.set_title(
+            "Helical Parameter Correlation "
+            f"for Base Pair Step \'{self.basepairname}\'")
+        fig.tight_layout()
+        fig.savefig(
+            self.io_dict['out']['output_jpg_path'],
+            format="jpg")
 
         # Remove temporary file(s)
         if self.remove_tmp:
@@ -225,9 +261,10 @@ def helparcorrelation(
         input_filename_shift: str, input_filename_slide: str,
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParCorrelation <dna.correlation.HelParCorrelation>` class and
-    execute the :meth:`launch() <dna.correlation.HelParCorrelation.launch>` method."""
+        output_csv_path: str, output_jpg_path: str,
+        properties: dict = None, **kwargs) -> int:
+    """Create :class:`HelParCorrelation <dna.helparcorrelation.HelParCorrelation>` class and
+    execute the :meth:`launch() <dna.helparcorrelation.HelParCorrelation.launch>` method."""
 
     return HelParCorrelation(
         input_filename_shift=input_filename_shift,
@@ -237,6 +274,7 @@ def helparcorrelation(
         input_filename_roll=input_filename_roll,
         input_filename_twist=input_filename_twist,
         output_csv_path=output_csv_path,
+        output_jpg_path=output_jpg_path,
         properties=properties, **kwargs).launch()
 
 
@@ -261,6 +299,8 @@ def main():
                                help='Path to csv file with inputs. Accepted formats: csv.')
     required_args.add_argument('--output_csv_path', required=True,
                                help='Path to output file. Accepted formats: csv.')
+    required_args.add_argument('--output_jpg_path', required=True,
+                               help='Path to output file. Accepted formats: csv.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -274,6 +314,7 @@ def main():
         input_filename_roll=args.input_filename_roll,
         input_filename_twist=args.input_filename_twist,
         output_csv_path=args.output_csv_path,
+        output_jpg_path=args.output_jpg_path,
         properties=properties)
 
 

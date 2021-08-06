@@ -178,7 +178,7 @@ def curves(input_struc_path: str, input_top_path: str, output_zip_path: str = No
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Description for the template module.',
+    parser = argparse.ArgumentParser(description='Execute Cur+ form the Curves+ software suite.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 

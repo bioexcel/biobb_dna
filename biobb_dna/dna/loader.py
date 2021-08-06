@@ -8,20 +8,21 @@ import pandas as pd
 
 
 def read_series(input_serfile, usecols=None):
+    """Read .ser file"""
     extra_kwargs = dict(
         header=None,
         sep='\s+',
         index_col=0)
-    if isinstance(usecols, list):
+    ser_data = pd.read_csv(input_serfile, **extra_kwargs)
+    if usecols is not None:
         if 0 in usecols:
             usecols.pop(usecols.index(0))
-        usecols = [0, *usecols]
-        extra_kwargs["usecols"] = usecols
-    ser_data = pd.read_csv(input_serfile, **extra_kwargs)
+        ser_data = ser_data[[i+1 for i in usecols]]
     return ser_data
 
 
 def load_data(data_filename, inner_file=None):
+    """Read .csv file directly or from inside a .zip file."""
     if Path(data_filename).suffix == ".zip":
         zf = zipfile.ZipFile(data_filename, "r")
         # use provided data filename of look for csv file

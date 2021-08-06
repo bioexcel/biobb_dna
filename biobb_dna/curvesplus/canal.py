@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 """Module containing the Canal class and the command line interface."""
+import os
+import shutil
 import zipfile
 import argparse
 from pathlib import Path
+
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -16,7 +19,9 @@ class Canal():
     | Wrapper for the Canal executable that is part of the Curves+ software suite. 
 
     Args:        
-        input_cda_file (str): Input .cda file, from Cur+ output. File type: input. Accepted formats: cda.
+        input_cda_file (str): Input .cda file, from Cur+ output. If `input_zip_file` is passed, this should be just the filename of the .cda file inside .zip. File type: input. Accepted formats: cda.
+        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. If `input_zip_file` is passed, this should be just the filename of the .lis file inside .zip. File type: input. Accepted formats: lis.
+        input_zip_file (str): (Optional) .zip file containing .cda and .lis files. File type: input. Accepted formats: zip.
         output_zip_path (str): zip filename for output files. File type: output.  Accepted formats: zip.
         properties (dic):
             * **bases** (*base*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 
@@ -30,7 +35,7 @@ class Canal():
             * **series** (*str*) - ('.f.') if '.t.' then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
             * **histo** (*str*) - ('.f.') if '.t.' then output histogram data.
             * **corr** (*str*) - ('.f.') if '.t.' than output linear correlation coefficients between all variables.
-            * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .cda file.
+            * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
             * **canal_exec** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
@@ -54,13 +59,18 @@ class Canal():
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_cda_file, output_zip_path,
+    def __init__(self, input_cda_file, input_lis_file=None,
+                 input_zip_file=None, output_zip_path=None,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = {
-            'in': {'input_cda_file': input_cda_file},
+            'in': {
+                'input_cda_file': input_cda_file,
+                'input_lis_file': input_lis_file,
+                'input_zip_file': input_zip_file
+            },
             'out': {'output_zip_path': output_zip_path}
         }
 
@@ -98,12 +108,40 @@ class Canal():
         out_log = getattr(self, 'out_log', None)
         err_log = getattr(self, 'err_log', None)
 
+        # Creating temporary folder
+        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
+        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+
+        if self.io_dict['in']['input_zip_file'] is not None:
+            # if zipfile is specified, extract to temporary folder
+            with zipfile.ZipFile(
+                    self.io_dict['in']['input_zip_file'],
+                    'r') as zip_ref:
+                zip_ref.extractall(self.tmp_folder)
+        else:
+            # copy input files to temporary folder
+            shutil.copy(
+                self.io_dict['in']['input_cda_file'],
+                self.tmp_folder)
+            if self.io_dict['in']['input_lis_file'] is not None:
+                shutil.copy(
+                    self.io_dict['in']['input_lis_file'],
+                    self.tmp_folder)
+        # change directory to temporary folder
+        original_directory = os.getcwd()
+        os.chdir(self.tmp_folder)
+
         # Check the properties
         fu.check_properties(self, self.properties)
         if self.sequence is None:
-            cda_lines = Path(
-                self.io_dict['in']['input_cda_file']).read_text().splitlines()
-            for line in cda_lines:
+            if self.io_dict['in']['input_lis_file'] is None:
+                raise RuntimeError(
+                    "if no sequence is passed in the configuration, "
+                    "you must at least specify `input_lis_file` "
+                    "so sequence can be parsed from there")
+            lis_lines = Path(
+                self.io_dict['in']['input_lis_file']).read_text().splitlines()
+            for line in lis_lines:
                 if line.strip().startswith("Strand  1"):
                     self.sequence = line.split(" ")[-1]
         # Restart
@@ -114,15 +152,11 @@ class Canal():
                        self.step, out_log, self.global_log)
                 return 0
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
-
         # create intructions
         instructions = [
             f"{self.canal_exec} <<! ",
             "&inp",
-            f"  lis={Path(self.tmp_folder) / 'canal_output'},"]
+            "  lis=canal_output,"]
         if self.bases is not None:
             # add topology file if needed
             fu.log('Appending sequence of bases to be searched to command',
@@ -152,6 +186,9 @@ class Canal():
         returncode = cmd_wrapper.CmdWrapper(
             cmd, out_log, err_log, self.global_log).launch()
 
+        # change back to original directory
+        os.chdir(original_directory)
+
         # create zipfile and wirte output inside
         zf = zipfile.ZipFile(
             Path(self.io_dict["out"]["output_zip_path"]), "w")
@@ -169,27 +206,39 @@ class Canal():
         return returncode
 
 
-def canal(input_cda_file: str, output_zip_path: str, properties: dict = None, **kwargs) -> int:
+def canal(
+        input_cda_file: str,
+        input_lis_file: str,
+        output_zip_path: str,
+        input_zip_file: str = None,
+        properties: dict = None,
+        **kwargs) -> int:
     """Create :class:`Canal <biobb_dna.curvesplus.canal.Canal>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.canal.Canal.launch>` method."""
 
     return Canal(
         input_cda_file=input_cda_file,
+        input_lis_file=input_lis_file,
+        input_zip_file=input_zip_file,
         output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Description for the template module.',
+    parser = argparse.ArgumentParser(description='Execute Canal from the Curves+ software suite.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
     required_args.add_argument('--input_cda_file', required=True,
-                               help='Trajectory or PDB input file. Accepted formats: trj, pdb.')
+                               help='cda input file from Curves+ output. Accepted formats: cda.')
     required_args.add_argument('--output_zip_path', required=True,
-                               help='Root filename to give to output files (without the .lis extension). Accepted formats: str.')
+                               help='Filename for .zip file with Canal output. Accepted formats: zip.')
+    parser.add_argument('--input_lis_file',
+                        help='lis input file from Curves+ output. Accepted formats: lis.')
+    parser.add_argument('--input_zip_file',
+                        help='.zip file containing .cda and (optionally) .lis files, from Curves+ output. Accepted formats: zip.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -197,6 +246,8 @@ def main():
 
     canal(
         input_cda_file=args.input_cda_file,
+        input_lis_file=args.input_lis_file,
+        input_zip_file=args.input_zip_file,
         output_zip_path=args.output_zip_path,
         properties=properties)
 

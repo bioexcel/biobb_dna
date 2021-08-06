@@ -130,7 +130,7 @@ class BIPopulations():
         zetaW = read_series(self.io_dict['in']['input_zetaW_path'])
 
         # calculate difference between epsil and zeta parameters
-        diff_epsil_zeta = self.get_angles_difference(
+        diff_epsil_zeta, xlabels = self.get_angles_difference(
             self.strand1,
             self.strand2,
             epsilC,
@@ -145,11 +145,11 @@ class BIPopulations():
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         axs.bar(
-            BI.index,
+            range(len(xlabels)),
             BI,
             label="BI")
         axs.bar(
-            BII.index,
+            range(len(xlabels)),
             BII,
             bottom=BI,
             label="BII")
@@ -160,7 +160,8 @@ class BIPopulations():
             color='white',
             label=None)
         axs.legend()
-        axs.set_xticklabels(BI.index, rotation=90)
+        axs.set_xticks(range(len(xlabels)))
+        axs.set_xticklabels(xlabels, rotation=90)
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("BI/BII Population (%)")
         axs.set_title("Nucleotide parameter: BI/BII Population")
@@ -169,8 +170,13 @@ class BIPopulations():
             format="jpg")
 
         # save table
-        BI.name = "BI/BII population"
-        BI.to_csv(self.io_dict['out']['output_csv_path'])
+        Bpopulations_df = pd.DataFrame({
+            "Nucleotide": xlabels,
+            "BI population": BI,
+            "BII population": BII})
+        Bpopulations_df.to_csv(
+            self.io_dict['out']['output_csv_path'],
+            index=False)
 
         plt.close()
 
@@ -193,7 +199,7 @@ class BIPopulations():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        columns = labelsW + ['-'] + labelsC
+        xlabels = labelsW + ['-'] + labelsC
 
         # concatenate zeta and epsil arrays
         separator_df = pd.DataFrame({"-": nan}, index=range(len(zetaW)))
@@ -202,17 +208,15 @@ class BIPopulations():
             separator_df,
             zetaC[zetaC.columns[::-1]]],
             axis=1)
-        zeta.columns = columns
         epsil = pd.concat([
             epsilW,
             separator_df,
             epsilC[epsilC.columns[::-1]]],
             axis=1)
-        epsil.columns = columns
 
         # difference between epsilon and zeta coordinates
         diff_epsil_zeta = epsil - zeta
-        return diff_epsil_zeta
+        return diff_epsil_zeta, xlabels
 
 
 def bipopulations(
@@ -235,7 +239,7 @@ def bipopulations(
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
+    parser = argparse.ArgumentParser(description='Calculate BI/BII populations.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 

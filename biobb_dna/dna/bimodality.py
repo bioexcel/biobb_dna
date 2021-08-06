@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParBimodality class and the command line interface."""
+import os
 import shutil
+import zipfile
 import argparse
 from pathlib import Path
 
@@ -20,15 +22,15 @@ from biobb_dna.dna.loader import load_data
 class HelParBimodality():
     """
     | biobb_dna HelParBimodality
-    | 
+    | Determine binormality/bimodality from a helical parameter dataset.
 
     Args:        
-        input_file_path (str): Path to .csv or .zip file with helical parameter data. File type: input. Accepted formats: csv (edam:format_3752), zip (edam:format_3987).
+        input_csv_file (str): Path to .csv file with helical parameter data. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. Accepted formats: csv (edam:format_3752) 
+        input_zip_file (str): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip. (edam:format_3987).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **helpar_name** (*str*) - (Optional) helical parameter name.
-            * **inner_file** (*str*) - (None) If .zip file is passed to input_filename, specify name of .csv file inside to be used.
             * **confidence_level** (*float*) - (5.0) Confidence level for Byes Factor test (in percentage).
             * **max_iter** (*int*) - (400) Number of maximum iterations for EM algorithm.
             * **tol** (*float*) - (1e-5) Tolerance value for EM algorithm.
@@ -42,10 +44,10 @@ class HelParBimodality():
 
             prop = { 
                 'max_iter': 500,
-                'inner_file': 'filename.csv'
             }
-            HelParBimodality(
-                input_file_path='/path/to/input.zip',
+            helparbimodality(
+                input_csv_file='filename.csv',
+                input_zip_file='/path/to/input.zip',
                 output_csv_path='/path/to/output.csv',
                 properties=prop)
 
@@ -55,14 +57,16 @@ class HelParBimodality():
 
     """
 
-    def __init__(self, input_file_path, output_csv_path,
-                 output_jpg_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_csv_file, output_csv_path,
+                 output_jpg_path, input_zip_file=None,
+                 properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
         self.io_dict = {
             'in': {
-                'input_file_path': input_file_path
+                'input_csv_file': input_csv_file,
+                'input_zip_file': input_zip_file
             },
             'out': {
                 'output_csv_path': output_csv_path,
@@ -82,7 +86,9 @@ class HelParBimodality():
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                if hp.lower() in Path(input_file_path).name.lower():
+                if (
+                        hp.lower() in Path(input_csv_file).name.lower()
+                        or hp.lower() in Path(input_zip_file).name.lower()):
                     self.helpar_name = hp
             if self.helpar_name is None:
                 raise ValueError(
@@ -104,7 +110,6 @@ class HelParBimodality():
                     self.hp_unit = "Angstroms"
 
         # Properties common in all BB
-        self.inner_file = properties.get('inner_file', None)
         self.can_write_console_log = properties.get(
             'can_write_console_log', True)
         self.global_log = properties.get('global_log', None)
@@ -140,12 +145,25 @@ class HelParBimodality():
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_file_path'], self.tmp_folder)
+        shutil.copy(self.io_dict['in']['input_zip_file'], self.tmp_folder)
 
         # read input
-        data = load_data(
-            data_filename=self.io_dict['in']['input_file_path'],
-            inner_file=self.inner_file)
+        if self.io_dict['in']['input_zip_file'] is not None:
+            # if zipfile is specified, extract to temporary folder
+            with zipfile.ZipFile(
+                    self.io_dict['in']['input_zip_file'],
+                    'r') as zip_ref:
+                zip_ref.extractall(self.tmp_folder)
+        else:
+            # copy input files to temporary folder
+            shutil.copy(
+                self.io_dict['in']['input_csv_file'],
+                self.tmp_folder)
+        # change directory to temporary folder
+        original_directory = os.getcwd()
+        os.chdir(self.tmp_folder)
+        data = load_data(self.io_dict['in']['input_csv_file'])
+
         means, variances, bics, weights = self.fit_to_model(data)
         uninormal, binormal, insuf_ev = self.bayes_factor_criteria(
             bics[0], bics[1])
@@ -215,6 +233,9 @@ class HelParBimodality():
         plt.title(f"Distribution of {self.helpar_name} states")
         plt.savefig(self.io_dict['out']['output_jpg_path'], format="jpg")
 
+        # change back to original directory
+        os.chdir(original_directory)
+
         # Remove temporary file(s)
         if self.remove_tmp:
             fu.rm(self.tmp_folder)
@@ -275,13 +296,14 @@ class HelParBimodality():
 
 
 def helparbimodality(
-        input_file_path: str, output_csv_path: str,
-        output_jpg_path: str, properties: dict = None, **kwargs) -> int:
+        input_csv_file, output_csv_path, output_jpg_path,
+        input_zip_file: str = None, properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParBimodality <dna.bimodality.HelParBimodality>` class and
     execute the :meth:`launch() <dna.bimodality.HelParBimodality.launch>` method."""
 
     return HelParBimodality(
-        input_file_path=input_file_path,
+        input_csv_file=input_csv_file,
+        input_zip_file=input_zip_file,
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
         properties=properties, **kwargs).launch()
@@ -289,13 +311,15 @@ def helparbimodality(
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
+    parser = argparse.ArgumentParser(description='Determine binormality/bimodality from a helical parameter dataset.',
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('--config', required=False, help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_file_path', required=True,
-                               help='Path to csv or zip file with input. Accepted formats: csv, zip.')
+    required_args.add_argument('--input_csv_file', required=True,
+                               help='Path to csv file with data. Accepted formats: csv.')
+    parser.add_argument('--input_zip_file',
+                        help='Path to zip file containing csv input files. Accepted formats: zip.')
     required_args.add_argument('--output_csv_path', required=True,
                                help='Filename and/or path of output csv file.')
     required_args.add_argument('--output_jpg_path', required=True,
@@ -306,7 +330,8 @@ def main():
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     helparbimodality(
-        input_file_path=args.input_file_path,
+        input_csv_file=args.input_csv_file,
+        input_zip_file=args.input_zip_file,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
         properties=properties)
