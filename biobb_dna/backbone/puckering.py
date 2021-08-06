@@ -31,7 +31,7 @@ class Puckering():
             * **strand2** (*str*) - Nucleic acid sequence for the second strand corresponding to the input .ser file.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **usecols** (*list*) - (None) list of column indices to use.
+            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -79,8 +79,8 @@ class Puckering():
         self.strand2 = properties.get("strand2")
         self.stride = properties.get(
             "stride", 1000)
-        self.usecols = properties.get(
-            "usecols", None)
+        self.seqpos = properties.get(
+            "seqpos", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -122,16 +122,20 @@ class Puckering():
         shutil.copy(self.io_dict['in']['input_phaseW_path'], self.tmp_folder)
 
         # read input files
-        phaseC = read_series(self.io_dict['in']['input_phaseC_path'])
-        phaseW = read_series(self.io_dict['in']['input_phaseW_path'])
+        phaseC = read_series(
+            self.io_dict['in']['input_phaseC_path'],
+            usecols=self.seqpos)
+        phaseW = read_series(
+            self.io_dict['in']['input_phaseW_path'],
+            usecols=self.seqpos)
 
         # fix angle range so its not negative
         phaseC = self.fix_angles(phaseC)
         phaseW = self.fix_angles(phaseW)
 
         # calculate difference between epsil and zeta parameters
-        Npop, Epop, Wpop, Spop, xlabels = self.check_puckering(
-            self.strand1, self.strand2, phaseC, phaseW)
+        xlabels = self.get_xlabels(self.strand1, self.strand2)
+        Npop, Epop, Wpop, Spop = self.check_puckering(phaseC, phaseW)
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -156,7 +160,7 @@ class Puckering():
             label="West")
         # empty bar to divide both sequences
         axs.bar(
-            [len(self.strand1)],
+            [len(phaseC.columns)],
             [100],
             color='white',
             label=None)
@@ -190,7 +194,7 @@ class Puckering():
 
         return 0
 
-    def check_puckering(self, strand1, strand2, phaseC, phaseW):
+    def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
         labelsW = list(strand1)
         labelsW[0] = f"{labelsW[0]}5\'"
@@ -202,8 +206,14 @@ class Puckering():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        xlabels = labelsW + ['-'] + labelsC
 
+        if self.seqpos is not None:
+            labelsC = [labelsC[i] for i in self.seqpos]
+            labelsW = [labelsW[i] for i in self.seqpos]
+        xlabels = labelsW + ['-'] + labelsC
+        return xlabels
+
+    def check_puckering(self, phaseC, phaseW):
         separator_df = pd.DataFrame({"-": np.nan}, index=range(1, len(phaseC)))
         phase = pd.concat([
             phaseW,
@@ -216,7 +226,7 @@ class Puckering():
         Epop = np.logical_and(phase > 45, phase < 135).mean() * 100
         Wpop = np.logical_and(phase > 225, phase < 315).mean() * 100
         Spop = np.logical_and(phase > 135, phase < 225).mean() * 100
-        return Npop, Epop, Wpop, Spop, xlabels
+        return Npop, Epop, Wpop, Spop
 
     def fix_angles(self, dataset):
         values = np.where(dataset < 0, dataset + 360, dataset)

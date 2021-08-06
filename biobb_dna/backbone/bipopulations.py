@@ -29,8 +29,9 @@ class BIPopulations():
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
+            * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
             * **strand2** (*str*) - Nucleic acid sequence for the second strand corresponding to the input .ser file.
+            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -81,6 +82,7 @@ class BIPopulations():
         self.properties = properties
         self.strand1 = properties.get("strand1")
         self.strand2 = properties.get("strand2")
+        self.seqpos = properties.get("seqpos", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -124,15 +126,22 @@ class BIPopulations():
         shutil.copy(self.io_dict['in']['input_zetaW_path'], self.tmp_folder)
 
         # read input files
-        epsilC = read_series(self.io_dict['in']['input_epsilC_path'])
-        epsilW = read_series(self.io_dict['in']['input_epsilW_path'])
-        zetaC = read_series(self.io_dict['in']['input_zetaC_path'])
-        zetaW = read_series(self.io_dict['in']['input_zetaW_path'])
+        epsilC = read_series(
+            self.io_dict['in']['input_epsilC_path'],
+            usecols=self.seqpos)
+        epsilW = read_series(
+            self.io_dict['in']['input_epsilW_path'],
+            usecols=self.seqpos)
+        zetaC = read_series(
+            self.io_dict['in']['input_zetaC_path'],
+            usecols=self.seqpos)
+        zetaW = read_series(
+            self.io_dict['in']['input_zetaW_path'],
+            usecols=self.seqpos)
 
         # calculate difference between epsil and zeta parameters
-        diff_epsil_zeta, xlabels = self.get_angles_difference(
-            self.strand1,
-            self.strand2,
+        xlabels = self.get_xlabels(self.strand1, self.strand2)
+        diff_epsil_zeta = self.get_angles_difference(
             epsilC,
             zetaC,
             epsilW,
@@ -155,7 +164,7 @@ class BIPopulations():
             label="BII")
         # empty bar to divide both sequences
         axs.bar(
-            [len(self.strand1)],
+            [len(BI)//2],
             [100],
             color='white',
             label=None)
@@ -187,7 +196,7 @@ class BIPopulations():
 
         return 0
 
-    def get_angles_difference(self, strand1, strand2, epsilC, zetaC, epsilW, zetaW):
+    def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
         labelsW = list(strand1)
         labelsW[0] = f"{labelsW[0]}5\'"
@@ -199,8 +208,14 @@ class BIPopulations():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        xlabels = labelsW + ['-'] + labelsC
 
+        if self.seqpos is not None:
+            labelsC = [labelsC[i] for i in self.seqpos]
+            labelsW = [labelsW[i] for i in self.seqpos]
+        xlabels = labelsW + ['-'] + labelsC
+        return xlabels
+
+    def get_angles_difference(self, epsilC, zetaC, epsilW, zetaW):
         # concatenate zeta and epsil arrays
         separator_df = pd.DataFrame({"-": nan}, index=range(len(zetaW)))
         zeta = pd.concat([
@@ -216,7 +231,7 @@ class BIPopulations():
 
         # difference between epsilon and zeta coordinates
         diff_epsil_zeta = epsil - zeta
-        return diff_epsil_zeta, xlabels
+        return diff_epsil_zeta
 
 
 def bipopulations(

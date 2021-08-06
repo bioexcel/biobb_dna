@@ -31,6 +31,7 @@ class CanonicalAG():
         properties (dict):
             * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **strand2** (*str*) - Nucleic acid sequence for the second strand corresponding to the input .ser file.
+            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -41,7 +42,7 @@ class CanonicalAG():
 
             prop = {
                 'helpar_name': 'twist',
-                'usecols': [1,2],
+                'seqpos': [1,2],
                 'strand1': 'GCAT',
                 'strand2': 'ATGC'
             }
@@ -85,8 +86,8 @@ class CanonicalAG():
         self.strand2 = properties.get("strand2")
         self.stride = properties.get(
             "stride", 1000)
-        self.usecols = properties.get(
-            "usecols", None)
+        self.seqpos = properties.get(
+            "seqpos", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -130,10 +131,18 @@ class CanonicalAG():
         shutil.copy(self.io_dict['in']['input_gammaW_path'], self.tmp_folder)
 
         # read input files
-        alphaC = read_series(self.io_dict['in']['input_alphaC_path'])
-        alphaW = read_series(self.io_dict['in']['input_alphaW_path'])
-        gammaC = read_series(self.io_dict['in']['input_gammaC_path'])
-        gammaW = read_series(self.io_dict['in']['input_gammaW_path'])
+        alphaC = read_series(
+            self.io_dict['in']['input_alphaC_path'],
+            usecols=self.seqpos)
+        alphaW = read_series(
+            self.io_dict['in']['input_alphaW_path'],
+            usecols=self.seqpos)
+        gammaC = read_series(
+            self.io_dict['in']['input_gammaC_path'],
+            usecols=self.seqpos)
+        gammaW = read_series(
+            self.io_dict['in']['input_gammaW_path'],
+            usecols=self.seqpos)
 
         # fix angle range so its not negative
         alphaC = self.fix_angles(alphaC)
@@ -142,9 +151,8 @@ class CanonicalAG():
         gammaW = self.fix_angles(gammaW)
 
         # calculate difference between epsil and zeta parameters
-        canonical_populations, xlabels = self.check_alpha_gamma(
-            self.strand1,
-            self.strand2,
+        xlabels = self.get_xlabels(self.strand1, self.strand2)
+        canonical_populations = self.check_alpha_gamma(
             alphaC,
             gammaC,
             alphaW,
@@ -163,7 +171,7 @@ class CanonicalAG():
             label=None)
         # empty bar to divide both sequences
         axs.bar(
-            [len(self.strand1)],
+            [len(alphaC.columns)],
             [100],
             color='white',
             label=None)
@@ -195,7 +203,7 @@ class CanonicalAG():
 
         return 0
 
-    def check_alpha_gamma(self, strand1, strand2, alphaC, gammaC, alphaW, gammaW):
+    def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
         labelsW = list(strand1)
         labelsW[0] = f"{labelsW[0]}5\'"
@@ -207,8 +215,14 @@ class CanonicalAG():
         labelsC[-1] = f"{labelsC[-1]}3\'"
         labelsC = [
             f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
-        xlabels = labelsW + ['-'] + labelsC
 
+        if self.seqpos is not None:
+            labelsC = [labelsC[i] for i in self.seqpos]
+            labelsW = [labelsW[i] for i in self.seqpos]
+        xlabels = labelsW + ['-'] + labelsC
+        return xlabels
+
+    def check_alpha_gamma(self, alphaC, gammaC, alphaW, gammaW):
         separator_df = pd.DataFrame({"-": np.nan}, index=range(len(gammaW)))
         gamma = pd.concat([
             gammaW,
@@ -226,7 +240,7 @@ class CanonicalAG():
         canonical_alpha_gamma = np.logical_and(
             alpha_filter, gamma_filter).mean() * 100
 
-        return canonical_alpha_gamma, xlabels
+        return canonical_alpha_gamma
 
     def fix_angles(self, dataset):
         values = np.where(dataset < 0, dataset + 360, dataset)
