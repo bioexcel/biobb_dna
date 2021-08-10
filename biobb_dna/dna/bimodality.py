@@ -12,11 +12,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
 
-from biobb_dna.dna import constants
+from biobb_dna.utils import constants
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.dna.loader import load_data
+from biobb_dna.utils.loader import load_data
 
 
 class HelParBimodality():
@@ -95,19 +95,11 @@ class HelParBimodality():
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
 
-            # get base length and unit from helical parameter name
-            if self.helpar_name.lower() in constants.hp_basepairs:
-                if self.helpar_name in ["roll", "tilt", "twist"]:
-                    self.hp_unit = "Degrees"
-                else:
-                    self.hp_unit = "Angstroms"
-            elif self.helpar_name.lower() in constants.hp_singlebases:
-                if self.helpar_name in [
-                        "buckle", "opening", "propel",
-                        "inclin", "tip"]:
-                    self.hp_unit = "Degrees"
-                else:
-                    self.hp_unit = "Angstroms"
+            # get  unit from helical parameter name
+            if self.helpar_name in constants.hp_angular:
+                self.hp_unit = "Degrees"
+            else:
+                self.hp_unit = "Angstroms"
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(

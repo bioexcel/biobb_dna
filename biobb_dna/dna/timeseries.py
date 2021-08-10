@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from biobb_dna.dna import constants
+from biobb_dna.utils import constants
+from biobb_dna.utils.loader import read_series
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.dna.loader import read_series
 
 
 class HelParTimeSeries():
@@ -94,18 +94,12 @@ class HelParTimeSeries():
             # get base length and unit from helical parameter name
             if self.helpar_name.lower() in constants.hp_basepairs:
                 self.baselen = 1
-                if self.helpar_name in ["roll", "tilt", "twist"]:
-                    self.hp_unit = "Degrees"
-                else:
-                    self.hp_unit = "Angstroms"
             elif self.helpar_name.lower() in constants.hp_singlebases:
                 self.baselen = 0
-                if self.helpar_name in [
-                        "buckle", "opening", "propel",
-                        "inclin", "tip"]:
-                    self.hp_unit = "Degrees"
-                else:
-                    self.hp_unit = "Angstroms"
+            if self.helpar_name in constants.hp_angular:
+                self.hp_unit = "Degrees"
+            else:
+                self.hp_unit = "Angstroms"
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(

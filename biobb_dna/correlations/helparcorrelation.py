@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.dna.loader import load_data
+from biobb_dna.utils.loader import load_data
 
 
 class HelParCorrelation():
     """
     | biobb_dna HelParCorrelation
-    |
+    | Calculate correlation between helical parameters for a single basepair.
 
     Args:
         input_filename_shift (str): Path to .csv file with data for helical parameter 'shift'. File type: input. Accepted formats: csv (edam:format_3752).
@@ -34,7 +34,7 @@ class HelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.helparcorrelation import HelParCorrelation
+            from biobb_dna.correlations.helparcorrelation import HelParCorrelation
 
             helparcorrelation(
                 input_filename_shift='path/to/shift.csv',
@@ -91,7 +91,7 @@ class HelParCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <dna.helparcorrelation.HelParCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <correlations.helparcorrelation.HelParCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -263,8 +263,8 @@ def helparcorrelation(
         input_filename_roll: str, input_filename_twist: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParCorrelation <dna.helparcorrelation.HelParCorrelation>` class and
-    execute the :meth:`launch() <dna.helparcorrelation.HelParCorrelation.launch>` method."""
+    """Create :class:`HelParCorrelation <correlations.helparcorrelation.HelParCorrelation>` class and
+    execute the :meth:`launch() <correlations.helparcorrelation.HelParCorrelation.launch>` method."""
 
     return HelParCorrelation(
         input_filename_shift=input_filename_shift,

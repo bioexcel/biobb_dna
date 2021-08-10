@@ -6,8 +6,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from biobb_dna.dna import constants
-from biobb_dna.dna.loader import read_series
+from biobb_dna.utils import constants
+from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
@@ -37,7 +37,7 @@ class AverageStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.average_stiffness import AverageStiffness
+            from biobb_dna.stiffness.average_stiffness import AverageStiffness
 
             prop = { 
                 'helpar_name': 'twist',
@@ -110,7 +110,7 @@ class AverageStiffness():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`AverageStiffness <dna.average_stiffness.AverageStiffness>` object."""
+        """Execute the :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -203,8 +203,8 @@ class AverageStiffness():
 def averagestiffness(
         input_ser_path: str, output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`AverageStiffness <dna.average_stiffness.AverageStiffness>` class and
-    execute the :meth:`launch() <dna.average_stiffness.AverageStiffness.launch>` method."""
+    """Create :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` class and
+    execute the :meth:`launch() <stiffness.average_stiffness.AverageStiffness.launch>` method."""
 
     return AverageStiffness(
         input_ser_path=input_ser_path,

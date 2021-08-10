@@ -1,5 +1,4 @@
 
-# 10
 hp_singlebases = [
     "shear",
     "stagger",
@@ -13,7 +12,6 @@ hp_singlebases = [
     "ydisp"
 ]
 
-# 10
 hp_basepairs = [
     "majw",
     "majd",
@@ -25,6 +23,17 @@ hp_basepairs = [
     "slide",
     "tilt",
     "twist"
+]
+
+hp_angular = [
+    "roll",
+    "tilt",
+    "twist",
+    "buckle",
+    "opening",
+    "propel",
+    "inclin",
+    "tip"
 ]
 
 helical_parameters = hp_basepairs + hp_singlebases

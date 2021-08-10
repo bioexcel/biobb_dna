@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.dna.loader import load_data
+from biobb_dna.utils.loader import load_data
 
 
 class BPStiffness():
@@ -36,7 +36,7 @@ class BPStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.basepair_stiffness import BPStiffness
+            from biobb_dna.stiffness.basepair_stiffness import BPStiffness
 
             prop = { 
                 'KT': 0.592186827,
@@ -99,7 +99,7 @@ class BPStiffness():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`BPStiffness <dna.basepair_stiffness.BPStiffness>` object."""
+        """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -199,8 +199,8 @@ def bpstiffness(
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
         output_csv_path: str, output_jpg_path: str, properties: dict = None, **kwargs) -> int:
-    """Create :class:`BPStiffness <dna.basepair_stiffness.BPStiffness>` class and
-    execute the :meth:`launch() <dna.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
+    """Create :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` class and
+    execute the :meth:`launch() <stiffness.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
 
     return BPStiffness(
         input_filename_shift=input_filename_shift,
