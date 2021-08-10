@@ -1,12 +1,10 @@
 # !/usr/bin/env python3
 import shutil
 import argparse
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from numpy import nan
-from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
@@ -38,7 +36,7 @@ class BIPopulations():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.backbone.bipopulations import BIPopulations
+            from biobb_dna.backbone.bipopulations import bipopulations
 
             prop = {
                 'strand1': 'GCAT',
@@ -151,6 +149,15 @@ class BIPopulations():
         BI = (diff_epsil_zeta < 0).sum(axis=0) * 100 / len(diff_epsil_zeta)
         BII = 100 - BI
 
+        # save table
+        Bpopulations_df = pd.DataFrame({
+            "Nucleotide": xlabels,
+            "BI population": BI,
+            "BII population": BII})
+        Bpopulations_df.to_csv(
+            self.io_dict['out']['output_csv_path'],
+            index=False)
+
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         axs.bar(
@@ -177,16 +184,6 @@ class BIPopulations():
         fig.savefig(
             self.io_dict['out']['output_jpg_path'],
             format="jpg")
-
-        # save table
-        Bpopulations_df = pd.DataFrame({
-            "Nucleotide": xlabels,
-            "BI population": BI,
-            "BII population": BII})
-        Bpopulations_df.to_csv(
-            self.io_dict['out']['output_csv_path'],
-            index=False)
-
         plt.close()
 
         # Remove temporary file(s)

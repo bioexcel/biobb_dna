@@ -1,12 +1,10 @@
 # !/usr/bin/env python3
 import shutil
 import argparse
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
@@ -38,7 +36,7 @@ class Puckering():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.backbone.puckering import Puckering
+            from biobb_dna.backbone.puckering import puckering
 
             prop = {
                 'strand1': 'GCAT',

@@ -1,12 +1,10 @@
 # !/usr/bin/env python3
 import shutil
 import argparse
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
@@ -38,7 +36,7 @@ class CanonicalAG():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.backbone.canonical_alpha_gamma import CanonicalAG
+            from biobb_dna.backbone.canonical_alpha_gamma import canonicalag
 
             prop = {
                 'helpar_name': 'twist',
@@ -132,17 +130,13 @@ class CanonicalAG():
 
         # read input files
         alphaC = read_series(
-            self.io_dict['in']['input_alphaC_path'],
-            usecols=self.seqpos)
+            self.io_dict['in']['input_alphaC_path'], usecols=self.seqpos)
         alphaW = read_series(
-            self.io_dict['in']['input_alphaW_path'],
-            usecols=self.seqpos)
+            self.io_dict['in']['input_alphaW_path'], usecols=self.seqpos)
         gammaC = read_series(
-            self.io_dict['in']['input_gammaC_path'],
-            usecols=self.seqpos)
+            self.io_dict['in']['input_gammaC_path'], usecols=self.seqpos)
         gammaW = read_series(
-            self.io_dict['in']['input_gammaW_path'],
-            usecols=self.seqpos)
+            self.io_dict['in']['input_gammaW_path'], usecols=self.seqpos)
 
         # fix angle range so its not negative
         alphaC = self.fix_angles(alphaC)
@@ -157,6 +151,15 @@ class CanonicalAG():
             gammaC,
             alphaW,
             gammaW)
+
+        # save table
+        canonical_populations.name = "Canonical alpha/gamma"
+        ag_populations_df = pd.DataFrame({
+            "Nucleotide": xlabels,
+            "Canonical alpha/gamma": canonical_populations})
+        ag_populations_df.to_csv(
+            self.io_dict['out']['output_csv_path'],
+            index=False)
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -184,16 +187,6 @@ class CanonicalAG():
         fig.savefig(
             self.io_dict['out']['output_jpg_path'],
             format="jpg")
-
-        # save table
-        canonical_populations.name = "Canonical alpha/gamma"
-        ag_populations_df = pd.DataFrame({
-            "Nucleotide": xlabels,
-            "Canonical alpha/gamma": canonical_populations})
-        ag_populations_df.to_csv(
-            self.io_dict['out']['output_csv_path'],
-            index=False)
-
         plt.close()
 
         # Remove temporary file(s)
