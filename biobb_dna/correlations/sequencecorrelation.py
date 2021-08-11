@@ -106,6 +106,11 @@ class SequenceCorrelation():
         fu.check_properties(self, self.properties)
         if self.sequence is None:
             raise ValueError("sequence must be specified in properties!")
+        # check seqpos
+        if self.seqpos is not None:
+            if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
+                raise ValueError(
+                    "seqpos must be a list of at least two integers")
 
         # Restart
         if self.restart:

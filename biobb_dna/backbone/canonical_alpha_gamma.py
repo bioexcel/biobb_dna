@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from biobb_dna.utils.loader import read_series
+from biobb_dna.utils.transform import inverse_complement
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
@@ -28,7 +29,7 @@ class CanonicalAG():
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **strand2** (*str*) - Nucleic acid sequence for the second strand corresponding to the input .ser file.
+            * **strand2** (*str*) - (Optional) Nucleic acid sequence for the second strand corresponding to the input .ser file.
             * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -81,7 +82,8 @@ class CanonicalAG():
 
         self.properties = properties
         self.strand1 = properties.get("strand1")
-        self.strand2 = properties.get("strand2")
+        self.strand2 = properties.get(
+            "strand2", inverse_complement(self.strand1))
         self.stride = properties.get(
             "stride", 1000)
         self.seqpos = properties.get(
@@ -107,6 +109,11 @@ class CanonicalAG():
 
         # Check the properties
         fu.check_properties(self, self.properties)
+        # check seqpos
+        if self.seqpos is not None:
+            if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
+                raise ValueError(
+                    "seqpos must be a list of at least two integers")
 
         # Restart
         if self.restart:

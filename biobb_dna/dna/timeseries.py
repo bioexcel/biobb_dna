@@ -10,6 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
+from biobb_dna.utils.transform import inverse_complement
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -25,7 +26,7 @@ class HelParTimeSeries():
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
         properties (dict):
             * **strand1** (*str*) - Nucleic acid sequence for the first strand (5'->3') corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **strand2** (*str*) - Nucleic acid sequence for the second strand (3'->5') corresponding to the input .ser file.
+            * **strand2** (*str*) - (Optional) Nucleic acid sequence for the second strand (3'->5') corresponding to the input .ser file.
             * **bins** (*int* or *sequence* or *str*) - Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
@@ -71,7 +72,8 @@ class HelParTimeSeries():
 
         self.properties = properties
         self.strand1 = properties.get("strand1")
-        self.strand2 = properties.get("strand2")
+        self.strand2 = properties.get(
+            "strand2", inverse_complement(self.strand1))
         self.bins = properties.get("bins", "auto")
         self.stride = properties.get(
             "stride", 10)
@@ -121,6 +123,12 @@ class HelParTimeSeries():
 
         # Check the properties
         fu.check_properties(self, self.properties)
+
+        # check seqpos
+        if self.seqpos is not None:
+            if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
+                raise ValueError(
+                    "seqpos must be a list of at least two integers")
 
         # Restart
         if self.restart:
