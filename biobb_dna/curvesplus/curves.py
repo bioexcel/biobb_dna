@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """Module containing the Curves class and the command line interface."""
+import os
 import zipfile
 import argparse
 import shutil
@@ -72,7 +73,7 @@ class Curves():
         self.s1range = properties.get('s1range', None)
         self.s2range = properties.get('s2range', None)
         self.curves_exec = properties.get('curves_exec', 'Cur+')
-        self.stdlib_path = properties.get('stdlib_path', 'standard')
+        self.stdlib_path = properties.get('stdlib_path', None)
         self.properties = properties
 
         # Properties common in all BB
@@ -98,7 +99,31 @@ class Curves():
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
         if self.s2range is None:
-            raise ValueError("property 's2range' must be specified!")
+            range1_end = int(self.s1range.split(":")[1])
+            s2start = range1_end + 1
+            s2end = 2 * range1_end
+            self.s2range = f"{s2end}:{s2start}"
+        # check standard library files location if not provided
+        if self.stdlib_path is None:
+            if not os.getenv("CONDA_PREFIX", False):
+                # CONDA_PREFIX undefined
+                self.stdlib_path = "standard"
+            else:
+                curves_aux_path = Path(
+                    os.getenv("CONDA_PREFIX")) / ".curvesplus"
+                # check if .curvesplus directory is in $CONDA_PREFIX
+                if curves_aux_path.exists():
+                    self.stdlib_path = curves_aux_path / "standard"
+                    if len(list(self.stdlib_path.glob("standard_*.lib"))) != 3:
+                        raise FileNotFoundError(
+                            "One or all standard library files "
+                            f"missing from {curves_aux_path}! ")
+                else:
+                    raise FileNotFoundError(
+                        ".curvesplus CONDA_PREFIX not found in "
+                        f"{os.getenv('AMBERHOME')} !"
+                        "Please indicate where standard_*.lib files are "
+                        "located with the stdlib_path property.")
 
         # Restart
         if self.restart:
@@ -116,9 +141,8 @@ class Curves():
         if self.io_dict['in']['input_top_path'] is not None:
             shutil.copy(self.io_dict['in']['input_top_path'], self.tmp_folder)
 
-       # create intructions
+        # create intructions
         instructions = [
-            "export DYLD_LIBRARY_PATH=$AMBERHOME/lib; ",
             f"{self.curves_exec} <<! ",
             "&inp",
             f"  file={self.io_dict['in']['input_struc_path']},"]
