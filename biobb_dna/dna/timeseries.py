@@ -10,7 +10,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
-from biobb_dna.utils.transform import inverse_complement
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -25,8 +24,7 @@ class HelParTimeSeries():
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
         properties (dict):
-            * **strand1** (*str*) - Nucleic acid sequence for the first strand (5'->3') corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **strand2** (*str*) - (Optional) Nucleic acid sequence for the second strand (3'->5') corresponding to the input .ser file.
+            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **bins** (*int* or *sequence* or *str*) - Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
@@ -42,8 +40,7 @@ class HelParTimeSeries():
             prop = {
                 'helpar_name': 'twist',
                 'seqpos': [1,2,3,4,5],
-                'strand1': 'GCAACGTGCTATGGAAGC',
-                'strand2': 'GCTTCCATAGCACGTTGC'
+                'sequence': 'GCAACGTGCTATGGAAGC',
             }
             helpartimeseries(
                 input_ser_path='/path/to/twist.ser',
@@ -71,9 +68,7 @@ class HelParTimeSeries():
         }
 
         self.properties = properties
-        self.strand1 = properties.get("strand1")
-        self.strand2 = properties.get(
-            "strand2", inverse_complement(self.strand1))
+        self.sequence = properties.get("sequence", None)
         self.bins = properties.get("bins", "auto")
         self.stride = properties.get(
             "stride", 10)
@@ -124,8 +119,15 @@ class HelParTimeSeries():
         # Check the properties
         fu.check_properties(self, self.properties)
 
+        # check sequence
+        if self.sequence is None or len(self.sequence) < 2:
+            raise ValueError("sequence is null or too short!")
+
         # check seqpos
         if self.seqpos is not None:
+            if (max(self.seqpos) > len(self.sequence) - 2) or (min(self.seqpos) < 1):
+                raise ValueError(
+                    f"seqpos values must be between 1 and {len(self.sequence) - 2}")
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
@@ -151,17 +153,15 @@ class HelParTimeSeries():
             usecols=self.seqpos)
         if self.seqpos is None:
             ser_data = ser_data[ser_data.columns[1:-1]]
-            # discard first and last base(pairs) from strands
-            strand1 = self.strand1[1:]
-            strand2 = self.strand2[::-1][1:]
+            # discard first and last base(pairs) from sequence
+            sequence = self.sequence[1:]
             subunits = [
-                f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
+                f"{sequence[i:i+1+self.baselen]}"
                 for i in range(len(ser_data.columns))]
         else:
-            strand1 = self.strand1
-            strand2 = self.strand2[::-1]
+            sequence = self.sequence
             subunits = [
-                f"{strand1[i:i+1+self.baselen]}{strand2[i:i+1+self.baselen][::-1]}"
+                f"{sequence[i:i+1+self.baselen]}"
                 for i in [c for c in self.seqpos]]
         ser_data.columns = subunits
 

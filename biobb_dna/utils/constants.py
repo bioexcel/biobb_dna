@@ -18,9 +18,9 @@ hp_basepairs = [
     "minw",
     "mind",
     "rise",
-    "roll",
     "shift",
     "slide",
+    "roll",
     "tilt",
     "twist"
 ]
@@ -34,6 +34,21 @@ hp_angular = [
     "propel",
     "inclin",
     "tip"
+]
+
+hp_translational = [
+    "shear",
+    "stagger",
+    "stretch",
+    "xdisp",
+    "ydisp",
+    "majw",
+    "majd",
+    "minw",
+    "mind",
+    "rise",
+    "shift",
+    "slide"
 ]
 
 helical_parameters = hp_basepairs + hp_singlebases

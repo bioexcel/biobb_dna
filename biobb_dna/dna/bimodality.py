@@ -22,10 +22,10 @@ from biobb_dna.utils.loader import load_data
 class HelParBimodality():
     """
     | biobb_dna HelParBimodality
-    | Determine binormality/bimodality from a helical parameter dataset.
+    | Determine binormality/bimodality from a helical parameter series dataset.
 
     Args:        
-        input_csv_file (str): Path to .csv file with helical parameter data. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. Accepted formats: csv (edam:format_3752) 
+        input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. Accepted formats: csv (edam:format_3752) 
         input_zip_file (str): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip. (edam:format_3987).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
@@ -49,6 +49,7 @@ class HelParBimodality():
                 input_csv_file='filename.csv',
                 input_zip_file='/path/to/input.zip',
                 output_csv_path='/path/to/output.csv',
+                output_jpg_path='/path/to/output.jpg',
                 properties=prop)
 
         * ontology:
@@ -74,6 +75,7 @@ class HelParBimodality():
             }
         }
 
+        # Properties specific for BB
         self.confidence_level = properties.get(
             "confidence_level", 5.0)
         self.max_iter = properties.get(
@@ -82,24 +84,6 @@ class HelParBimodality():
             "tol", 1e-5)
         self.helpar_name = properties.get("helpar_name", None)
         self.properties = properties
-
-        # get helical parameter from filename if not specified
-        if self.helpar_name is None:
-            for hp in constants.helical_parameters:
-                if (
-                        hp.lower() in Path(input_csv_file).name.lower()
-                        or hp.lower() in Path(input_zip_file).name.lower()):
-                    self.helpar_name = hp
-            if self.helpar_name is None:
-                raise ValueError(
-                    "Helical parameter name can't be inferred from file, "
-                    "so it must be specified!")
-
-            # get  unit from helical parameter name
-            if self.helpar_name in constants.hp_angular:
-                self.hp_unit = "Degrees"
-            else:
-                self.hp_unit = "Angstroms"
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -121,6 +105,26 @@ class HelParBimodality():
 
         # Check the properties
         fu.check_properties(self, self.properties)
+
+        # get helical parameter from filename if not specified
+        if self.helpar_name is None:
+            for hp in constants.helical_parameters:
+                if (
+                        hp.lower() in Path(
+                            self.io_dict['in']['input_csv_file']).name.lower()
+                        or hp.lower() in Path(
+                            self.io_dict['in']['input_zip_file']).name.lower()):
+                    self.helpar_name = hp
+            if self.helpar_name is None:
+                raise ValueError(
+                    "Helical parameter name can't be inferred from file, "
+                    "so it must be specified!")
+
+            # get  unit from helical parameter name
+            if self.helpar_name in constants.hp_angular:
+                self.hp_unit = "Degrees"
+            else:
+                self.hp_unit = "Angstroms"
 
         # Restart
         if self.restart:

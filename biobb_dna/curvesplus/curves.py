@@ -20,16 +20,18 @@ class Curves():
     Args:        
         input_struc_path (str): Trajectory or PDB input file. File type: input. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
         input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. Accepted formats: top (edam:format_3881).
-        output_zip_path (str): Filename for .zip files containing Curve+ output. File type: output. Accepted formats: zip (edam:format_3987).
+        output_cda_path (str): Filename for Curves+ output .cda file. File type: output. Accepted formats: cda.
+        output_lis_path (str): Filename for Curves+ output .lis file. File type: output. Accepted formats: lis.
+        output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. Accepted formats: zip (edam:format_3987).
         properties (dict):
-            * **stdlib_path** (*path*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
-            * **itst** (*int*) - (0) Iteration start index.
-            * **itnd** (*int*) - (0) Iteration end index.
-            * **itdel** (*int*) - (1) Iteration delimiter. 
-            * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end". 
-            * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
-            * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **s2range** (*str*) - (Optional) (None) Range of second strand. Must be specified in the form "start:end".
+            * **stdlib_path** (*path*) - (Optional) ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
+            * **itst** (*int*) - (Optional) (0) Iteration start index.
+            * **itnd** (*int*) - (Optional) (0) Iteration end index.
+            * **itdel** (*int*) - (Optional) (1) Iteration delimiter. 
+            * **ions** (*bool*) - (Optional) (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
+            * **curves_exec** (*str*) - (Optional) (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
             from biobb_dna.curvesplus.curves import curves
@@ -39,8 +41,9 @@ class Curves():
             }
             curves(
                 input_struc_path='/path/to/structure/file.trj',
-                input_top_path='/path/to/topology.top',
-                output_zip_path='/path/to/output/root/filename',
+                input_top_path='/path/to/topology/file.top',
+                output_cda_path='/path/to/output/file.cda',
+                output_lis_path='/path/to/output/file.lis',
                 properties=prop)
     Info:
         * wrapped_software:
@@ -52,8 +55,10 @@ class Curves():
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_struc_path, output_zip_path,
-                 input_top_path=None, properties=None, **kwargs) -> None:
+    def __init__(
+            self, input_struc_path, output_lis_path,
+            output_cda_path, output_zip_path=None,
+            input_top_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -62,18 +67,22 @@ class Curves():
                 'input_struc_path': input_struc_path,
                 'input_top_path': input_top_path
             },
-            'out': {'output_zip_path': output_zip_path}
+            'out': {
+                'output_lis_path': output_lis_path,
+                'output_cda_path': output_cda_path,
+                'output_zip_path': output_zip_path
+            }
         }
 
         # Properties specific for BB
+        self.s1range = properties.get('s1range', None)
+        self.curves_exec = properties.get('curves_exec', 'Cur+')
+        self.stdlib_path = properties.get('stdlib_path', None)
+        self.s2range = properties.get('s2range', None)
         self.itst = properties.get('itst', 0)
         self.itnd = properties.get('itnd', 0)
         self.itdel = properties.get('itdel', 1)
         self.ions = properties.get('ions', '.f.')
-        self.s1range = properties.get('s1range', None)
-        self.s2range = properties.get('s2range', None)
-        self.curves_exec = properties.get('curves_exec', 'Cur+')
-        self.stdlib_path = properties.get('stdlib_path', None)
         self.properties = properties
 
         # Properties common in all BB
@@ -99,16 +108,14 @@ class Curves():
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
         if self.s2range is None:
+            # compute s2range if not provided
             range1_end = int(self.s1range.split(":")[1])
             s2start = range1_end + 1
             s2end = 2 * range1_end
             self.s2range = f"{s2end}:{s2start}"
         # check standard library files location if not provided
         if self.stdlib_path is None:
-            if not os.getenv("CONDA_PREFIX", False):
-                # CONDA_PREFIX undefined
-                self.stdlib_path = "standard"
-            else:
+            if os.getenv("CONDA_PREFIX", False):
                 curves_aux_path = Path(
                     os.getenv("CONDA_PREFIX")) / ".curvesplus"
                 # check if .curvesplus directory is in $CONDA_PREFIX
@@ -117,17 +124,25 @@ class Curves():
                     if len(list(self.stdlib_path.glob("standard_*.lib"))) != 3:
                         raise FileNotFoundError(
                             "One or all standard library files "
-                            f"missing from {curves_aux_path}! ")
+                            f"missing from {curves_aux_path}! "
+                            "Check files standard_b.lib, "
+                            "standard_s.lib and standard_i.lib exist.")
                 else:
                     raise FileNotFoundError(
-                        ".curvesplus CONDA_PREFIX not found in "
-                        f"{os.getenv('AMBERHOME')} !"
+                        ".curvesplus directory not found in "
+                        f"{os.getenv('CONDA_PREFIX')} !"
                         "Please indicate where standard_*.lib files are "
                         "located with the stdlib_path property.")
+            else:
+                # CONDA_PREFIX undefined
+                self.stdlib_path = "standard"
 
         # Restart
         if self.restart:
-            output_file_list = [self.io_dict['out']['output_zip_path']]
+            output_file_list = [
+                self.io_dict['out']['output_lis_path'],
+                self.io_dict['out']['output_cda_path'],
+                self.io_dict['out']['output_zip_path']]
             if fu.check_complete_files(output_file_list):
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
@@ -171,15 +186,22 @@ class Curves():
         returncode = cmd_wrapper.CmdWrapper(
             cmd, out_log, err_log, self.global_log).launch()
 
-        # create zipfile and wirte output inside
-        zf = zipfile.ZipFile(
-            Path(self.io_dict["out"]["output_zip_path"]),
-            "w")
-        for curves_outfile in Path(self.tmp_folder).glob("curves_output*"):
-            zf.write(
-                curves_outfile,
-                arcname=curves_outfile.name)
-        zf.close()
+        # create zipfile and write output inside
+        if self.io_dict["out"]["output_zip_path"] is not None:
+            zf = zipfile.ZipFile(
+                Path(self.io_dict["out"]["output_zip_path"]),
+                "w")
+            for curves_outfile in Path(self.tmp_folder).glob("curves_output*"):
+                if curves_outfile.suffix not in (".cda", ".lis"):
+                    zf.write(
+                        curves_outfile,
+                        arcname=curves_outfile.name)
+            zf.close()
+        # rename cda and lis files
+        (Path(self.tmp_folder) / "curves_output.cda").rename(
+            self.io_dict["out"]["output_cda_path"])
+        (Path(self.tmp_folder) / "curves_output.lis").rename(
+            self.io_dict["out"]["output_lis_path"])
 
         # Remove temporary file(s)
         if self.remove_tmp:
@@ -189,13 +211,18 @@ class Curves():
         return returncode
 
 
-def curves(input_struc_path: str, input_top_path: str, output_zip_path: str = None, properties: dict = None, **kwargs) -> int:
+def curves(
+        input_struc_path: str, output_lis_path: str, output_cda_path: str,
+        input_top_path: str = None, output_zip_path: str = None,
+        properties: dict = None, **kwargs) -> int:
     """Create :class:`Curves <biobb_dna.curvesplus.curves.Curves>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.curves.Curves.launch>` method."""
 
     return Curves(
         input_struc_path=input_struc_path,
         input_top_path=input_top_path,
+        output_lis_path=output_lis_path,
+        output_cda_path=output_cda_path,
         output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
 
@@ -209,10 +236,14 @@ def main():
     required_args = parser.add_argument_group('required arguments')
     required_args.add_argument('--input_struc_path', required=True,
                                help='Trajectory or PDB input file. Accepted formats: trj, pdb.')
+    required_args.add_argument('--output_cda_path', required=True,
+                               help='Filename to give to output .cda file. Accepted formats: str.')
+    required_args.add_argument('--output_lis_path', required=True,
+                               help='Filename to give to output .lis file. Accepted formats: str.')
     parser.add_argument('--input_top_path', required=False,
                         help='Topology file, needed along with .trj file (optional). Accepted formats: top.')
-    required_args.add_argument('--output_zip_path', required=True,
-                               help='Filename to give to output .lis files (without the .lis extension). Accepted formats: str.')
+    parser.add_argument('--output_zip_path', required=False,
+                        help='Filename to give to output files (except .cda and .lis files). Accepted formats: str.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -221,6 +252,8 @@ def main():
     curves(
         input_struc_path=args.input_struc_path,
         input_top_path=args.input_top_path,
+        output_cda_path=args.output_cda_path,
+        output_lis_path=args.output_lis_path,
         output_zip_path=args.output_zip_path,
         properties=properties)
 

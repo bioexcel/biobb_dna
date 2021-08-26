@@ -68,22 +68,6 @@ class SequenceCorrelation():
         self.seqpos = properties.get("seqpos", None)
         self.helpar_name = properties.get("helpar_name", None)
 
-        # get helical parameter from filename if not specified
-        if self.helpar_name is None:
-            for hp in constants.helical_parameters:
-                if hp.lower() in Path(input_ser_path).name.lower():
-                    self.helpar_name = hp
-            if self.helpar_name is None:
-                raise ValueError(
-                    "Helical parameter name can't be inferred from file, "
-                    "so it must be specified!")
-
-            # get base length and unit from helical parameter name
-            if self.helpar_name in constants.hp_angular:
-                self.method = "pearson"
-            else:
-                self.method = self.circular
-
         # Properties common in all BB
         self.can_write_console_log = properties.get(
             'can_write_console_log', True)
@@ -104,8 +88,28 @@ class SequenceCorrelation():
 
         # Check the properties
         fu.check_properties(self, self.properties)
-        if self.sequence is None:
-            raise ValueError("sequence must be specified in properties!")
+
+        # check sequence
+        if self.sequence is None or len(self.sequence) < 2:
+            raise ValueError("sequence is null or too short!")
+
+        # get helical parameter from filename if not specified
+        if self.helpar_name is None:
+            for hp in constants.helical_parameters:
+                if hp.lower() in Path(
+                        self.io_dict['in']['input_ser_path']).name.lower():
+                    self.helpar_name = hp
+            if self.helpar_name is None:
+                raise ValueError(
+                    "Helical parameter name can't be inferred from file, "
+                    "so it must be specified!")
+
+            # get base length and unit from helical parameter name
+            if self.helpar_name in constants.hp_angular:
+                self.method = "pearson"
+            else:
+                self.method = self.circular
+
         # check seqpos
         if self.seqpos is not None:
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):

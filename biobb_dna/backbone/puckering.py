@@ -102,8 +102,16 @@ class Puckering():
 
         # Check the properties
         fu.check_properties(self, self.properties)
+
+        # check strand1
+        if self.strand1 is None or len(self.strand1) < 2:
+            raise ValueError("strand1 is null or too short!")
+
         # check seqpos
         if self.seqpos is not None:
+            if (max(self.seqpos) > len(self.strand1) - 2) or (min(self.seqpos) < 1):
+                raise ValueError(
+                    f"seqpos values must be between 1 and {len(self.strand1) - 2}")
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")

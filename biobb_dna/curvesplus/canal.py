@@ -19,9 +19,8 @@ class Canal():
     | Wrapper for the Canal executable that is part of the Curves+ software suite. 
 
     Args:        
-        input_cda_file (str): Input .cda file, from Cur+ output. If `input_zip_file` is passed, this should be just the filename of the .cda file inside .zip. File type: input. Accepted formats: cda.
-        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. If `input_zip_file` is passed, this should be just the filename of the .lis file inside .zip. File type: input. Accepted formats: lis.
-        input_zip_file (str): (Optional) .zip file containing .cda and .lis files. File type: input. Accepted formats: zip.
+        input_cda_file (str): Input .cda file, from Cur+ output. File type: input. Accepted formats: cda.
+        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. File type: input. Accepted formats: lis.
         output_zip_path (str): zip filename for output files. File type: output.  Accepted formats: zip.
         properties (dic):
             * **bases** (*base*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 
@@ -60,8 +59,7 @@ class Canal():
     """
 
     def __init__(self, input_cda_file, input_lis_file=None,
-                 input_zip_file=None, output_zip_path=None,
-                 properties=None, **kwargs) -> None:
+                 output_zip_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -69,9 +67,10 @@ class Canal():
             'in': {
                 'input_cda_file': input_cda_file,
                 'input_lis_file': input_lis_file,
-                'input_zip_file': input_zip_file
             },
-            'out': {'output_zip_path': output_zip_path}
+            'out': {
+                'output_zip_path': output_zip_path
+            }
         }
 
         # Properties specific for BB
@@ -83,9 +82,9 @@ class Canal():
         self.itst = properties.get('itst', 0)
         self.itnd = properties.get('itnd', 0)
         self.itdel = properties.get('itdel', 1)
-        self.series = properties.get('series', '.f.')
-        self.histo = properties.get('histo', '.f.')
-        self.corr = properties.get('corr', '.f.')
+        self.series = ".t." if properties.get('series', False) else ".f."
+        self.histo = ".t." if properties.get('histo', False) else ".f."
+        self.corr = ".t." if properties.get('corr', False) else ".f."
         self.sequence = properties.get('sequence', None)
         self.canal_exec = properties.get('canal_exec', 'Canal')
         self.properties = properties
@@ -108,29 +107,6 @@ class Canal():
         out_log = getattr(self, 'out_log', None)
         err_log = getattr(self, 'err_log', None)
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
-
-        if self.io_dict['in']['input_zip_file'] is not None:
-            # if zipfile is specified, extract to temporary folder
-            with zipfile.ZipFile(
-                    self.io_dict['in']['input_zip_file'],
-                    'r') as zip_ref:
-                zip_ref.extractall(self.tmp_folder)
-        else:
-            # copy input files to temporary folder
-            shutil.copy(
-                self.io_dict['in']['input_cda_file'],
-                self.tmp_folder)
-            if self.io_dict['in']['input_lis_file'] is not None:
-                shutil.copy(
-                    self.io_dict['in']['input_lis_file'],
-                    self.tmp_folder)
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-        os.chdir(self.tmp_folder)
-
         # Check the properties
         fu.check_properties(self, self.properties)
         if self.sequence is None:
@@ -144,6 +120,11 @@ class Canal():
             for line in lis_lines:
                 if line.strip().startswith("Strand  1"):
                     self.sequence = line.split(" ")[-1]
+                    fu.log(
+                        f"using sequence {self.sequence} "
+                        f"from {self.io_dict['in']['input_lis_file']}",
+                        out_log)
+
         # Restart
         if self.restart:
             output_file_list = [self.io_dict['out']['output_zip_path']]
@@ -151,6 +132,22 @@ class Canal():
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
                 return 0
+
+        # Creating temporary folder
+        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
+        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+
+        # copy input files to temporary folder
+        shutil.copy(
+            self.io_dict['in']['input_cda_file'],
+            self.tmp_folder)
+        if self.io_dict['in']['input_lis_file'] is not None:
+            shutil.copy(
+                self.io_dict['in']['input_lis_file'],
+                self.tmp_folder)
+        # change directory to temporary folder
+        original_directory = os.getcwd()
+        os.chdir(self.tmp_folder)
 
         # create intructions
         instructions = [
@@ -189,7 +186,7 @@ class Canal():
         # change back to original directory
         os.chdir(original_directory)
 
-        # create zipfile and wirte output inside
+        # create zipfile and write output inside
         zf = zipfile.ZipFile(
             Path(self.io_dict["out"]["output_zip_path"]), "w")
         for canal_outfile in Path(self.tmp_folder).glob("canal_output*"):
@@ -210,7 +207,6 @@ def canal(
         input_cda_file: str,
         input_lis_file: str,
         output_zip_path: str,
-        input_zip_file: str = None,
         properties: dict = None,
         **kwargs) -> int:
     """Create :class:`Canal <biobb_dna.curvesplus.canal.Canal>` class and
@@ -219,7 +215,6 @@ def canal(
     return Canal(
         input_cda_file=input_cda_file,
         input_lis_file=input_lis_file,
-        input_zip_file=input_zip_file,
         output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
 
@@ -237,8 +232,6 @@ def main():
                                help='Filename for .zip file with Canal output. Accepted formats: zip.')
     parser.add_argument('--input_lis_file',
                         help='lis input file from Curves+ output. Accepted formats: lis.')
-    parser.add_argument('--input_zip_file',
-                        help='.zip file containing .cda and (optionally) .lis files, from Curves+ output. Accepted formats: zip.')
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -247,7 +240,6 @@ def main():
     canal(
         input_cda_file=args.input_cda_file,
         input_lis_file=args.input_lis_file,
-        input_zip_file=args.input_zip_file,
         output_zip_path=args.output_zip_path,
         properties=properties)
 

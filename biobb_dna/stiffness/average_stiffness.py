@@ -28,8 +28,7 @@ class AverageStiffness():
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **KT** (*float*) - (0.592186827) Value of Boltzmann temperature factor.
-            * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **strand2** (*str*) - (Optional) Nucleic acid sequence for the second strand corresponding to the input .ser file.
+            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -42,8 +41,7 @@ class AverageStiffness():
 
             prop = { 
                 'helpar_name': 'twist',
-                'strand1': 'GCAT',
-                'strand2': 'ATGC'
+                'sequence': 'GCAT',
             }
             averagestiffness(
                 input_ser_path='/path/to/twist.ser',
@@ -73,32 +71,11 @@ class AverageStiffness():
         }
 
         self.properties = properties
-        self.strand1 = properties.get("strand1")
-        self.strand2 = properties.get(
-            "strand2", inverse_complement(self.strand1))
+        self.sequence = properties.get("sequence")
         self.KT = properties.get(
             "KT", 0.592186827)
         self.seqpos = properties.get("seqpos", None)
-        helpar_name = properties.get("helpar_name", None)
-
-        self.helpar_name = helpar_name
-        # get helical parameter from filename if not specified
-        if self.helpar_name is None:
-            for hp in constants.helical_parameters:
-                if hp.lower() in Path(input_ser_path).name.lower():
-                    self.helpar_name = hp
-            if self.helpar_name is None:
-                raise ValueError(
-                    "Helical parameter name can't be inferred from file, "
-                    "so it must be specified!")
-
-            # get base length and unit from helical parameter name
-            if self.helpar_name in ["roll", "tilt", "twist"]:
-                self.hp_unit = "kcal/(mol*degree²)"
-                self.scale = 1
-            else:
-                self.hp_unit = "kcal/(mol*Å²)"
-                self.scale = 10.6
+        self.helpar_name = properties.get("helpar_name", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -121,8 +98,34 @@ class AverageStiffness():
         # Check the properties
         fu.check_properties(self, self.properties)
 
+        # check sequence
+        if self.sequence is None or len(self.sequence) < 2:
+            raise ValueError("sequence is null or too short!")
+
+        # get helical parameter from filename if not specified
+        if self.helpar_name is None:
+            for hp in constants.helical_parameters:
+                if hp.lower() in Path(
+                        self.io_dict['in']['input_ser_path']).name.lower():
+                    self.helpar_name = hp
+            if self.helpar_name is None:
+                raise ValueError(
+                    "Helical parameter name can't be inferred from file, "
+                    "so it must be specified!")
+
+            # get base length and unit from helical parameter name
+            if self.helpar_name in ["roll", "tilt", "twist"]:
+                self.hp_unit = "kcal/(mol*degree²)"
+                self.scale = 1
+            else:
+                self.hp_unit = "kcal/(mol*Å²)"
+                self.scale = 10.6
+
         # check seqpos
         if self.seqpos is not None:
+            if (max(self.seqpos) > len(self.sequence) - 2) or (min(self.seqpos) < 1):
+                raise ValueError(
+                    f"seqpos values must be between 1 and {len(self.sequence) - 2}")
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
@@ -137,12 +140,6 @@ class AverageStiffness():
                        self.step, out_log, self.global_log)
                 return 0
 
-        # check seqpos property
-        if (
-                not isinstance(self.seqpos, list) or
-                not all([isinstance(i, int) for i in self.seqpos])):
-            raise ValueError("`seqpos` must be a list of integers!")
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="avgstiffness_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
@@ -155,18 +152,16 @@ class AverageStiffness():
             self.io_dict['in']['input_ser_path'],
             usecols=self.seqpos)
         if self.seqpos is None:
-            ser_data = ser_data[ser_data.columns[1:-2]]
-            # discard first and last base(pairs) from strands
-            strand1 = self.strand1[1:]
-            strand2 = self.strand2[::-1][1:]
+            ser_data = ser_data[ser_data.columns[1:-1]]
+            # discard first and last base(pairs) from sequence
+            sequence = self.sequence[1:]
             xlabels = [
-                f"{strand1[i:i+2]}{strand2[i:i+2][::-1]}"
+                f"{sequence[i:i+2]}"
                 for i in range(len(ser_data.columns))]
         else:
-            strand1 = self.strand1
-            strand2 = self.strand2[::-1]
+            sequence = self.sequence
             xlabels = [
-                f"{strand1[i:i+2]}{strand2[i:i+2][::-1]}"
+                f"{sequence[i:i+2]}"
                 for i in self.seqpos]
 
         # calculate average stiffness
