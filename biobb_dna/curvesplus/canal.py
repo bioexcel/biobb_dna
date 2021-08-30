@@ -19,8 +19,8 @@ class Canal():
     | Wrapper for the Canal executable that is part of the Curves+ software suite. 
 
     Args:        
-        input_cda_file (str): Input .cda file, from Cur+ output. File type: input. Accepted formats: cda.
-        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. File type: input. Accepted formats: lis.
+        input_cda_file (str): Input .cda file, from Cur+ output. File type: input. Accepted formats: cda (edam:format_2330).
+        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
         output_zip_path (str): zip filename for output files. File type: output.  Accepted formats: zip.
         properties (dic):
             * **bases** (*base*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 

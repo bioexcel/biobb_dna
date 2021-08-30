@@ -21,7 +21,7 @@ class HelParTimeSeries():
     | Created time series and histogram plots for each base pair from a helical parameter series file.
 
     Args:
-        input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser
+        input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser (edam:format_2330).
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
         properties (dict):
             * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).

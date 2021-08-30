@@ -20,7 +20,7 @@ class SequenceCorrelation():
     | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
 
     Args:
-        input_ser_path (str): Path to .ser file with data for single helical parameter. File type: input. Accepted formats: ser
+        input_ser_path (str): Path to .ser file with data for single helical parameter. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):

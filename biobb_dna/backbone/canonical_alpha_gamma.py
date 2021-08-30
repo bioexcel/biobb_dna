@@ -21,10 +21,10 @@ class CanonicalAG():
     | Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.
 
     Args:
-        input_alphaC_path (str): Path to .ser file for helical parameter 'alphaC'. File type: input. Accepted formats: ser
-        input_alphaW_path (str): Path to .ser file for helical parameter 'alphaW'. File type: input. Accepted formats: ser
-        input_gammaC_path (str): Path to .ser file for helical parameter 'gammaC'. File type: input. Accepted formats: ser
-        input_gammaW_path (str): Path to .ser file for helical parameter 'gammaW'. File type: input. Accepted formats: ser
+        input_alphaC_path (str): Path to .ser file for helical parameter 'alphaC'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_alphaW_path (str): Path to .ser file for helical parameter 'alphaW'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_gammaC_path (str): Path to .ser file for helical parameter 'gammaC'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_gammaW_path (str): Path to .ser file for helical parameter 'gammaW'. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):

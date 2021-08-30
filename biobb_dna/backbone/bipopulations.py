@@ -21,10 +21,10 @@ class BIPopulations():
     | Calculate BI/BII populations from epsilon and zeta parameters.
 
     Args:
-        input_epsilC_path (str): Path to .ser file for helical parameter 'epsilC'. File type: input. Accepted formats: ser
-        input_epsilW_path (str): Path to .ser file for helical parameter 'epsilW'. File type: input. Accepted formats: ser
-        input_zetaC_path (str): Path to .ser file for helical parameter 'zetaC'. File type: input. Accepted formats: ser
-        input_zetaW_path (str): Path to .ser file for helical parameter 'zetaW'. File type: input. Accepted formats: ser
+        input_epsilC_path (str): Path to .ser file for helical parameter 'epsilC'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_epsilW_path (str): Path to .ser file for helical parameter 'epsilW'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_zetaC_path (str): Path to .ser file for helical parameter 'zetaC'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_zetaW_path (str): Path to .ser file for helical parameter 'zetaW'. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):

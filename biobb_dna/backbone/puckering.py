@@ -21,8 +21,8 @@ class Puckering():
     | Calculate Puckering from phase parameters.
 
     Args:
-        input_phaseC_path (str): Path to .ser file for helical parameter 'phaseC'. File type: input. Accepted formats: ser
-        input_phaseW_path (str): Path to .ser file for helical parameter 'phaseW'. File type: input. Accepted formats: ser
+        input_phaseC_path (str): Path to .ser file for helical parameter 'phaseC'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_phaseW_path (str): Path to .ser file for helical parameter 'phaseW'. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):

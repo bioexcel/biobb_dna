@@ -22,12 +22,12 @@ class BasePairCorrelation():
     | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
 
     Args:
-        input_filename_shift (str): Path to .ser file with data for helical parameter 'shift'. File type: input. Accepted formats: ser
-        input_filename_slide (str): Path to .ser file with data for helical parameter 'slide'. File type: input. Accepted formats: ser
-        input_filename_rise (str): Path to .ser file with data for helical parameter 'rise'. File type: input. Accepted formats: ser
-        input_filename_tilt (str): Path to .ser file with data for helical parameter 'tilt'. File type: input. Accepted formats: ser
-        input_filename_roll (str): Path to .ser file with data for helical parameter 'roll'. File type: input. Accepted formats: ser
-        input_filename_twist (str): Path to .ser file with data for helical parameter 'twist'. File type: input. Accepted formats: ser
+        input_filename_shift (str): Path to .ser file with data for helical parameter 'shift'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_slide (str): Path to .ser file with data for helical parameter 'slide'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_rise (str): Path to .ser file with data for helical parameter 'rise'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_tilt (str): Path to .ser file with data for helical parameter 'tilt'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_roll (str): Path to .ser file with data for helical parameter 'roll'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_twist (str): Path to .ser file with data for helical parameter 'twist'. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
