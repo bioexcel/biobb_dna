@@ -74,10 +74,9 @@ class HelParTimeSeries():
             "stride", 10)
         self.seqpos = properties.get(
             "seqpos", None)
-        helpar_name = properties.get(
+        self.helpar_name = properties.get(
             "helpar_name", None)
 
-        self.helpar_name = helpar_name
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
@@ -88,15 +87,15 @@ class HelParTimeSeries():
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
 
-            # get base length and unit from helical parameter name
-            if self.helpar_name.lower() in constants.hp_basepairs:
-                self.baselen = 1
-            elif self.helpar_name.lower() in constants.hp_singlebases:
-                self.baselen = 0
-            if self.helpar_name in constants.hp_angular:
-                self.hp_unit = "Degrees"
-            else:
-                self.hp_unit = "Angstroms"
+        # get base length and unit from helical parameter name
+        if self.helpar_name.lower() in constants.hp_basepairs:
+            self.baselen = 1
+        elif self.helpar_name.lower() in constants.hp_singlebases:
+            self.baselen = 0
+        if self.helpar_name in constants.hp_angular:
+            self.hp_unit = "Degrees"
+        else:
+            self.hp_unit = "Angstroms"
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(

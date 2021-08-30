@@ -135,7 +135,7 @@ class SequenceCorrelation():
             self.io_dict['in']['input_ser_path'],
             usecols=self.seqpos)
         if self.seqpos is None:
-            ser_data = ser_data[ser_data.columns[1:-2]]
+            ser_data = ser_data[ser_data.columns[1:-1]]
             # discard first and last base(pairs) from strands
             sequence = self.sequence[1:]
             labels = [
@@ -172,7 +172,7 @@ class SequenceCorrelation():
                     color="w")
         axs.set_xticks([i + 0.5 for i in range(len(corr_data))])
         axs.set_xticklabels(labels, rotation=90)
-        axs.set_yticks([i+0.5 for i in range(len(corr_data))])
+        axs.set_yticks([i + 0.5 for i in range(len(corr_data))])
         axs.set_yticklabels(labels)
         axs.set_title(
             "Base Pair Correlation "

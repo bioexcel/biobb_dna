@@ -30,12 +30,16 @@ class HelParCorrelation():
         properties (dict):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **basepair** (*str*) - (None) Name of basepair analyzed.
 
     Examples:
         This is a use example of how to use the building block from Python::
 
             from biobb_dna.correlations.helparcorrelation import HelParCorrelation
 
+            prop = { 
+                'basepair': 'AA',
+            }
             helparcorrelation(
                 input_filename_shift='path/to/shift.csv',
                 input_filename_slide='path/to/slide.csv',
@@ -77,7 +81,7 @@ class HelParCorrelation():
         }
 
         self.properties = properties
-        self.basepairname = properties.get("basepairname", None)
+        self.basepair = properties.get("basepair", None)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get(
@@ -122,9 +126,9 @@ class HelParCorrelation():
         roll = load_data(self.io_dict["in"]["input_filename_roll"])
         twist = load_data(self.io_dict["in"]["input_filename_twist"])
 
-        # get basepairname
-        if self.basepairname is None:
-            self.basepairname = shift.columns[0]
+        # get basepair
+        if self.basepair is None:
+            self.basepair = shift.columns[0]
 
         # make matrix
         coordinates = ["shift", "slide", "rise", "tilt", "roll", "twist"]
@@ -209,7 +213,7 @@ class HelParCorrelation():
         axs.set_yticklabels(corr_matrix.index)
         axs.set_title(
             "Helical Parameter Correlation "
-            f"for Base Pair Step \'{self.basepairname}\'")
+            f"for Base Pair Step \'{self.basepair}\'")
         fig.tight_layout()
         fig.savefig(
             self.io_dict['out']['output_jpg_path'],

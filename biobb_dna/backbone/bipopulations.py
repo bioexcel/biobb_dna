@@ -28,8 +28,7 @@ class BIPopulations():
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **strand1** (*str*) - Nucleic acid sequence for the first strand corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
-            * **strand2** (*str*) - (Optional) Nucleic acid sequence for the second strand corresponding to the input .ser file.
+            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
             * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -40,8 +39,7 @@ class BIPopulations():
             from biobb_dna.backbone.bipopulations import bipopulations
 
             prop = {
-                'strand1': 'GCAT',
-                'strand2': 'ATGC'
+                'sequence': 'GCAT',
             }
             BIPopulations(
                 input_epsilC_path='/path/to/epsilC.ser',
@@ -79,9 +77,7 @@ class BIPopulations():
         }
 
         self.properties = properties
-        self.strand1 = properties.get("strand1")
-        self.strand2 = properties.get(
-            "strand2", inverse_complement(self.strand1))
+        self.sequence = properties.get("sequence")
         self.seqpos = properties.get("seqpos", None)
 
         # Properties common in all BB
@@ -105,15 +101,15 @@ class BIPopulations():
         # Check the properties
         fu.check_properties(self, self.properties)
 
-        # check strand1
-        if self.strand1 is None or len(self.strand1) < 2:
-            raise ValueError("strand1 is null or too short!")
+        # check sequence
+        if self.sequence is None or len(self.sequence) < 2:
+            raise ValueError("sequence is null or too short!")
 
         # check seqpos
         if self.seqpos is not None:
-            if (max(self.seqpos) > len(self.strand1) - 2) or (min(self.seqpos) < 1):
+            if (max(self.seqpos) > len(self.sequence) - 2) or (min(self.seqpos) < 1):
                 raise ValueError(
-                    f"seqpos values must be between 1 and {len(self.strand1) - 2}")
+                    f"seqpos values must be between 1 and {len(self.sequence) - 2}")
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
@@ -153,7 +149,9 @@ class BIPopulations():
             usecols=self.seqpos)
 
         # calculate difference between epsil and zeta parameters
-        xlabels = self.get_xlabels(self.strand1, self.strand2)
+        xlabels = self.get_xlabels(
+            self.sequence,
+            inverse_complement(self.sequence))
         diff_epsil_zeta = self.get_angles_difference(
             epsilC,
             zetaC,
