@@ -1,98 +1,178 @@
 working_dir_path: /tmp/biobb/unitests
 
+curves_trj:
+  paths:
+    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
+    input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
+    output_cda_path: curves_output.cda
+    output_lis_path: curves_output.lis
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
+  properties:
+    s1range: "1:12"
+
+curves_nc:
+  paths:
+    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.nc
+    input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
+    output_cda_path: curves_output.cda
+    output_lis_path: curves_output.lis
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_nc_output.cda
+  properties:
+    s1range: "1:12"
+
+curves_pdb:
+  paths:
+    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.pdb
+    output_cda_path: curves_output.cda
+    output_lis_path: curves_output.lis
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_pdb_output.cda
+  properties:
+    s1range: "1:12"
+
+canal:
+  paths:
+    input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
+    output_zip_path: canal_output.zip
+  properties:
+    series: true
+    sequence: "CGCGAATTCGCG"
+
+canal_noseq:
+  paths:
+    input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
+    input_lis_file: file:test_data_dir/curvesplus/curves_output.lis
+    output_zip_path: canal_output.zip
+  properties:
+    series: true
+  
 timeseries:
   paths:
-    input_serfile_path: file:test_data_dir/template/shift.ser
-    output_file_path: timeseries_output.zip
-    ref_output_file_path: file:test_reference_dir/template/timeseries_output.zip
+    input_ser_path: file:test_data_dir/dna/canal_output_shift.ser
+    output_zip_path: timeseries_output.zip
+    ref_output_zip_path: file:test_reference_dir/dna/timeseries_output.zip
   properties:
-    strand1: "GCAACGTGCTATGGAAGC"
-    strand2: "GCTTCCATAGCACGTTGC"
-    helpar_name: "shift"
-    usecols: [4,5,6]
+    sequence: "CGCGAATTCGCG"
+    seqpos: [4,5]
   
 averages:
   paths:
-    input_serfile_path: file:test_data_dir/template/shift.ser
-    output_file_path: averages_test_output.zip
-    ref_output_file_path: file:test_reference_dir/template/averages_output.zip
+    input_ser_path: file:test_data_dir/dna/canal_output_shift.ser
+    output_csv_path: avg_out.csv
+    output_jpg_path: avg_out.jpg
+    ref_csv_output: file:test_reference_dir/dna/shift_avg.csv
+    ref_jpg_output: file:test_reference_dir/dna/shift_avg.jpg
   properties:
-    strand1: "GCAACGTGCTATGGAAGC"
-    strand2: "GCTTCCATAGCACGTTGC"
-    helpar_name: "shift"
-    usecols: [4,5,6]
+    sequence: "CGCGAATTCGCG"
+    seqpos: [4,5,6]
+    stride: 1
 
 bimodality:
   paths:
-    input_filename: file:test_data_dir/template/bimod_input.zip
-    inner_file: file:series.shift.GTAC.csv
-    output_file_path: bimod_output.csv
-    ref_output_file_path: file:test_reference_dir/template/bimod_output.csv
+    input_csv_file: file:test_data_dir/dna/series_shift_AT.csv
+    output_csv_path: bimod_out.csv
+    output_jpg_path: bimod_out.jpg
+    ref_csv_output: file:test_reference_dir/dna/AT_shift_bimod.csv
+    ref_jpg_output: file:test_reference_dir/dna/AT_shift_bimod.jpg
   properties:
+    helpar_name: "shift"
     confidence_level: 5.0
     max_iter: 400
     tol: 0.00001
 
-stiffness:
+avgstiffness:
   paths:
-    input_filename_shift: file:test_data_dir/template/csvinput/series.shift.GTAC.csv
-    input_filename_slide: file:test_data_dir/template/csvinput/series.slide.GTAC.csv
-    input_filename_rise: file:test_data_dir/template/csvinput/series.rise.GTAC.csv
-    input_filename_tilt: file:test_data_dir/template/csvinput/series.tilt.GTAC.csv
-    input_filename_roll: file:test_data_dir/template/csvinput/series.roll.GTAC.csv
-    input_filename_twist: file:test_data_dir/template/csvinput/series.twist.GTAC.csv
-    output_covariance_path: output_cov.csv
-    output_stiffness_path: output_stiffness.csv
-    output_fctes_path: output_fctes.csv
-    output_averages_path: output_averages.csv
-    ref_output_covariance_path: file:test_reference_dir/template/stiffness/output_cov.csv
-    ref_output_stiffness_path: file:test_reference_dir/template/stiffness/output_stiffness.csv
-    ref_output_fctes_path: file:test_reference_dir/template/stiffness/output_fctes.csv
-    ref_output_averages_path: file:test_reference_dir/template/stiffness/output_averages.csv
+    input_ser_path: file:test_data_dir/stiffness/canal_output_roll.ser
+    output_csv_path: avgstiff.csv
+    output_jpg_path: avgstiff.jpg
+    ref_csv_output: file:test_reference_dir/stiffness/stiffavg_roll.csv
+    ref_jpg_output: file:test_reference_dir/stiffness/stiffavg_roll.jpg
   properties:
-    scaling: [1, 1, 1, 10.6, 10.6, 10.6]
+    sequence: "CGCGAATTCGCG"
 
-correlation:
+bpstiffness:
   paths:
-    input_filename_shift: file:test_data_dir/template/csvinput/series.shift.GTAC.csv
-    input_filename_slide: file:test_data_dir/template/csvinput/series.slide.GTAC.csv
-    input_filename_rise: file:test_data_dir/template/csvinput/series.rise.GTAC.csv
-    input_filename_tilt: file:test_data_dir/template/csvinput/series.tilt.GTAC.csv
-    input_filename_roll: file:test_data_dir/template/csvinput/series.roll.GTAC.csv
-    input_filename_twist: file:test_data_dir/template/csvinput/series.twist.GTAC.csv
-    output_file_path: output_corr.csv
-    ref_output_file_path: file:test_reference_dir/template/output_corr.csv
-  properties:
+    input_filename_shift: file:test_data_dir/stiffness/series_shift_AA.csv
+    input_filename_slide: file:test_data_dir/stiffness/series_slide_AA.csv
+    input_filename_rise: file:test_data_dir/stiffness/series_rise_AA.csv
+    input_filename_roll: file:test_data_dir/stiffness/series_roll_AA.csv
+    input_filename_tilt: file:test_data_dir/stiffness/series_tilt_AA.csv
+    input_filename_twist: file:test_data_dir/stiffness/series_twist_AA.csv
+    output_csv_path: bpstiff.csv
+    output_jpg_path: bpstiff.jpg
+    ref_csv_output: file:test_reference_dir/stiffness/stiffbp_ref.csv
+    ref_jpg_output: file:test_reference_dir/stiffness/stiffbp_ref.jpg
 
-template_container:
+bipopulations:
   paths:
-    input_file_path1: file:test_data_dir/template/topology.top
-    input_file_path2: file:test_data_dir/template/trajectory.dcd
-    output_file_path: output.zip
-    ref_output_file_path: file:test_reference_dir/template/output.container.zip
+    input_epsilC_path: file:test_data_dir/backbone/canal_output_epsilC.ser
+    input_epsilW_path: file:test_data_dir/backbone/canal_output_epsilW.ser
+    input_zetaC_path: file:test_data_dir/backbone/canal_output_zetaC.ser
+    input_zetaW_path: file:test_data_dir/backbone/canal_output_zetaW.ser
+    output_csv_path: bipop.csv
+    output_jpg_path: bipop.jpg
+    ref_csv_output: file:test_reference_dir/backbone/bipop_ref.csv
+    ref_jpg_output: file:test_reference_dir/backbone/bipop_ref.jpg
   properties:
-    boolean_property: false
-    remove_tmp: true
-    container_path: docker
-    container_image: mmbirb/zip:latest
-    container_volume_path: /tmp
+    sequence: "CGCGAATTCGCG"
 
-template_singularity:
+canonicalag:
   paths:
-    input_file_path1: file:test_data_dir/template/topology.top
-    input_file_path2: file:test_data_dir/template/trajectory.dcd
-    output_file_path: output.zip
-    ref_output_file_path: file:test_reference_dir/template/output.container.zip
+    input_alphaC_path: file:test_data_dir/backbone/canal_output_alphaC.ser
+    input_alphaW_path: file:test_data_dir/backbone/canal_output_alphaW.ser
+    input_gammaC_path: file:test_data_dir/backbone/canal_output_gammaC.ser
+    input_gammaW_path: file:test_data_dir/backbone/canal_output_gammaW.ser
+    output_csv_path: canonag.csv
+    output_jpg_path: canonag.jpg
+    ref_csv_output: file:test_reference_dir/backbone/canonag_ref.csv
+    ref_jpg_output: file:test_reference_dir/backbone/canonag_ref.jpg
   properties:
-    boolean_property: false
-    remove_tmp: false
-    executable_binary_property: /opt/conda/bin/zip
-    container_path: singularity
-    container_image: bioexcel-zip_container-master-latest.simg
-    container_volume_path: /tmp
+    sequence: "CGCGAATTCGCG"
 
+puckering:
+  paths:
+    input_phaseC_path: file:test_data_dir/backbone/canal_output_phaseC.ser
+    input_phaseW_path: file:test_data_dir/backbone/canal_output_phaseW.ser
+    output_csv_path: puckering.csv
+    output_jpg_path: puckering.jpg
+    ref_csv_output: file:test_reference_dir/backbone/puckering_ref.csv
+    ref_jpg_output: file:test_reference_dir/backbone/puckering_ref.jpg
+  properties:
+    sequence: "CGCGAATTCGCG"
 
+hpcorrelation:
+  paths:
+    input_filename_shift: file:test_data_dir/stiffness/series_shift_AA.csv
+    input_filename_slide: file:test_data_dir/stiffness/series_slide_AA.csv
+    input_filename_rise: file:test_data_dir/stiffness/series_rise_AA.csv
+    input_filename_roll: file:test_data_dir/stiffness/series_roll_AA.csv
+    input_filename_tilt: file:test_data_dir/stiffness/series_tilt_AA.csv
+    input_filename_twist: file:test_data_dir/stiffness/series_twist_AA.csv
+    output_csv_path: hpcorr.csv
+    output_jpg_path: hpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/hpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/hpcorr_ref.jpg
 
+seqcorrelation:
+  paths:
+    input_ser_path: file:test_data_dir/stiffness/canal_output_roll.ser
+    output_csv_path: seqcorr.csv
+    output_jpg_path: seqcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/seqcorr_roll.csv
+    ref_jpg_output: file:test_reference_dir/correlation/seqcorr_roll.jpg
+  properties:
+    sequence: "CGCGAATTCGCG"
 
-
-
+bpcorrelation:
+  paths:
+    input_filename_roll: file:test_data_dir/correlation/canal_output_roll.ser
+    input_filename_tilt: file:test_data_dir/correlation/canal_output_tilt.ser
+    input_filename_twist: file:test_data_dir/correlation/canal_output_twist.ser
+    input_filename_shift: file:test_data_dir/correlation/canal_output_shift.ser
+    input_filename_slide: file:test_data_dir/correlation/canal_output_slide.ser
+    input_filename_rise: file:test_data_dir/correlation/canal_output_rise.ser
+    output_csv_path: bpcorr.csv
+    output_jpg_path: bpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/bpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/bpcorr_ref.jpg
+  properties:
+    sequence: "CGCGAATTCGCG"

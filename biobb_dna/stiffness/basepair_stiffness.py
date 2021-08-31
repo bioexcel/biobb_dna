@@ -27,6 +27,7 @@ class BPStiffness():
         input_filename_roll (str): Path to .csv file with data for helical parameter 'roll'. File type: input. Accepted formats: csv (edam:format_3752).
         input_filename_twist (str): Path to .csv file with data for helical parameter 'twist'. File type: input. Accepted formats: csv (edam:format_3752).
         output_csv_path (str): Path to directory where stiffness matrix file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752).
+        output_jpg_path (str): Path to directory where stiffness heatmap image is saved as a jpg file. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **KT** (*float*) - (0.592186827) Value of Boltzmann temperature factor.
             * **scaling** (*list*) - ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist.

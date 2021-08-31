@@ -141,6 +141,7 @@ class Canal():
         shutil.copy(
             self.io_dict['in']['input_cda_file'],
             self.tmp_folder)
+        tmp_cda_path = Path(self.io_dict['in']['input_cda_file']).name
         if self.io_dict['in']['input_lis_file'] is not None:
             shutil.copy(
                 self.io_dict['in']['input_lis_file'],
@@ -173,7 +174,7 @@ class Canal():
             f"  series={self.series},",
             f"  corr={self.corr},",
             "&end",
-            f"{self.io_dict['in']['input_cda_file']} {self.sequence}",
+            f"{tmp_cda_path} {self.sequence}",
             "!"]
 
         cmd = ["\n".join(instructions)]
@@ -205,8 +206,8 @@ class Canal():
 
 def canal(
         input_cda_file: str,
-        input_lis_file: str,
         output_zip_path: str,
+        input_lis_file: str = None,
         properties: dict = None,
         **kwargs) -> int:
     """Create :class:`Canal <biobb_dna.curvesplus.canal.Canal>` class and
@@ -230,7 +231,7 @@ def main():
                                help='cda input file from Curves+ output. Accepted formats: cda.')
     required_args.add_argument('--output_zip_path', required=True,
                                help='Filename for .zip file with Canal output. Accepted formats: zip.')
-    parser.add_argument('--input_lis_file',
+    parser.add_argument('--input_lis_file', required=False,
                         help='lis input file from Curves+ output. Accepted formats: lis.')
 
     args = parser.parse_args()

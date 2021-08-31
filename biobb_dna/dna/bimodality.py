@@ -109,22 +109,26 @@ class HelParBimodality():
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                if (
-                        hp.lower() in Path(
-                            self.io_dict['in']['input_csv_file']).name.lower()
-                        or hp.lower() in Path(
-                            self.io_dict['in']['input_zip_file']).name.lower()):
+                input_zip_path = self.io_dict['in']['input_zip_file']
+                if input_zip_path is not None:
+                    condition_2 = (
+                        hp.lower() in Path(input_zip_path).name.lower())
+                else:
+                    condition_2 = False
+                condition_1 = hp.lower() in Path(
+                    self.io_dict['in']['input_csv_file']).name.lower()
+                if (condition_1 or condition_2):
                     self.helpar_name = hp
             if self.helpar_name is None:
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
 
-            # get  unit from helical parameter name
-            if self.helpar_name in constants.hp_angular:
-                self.hp_unit = "Degrees"
-            else:
-                self.hp_unit = "Angstroms"
+        # get  unit from helical parameter name
+        if self.helpar_name in constants.hp_angular:
+            self.hp_unit = "Degrees"
+        else:
+            self.hp_unit = "Angstroms"
 
         # Restart
         if self.restart:
@@ -140,11 +144,10 @@ class HelParBimodality():
         self.tmp_folder = fu.create_unique_dir(prefix="bimodality_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
-        # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_zip_file'], self.tmp_folder)
-
         # read input
         if self.io_dict['in']['input_zip_file'] is not None:
+            # Copy input_file_path1 to temporary folder
+            shutil.copy(self.io_dict['in']['input_zip_file'], self.tmp_folder)
             # if zipfile is specified, extract to temporary folder
             with zipfile.ZipFile(
                     self.io_dict['in']['input_zip_file'],
