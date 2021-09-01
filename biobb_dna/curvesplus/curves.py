@@ -120,13 +120,13 @@ class Curves():
                     os.getenv("CONDA_PREFIX")) / ".curvesplus"
                 # check if .curvesplus directory is in $CONDA_PREFIX
                 if curves_aux_path.exists():
-                    self.stdlib_path = curves_aux_path / "standard"
-                    if len(list(self.stdlib_path.glob("standard_*.lib"))) != 3:
+                    if len(list(curves_aux_path.glob("standard_*.lib"))) != 3:
                         raise FileNotFoundError(
                             "One or all standard library files "
                             f"missing from {curves_aux_path}! "
                             "Check files standard_b.lib, "
                             "standard_s.lib and standard_i.lib exist.")
+                    self.stdlib_path = curves_aux_path / "standard"
                 else:
                     raise FileNotFoundError(
                         ".curvesplus directory not found in "
