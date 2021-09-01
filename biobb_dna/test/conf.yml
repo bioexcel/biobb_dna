@@ -139,7 +139,7 @@ puckering:
   properties:
     sequence: "CGCGAATTCGCG"
 
-hpcorrelation:
+inter_hpcorrelation:
   paths:
     input_filename_shift: file:test_data_dir/stiffness/series_shift_AA.csv
     input_filename_slide: file:test_data_dir/stiffness/series_slide_AA.csv
@@ -147,22 +147,22 @@ hpcorrelation:
     input_filename_roll: file:test_data_dir/stiffness/series_roll_AA.csv
     input_filename_tilt: file:test_data_dir/stiffness/series_tilt_AA.csv
     input_filename_twist: file:test_data_dir/stiffness/series_twist_AA.csv
-    output_csv_path: hpcorr.csv
-    output_jpg_path: hpcorr.jpg
-    ref_csv_output: file:test_reference_dir/correlation/hpcorr_ref.csv
-    ref_jpg_output: file:test_reference_dir/correlation/hpcorr_ref.jpg
+    output_csv_path: inter_hpcorr.csv
+    output_jpg_path: inter_hpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/inter_hpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/inter_hpcorr_ref.jpg
 
-seqcorrelation:
+inter_seqcorrelation:
   paths:
-    input_ser_path: file:test_data_dir/stiffness/canal_output_roll.ser
-    output_csv_path: seqcorr.csv
-    output_jpg_path: seqcorr.jpg
-    ref_csv_output: file:test_reference_dir/correlation/seqcorr_roll.csv
-    ref_jpg_output: file:test_reference_dir/correlation/seqcorr_roll.jpg
+    input_ser_path: file:test_data_dir/correlation/canal_output_roll.ser
+    output_csv_path: inter_seqcorr.csv
+    output_jpg_path: inter_seqcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/inter_seqcorr_roll.csv
+    ref_jpg_output: file:test_reference_dir/correlation/inter_seqcorr_roll.jpg
   properties:
     sequence: "CGCGAATTCGCG"
 
-bpcorrelation:
+inter_bpcorrelation:
   paths:
     input_filename_roll: file:test_data_dir/correlation/canal_output_roll.ser
     input_filename_tilt: file:test_data_dir/correlation/canal_output_tilt.ser
@@ -170,9 +170,47 @@ bpcorrelation:
     input_filename_shift: file:test_data_dir/correlation/canal_output_shift.ser
     input_filename_slide: file:test_data_dir/correlation/canal_output_slide.ser
     input_filename_rise: file:test_data_dir/correlation/canal_output_rise.ser
-    output_csv_path: bpcorr.csv
-    output_jpg_path: bpcorr.jpg
-    ref_csv_output: file:test_reference_dir/correlation/bpcorr_ref.csv
-    ref_jpg_output: file:test_reference_dir/correlation/bpcorr_ref.jpg
+    output_csv_path: inter_bpcorr.csv
+    output_jpg_path: inter_bpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/inter_bpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/inter_bpcorr_ref.jpg
+  properties:
+    sequence: "CGCGAATTCGCG"
+
+intra_hpcorrelation:
+  paths:
+    input_filename_buckle: file:test_data_dir/correlation/series_buckle_A.csv
+    input_filename_propel: file:test_data_dir/correlation/series_propel_A.csv
+    input_filename_opening: file:test_data_dir/correlation/series_opening_A.csv
+    input_filename_shear: file:test_data_dir/correlation/series_shear_A.csv
+    input_filename_stretch: file:test_data_dir/correlation/series_stretch_A.csv
+    input_filename_stagger: file:test_data_dir/correlation/series_stagger_A.csv
+    output_csv_path: intra_hpcorr.csv
+    output_jpg_path: intra_hpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/intra_hpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/intra_hpcorr_ref.jpg
+
+intra_seqcorrelation:
+  paths:
+    input_ser_path: file:test_data_dir/correlation/canal_output_buckle.ser
+    output_csv_path: intra_seqcorr.csv
+    output_jpg_path: intra_seqcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/intra_seqcorr_buckle.csv
+    ref_jpg_output: file:test_reference_dir/correlation/intra_seqcorr_buckle.jpg
+  properties:
+    sequence: "CGCGAATTCGCG"
+
+intra_bpcorrelation:
+  paths:
+    input_filename_buckle: file:test_data_dir/correlation/canal_output_buckle.ser
+    input_filename_propel: file:test_data_dir/correlation/canal_output_propel.ser
+    input_filename_opening: file:test_data_dir/correlation/canal_output_opening.ser
+    input_filename_shear: file:test_data_dir/correlation/canal_output_shear.ser
+    input_filename_stretch: file:test_data_dir/correlation/canal_output_stretch.ser
+    input_filename_stagger: file:test_data_dir/correlation/canal_output_stagger.ser
+    output_csv_path: intra_bpcorr.csv
+    output_jpg_path: intra_bpcorr.jpg
+    ref_csv_output: file:test_reference_dir/correlation/intra_bpcorr_ref.csv
+    ref_jpg_output: file:test_reference_dir/correlation/intra_bpcorr_ref.jpg
   properties:
     sequence: "CGCGAATTCGCG"
