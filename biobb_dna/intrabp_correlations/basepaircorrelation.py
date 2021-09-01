@@ -127,25 +127,34 @@ class BasePairCorrelation():
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # read input
-        shear = read_series(self.io_dict["in"]["input_filename_shear"])
-        stretch = read_series(self.io_dict["in"]["input_filename_stretch"])
-        stagger = read_series(self.io_dict["in"]["input_filename_stagger"])
-        buckle = read_series(self.io_dict["in"]["input_filename_buckle"])
-        propel = read_series(self.io_dict["in"]["input_filename_propel"])
-        opening = read_series(self.io_dict["in"]["input_filename_opening"])
+        shear = read_series(
+            self.io_dict["in"]["input_filename_shear"], usecols=self.seqpos)
+        stretch = read_series(
+            self.io_dict["in"]["input_filename_stretch"], usecols=self.seqpos)
+        stagger = read_series(
+            self.io_dict["in"]["input_filename_stagger"], usecols=self.seqpos)
+        buckle = read_series(
+            self.io_dict["in"]["input_filename_buckle"], usecols=self.seqpos)
+        propel = read_series(
+            self.io_dict["in"]["input_filename_propel"], usecols=self.seqpos)
+        opening = read_series(
+            self.io_dict["in"]["input_filename_opening"], usecols=self.seqpos)
 
-        # drop first and last columns
-        shear = shear[shear.columns[1:-1]]
-        stretch = stretch[stretch.columns[1:-1]]
-        stagger = stagger[stagger.columns[1:-1]]
-        buckle = buckle[buckle.columns[1:-1]]
-        propel = propel[propel.columns[1:-1]]
-        opening = opening[opening.columns[1:-1]]
-
-        labels = [
-            f"{self.sequence[i:i+1]}" for i in range(1, len(shear.columns) + 1)]
-        corr_index = [
-            f"{self.sequence[i:i+2]}" for i in range(1, len(shear.columns) + 1)]
+        if self.seqpos is None:
+            # drop first and last columns
+            shear = shear[shear.columns[1:-1]]
+            stretch = stretch[stretch.columns[1:-1]]
+            stagger = stagger[stagger.columns[1:-1]]
+            buckle = buckle[buckle.columns[1:-1]]
+            propel = propel[propel.columns[1:-1]]
+            opening = opening[opening.columns[1:-1]]
+            labels = [
+                f"{self.sequence[i:i+1]}" for i in range(1, len(shear.columns) + 1)]
+            corr_index = [
+                f"{self.sequence[i:i+2]}" for i in range(1, len(shear.columns) + 1)]
+        else:
+            labels = [f"{self.sequence[i:i+1]}" for i in self.seqpos]
+            corr_index = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
 
         # rename duplicated subunits
         shear.columns = labels

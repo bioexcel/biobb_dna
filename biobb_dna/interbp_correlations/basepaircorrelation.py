@@ -127,25 +127,34 @@ class BasePairCorrelation():
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # read input
-        shift = read_series(self.io_dict["in"]["input_filename_shift"])
-        slide = read_series(self.io_dict["in"]["input_filename_slide"])
-        rise = read_series(self.io_dict["in"]["input_filename_rise"])
-        tilt = read_series(self.io_dict["in"]["input_filename_tilt"])
-        roll = read_series(self.io_dict["in"]["input_filename_roll"])
-        twist = read_series(self.io_dict["in"]["input_filename_twist"])
+        shift = read_series(
+            self.io_dict["in"]["input_filename_shift"], usecols=self.seqpos)
+        slide = read_series(
+            self.io_dict["in"]["input_filename_slide"], usecols=self.seqpos)
+        rise = read_series(
+            self.io_dict["in"]["input_filename_rise"], usecols=self.seqpos)
+        tilt = read_series(
+            self.io_dict["in"]["input_filename_tilt"], usecols=self.seqpos)
+        roll = read_series(
+            self.io_dict["in"]["input_filename_roll"], usecols=self.seqpos)
+        twist = read_series(
+            self.io_dict["in"]["input_filename_twist"], usecols=self.seqpos)
 
-        # drop first and last columns
-        shift = shift[shift.columns[1:-2]]
-        slide = slide[slide.columns[1:-2]]
-        rise = rise[rise.columns[1:-2]]
-        tilt = tilt[tilt.columns[1:-2]]
-        roll = roll[roll.columns[1:-2]]
-        twist = twist[twist.columns[1:-2]]
-
-        labels = [
-            f"{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
-        corr_index = [
-            f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)]
+        if self.seqpos is None:
+            # drop first and last columns
+            shift = shift[shift.columns[1:-2]]
+            slide = slide[slide.columns[1:-2]]
+            rise = rise[rise.columns[1:-2]]
+            tilt = tilt[tilt.columns[1:-2]]
+            roll = roll[roll.columns[1:-2]]
+            twist = twist[twist.columns[1:-2]]
+            labels = [
+                f"{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
+            corr_index = [
+                f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)]
+        else:
+            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
+            corr_index = [f"{self.sequence[i:i+3]}" for i in self.seqpos]
 
         # rename duplicated subunits
         shift.columns = labels
