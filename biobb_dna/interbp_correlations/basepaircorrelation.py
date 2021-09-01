@@ -203,16 +203,18 @@ class BasePairCorrelation():
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         # define colormap
-        cmap = mpl.colors.ListedColormap([
-            "blue",
-            "cornflowerblue",
-            "lightskyblue",
-            "white",
-            "mistyrose",
-            "tomato",
-            "red"])
-        bounds = [-.6, -.5, -.4, -.3, .3, .4, .5, .6]
-        norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+        # cmap = mpl.colors.ListedColormap([
+        #     "blue",
+        #     "cornflowerblue",
+        #     "lightskyblue",
+        #     "white",
+        #     "mistyrose",
+        #     "tomato",
+        #     "red"])
+        cmap = plt.get_cmap("bwr")
+        bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
+        num = cmap.N
+        norm = mpl.colors.BoundaryNorm(bounds, num)
         cmap.set_bad(color="gainsboro")
         fig, ax = plt.subplots(
             1,
@@ -221,7 +223,7 @@ class BasePairCorrelation():
             figsize=(7.5, 5),
             tight_layout=True)
         im = ax.imshow(result_df, cmap=cmap, norm=norm, aspect='auto')
-        plt.colorbar(im)
+        plt.colorbar(im, ticks=[-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1])
 
         # axes
         xlocs = np.arange(len(result_df.columns))

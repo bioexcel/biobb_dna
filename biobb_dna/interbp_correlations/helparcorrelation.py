@@ -16,7 +16,7 @@ from biobb_dna.utils.loader import load_data
 class HelParCorrelation():
     """
     | biobb_dna HelParCorrelation
-    | Calculate correlation between helical parameters for a single basepair.
+    | Calculate correlation between helical parameters for a single inter-base pair.
 
     Args:
         input_filename_shift (str): Path to .csv file with data for helical parameter 'shift'. File type: input. Accepted formats: csv (edam:format_3752).
@@ -35,7 +35,7 @@ class HelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.correlations.helparcorrelation import HelParCorrelation
+            from biobb_dna.interbp_correlations.helparcorrelation import HelParCorrelation
 
             prop = { 
                 'basepair': 'AA',
@@ -48,6 +48,7 @@ class HelParCorrelation():
                 input_filename_roll='path/to/roll.csv',
                 input_filename_twist='path/to/twist.csv',
                 output_csv_path='path/to/output/file.csv',
+                output_jpg_path='path/to/output/file.jpg',
                 properties=prop)
 
         * ontology:
@@ -95,7 +96,7 @@ class HelParCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <correlations.helparcorrelation.HelParCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <interbp_correlations.helparcorrelation.HelParCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -267,8 +268,8 @@ def helparcorrelation(
         input_filename_roll: str, input_filename_twist: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParCorrelation <correlations.helparcorrelation.HelParCorrelation>` class and
-    execute the :meth:`launch() <correlations.helparcorrelation.HelParCorrelation.launch>` method."""
+    """Create :class:`HelParCorrelation <interbp_correlations.helparcorrelation.HelParCorrelation>` class and
+    execute the :meth:`launch() <interbp_correlations.helparcorrelation.HelParCorrelation.launch>` method."""
 
     return HelParCorrelation(
         input_filename_shift=input_filename_shift,

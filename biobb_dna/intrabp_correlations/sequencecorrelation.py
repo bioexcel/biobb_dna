@@ -17,7 +17,7 @@ from biobb_dna.utils import constants
 class SequenceCorrelation():
     """
     | biobb_dna SequenceCorrelation
-    | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
+    | Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.
 
     Args:
         input_ser_path (str): Path to .ser file with data for single helical parameter. File type: input. Accepted formats: ser (edam:format_2330).
@@ -33,7 +33,7 @@ class SequenceCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.correlations.sequencecorrelation import sequencecorrelation
+            from biobb_dna.intrabp_correlations.sequencecorrelation import sequencecorrelation
 
             sequencecorrelation(
                 input_ser_path='path/to/input/file.ser',
@@ -80,7 +80,7 @@ class SequenceCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <correlations.sequencecorrelation.SequenceCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <intrabp_correlations.sequencecorrelation.SequenceCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -104,11 +104,11 @@ class SequenceCorrelation():
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
 
-            # get base length and unit from helical parameter name
-            if self.helpar_name in constants.hp_angular:
-                self.method = "pearson"
-            else:
-                self.method = self.circular
+        # get base length and unit from helical parameter name
+        if self.helpar_name in constants.hp_angular:
+            self.method = "pearson"
+        else:
+            self.method = self.circular
 
         # check seqpos
         if self.seqpos is not None:
@@ -139,9 +139,9 @@ class SequenceCorrelation():
             # discard first and last base(pairs) from strands
             sequence = self.sequence[1:]
             labels = [
-                f"{sequence[i:i+2]}" for i in range(len(ser_data.columns))]
+                f"{sequence[i:i+1]}" for i in range(len(ser_data.columns))]
         else:
-            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
+            labels = [f"{self.sequence[i:i+1]}" for i in self.seqpos]
         ser_data.columns = labels
 
         # rename duplicated subunits
