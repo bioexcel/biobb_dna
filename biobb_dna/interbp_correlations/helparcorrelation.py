@@ -35,7 +35,7 @@ class HelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.helparcorrelation import HelParCorrelation
+            from biobb_dna.interbp_correlations.helparcorrelation import helparcorrelation
 
             prop = { 
                 'basepair': 'AA',

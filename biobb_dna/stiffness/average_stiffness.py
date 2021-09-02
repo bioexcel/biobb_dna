@@ -36,7 +36,7 @@ class AverageStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.stiffness.average_stiffness import AverageStiffness
+            from biobb_dna.stiffness.average_stiffness import averagestiffness
 
             prop = { 
                 'helpar_name': 'twist',

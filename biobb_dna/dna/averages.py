@@ -35,7 +35,7 @@ class HelParAverages():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.averages import HelParAverages
+            from biobb_dna.dna.averages import helparaverages
 
             prop = { 
                 'helpar_name': 'twist',

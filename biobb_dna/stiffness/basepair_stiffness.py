@@ -37,7 +37,7 @@ class BPStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.stiffness.basepair_stiffness import BPStiffness
+            from biobb_dna.stiffness.basepair_stiffness import bpstiffness
 
             prop = { 
                 'KT': 0.592186827,

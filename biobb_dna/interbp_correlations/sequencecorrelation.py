@@ -33,7 +33,7 @@ class SequenceCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.correlations.sequencecorrelation import sequencecorrelation
+            from biobb_dna.interbp_correlations.sequencecorrelation import sequencecorrelation
 
             sequencecorrelation(
                 input_ser_path='path/to/input/file.ser',

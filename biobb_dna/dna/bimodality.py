@@ -40,7 +40,7 @@ class HelParBimodality():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.bimodality import HelParBimodality
+            from biobb_dna.dna.bimodality import helparbimodality
 
             prop = { 
                 'max_iter': 500,

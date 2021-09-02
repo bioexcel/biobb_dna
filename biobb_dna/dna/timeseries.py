@@ -35,7 +35,7 @@ class HelParTimeSeries():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.timeseries import HelParTimeSeries
+            from biobb_dna.dna.timeseries import helpartimeseries
 
             prop = {
                 'helpar_name': 'twist',
