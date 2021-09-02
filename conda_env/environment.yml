@@ -1,4 +1,4 @@
-name: biobb_template
+name: biobb_dna
 channels:
   - conda-forge
   - bioconda
