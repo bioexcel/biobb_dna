@@ -1,0 +1,52 @@
+{
+    "_id": "biobb_dna",
+    "desc": "Biobb_dna is a package composed of different analyses for nucleic acid trajectories",
+    "github": "https://github.com/bioexcel/biobb_dna",
+    "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
+    "conda": "",
+    "docker": "",
+    "singularity": "",
+    "version": "2.0.0",
+    "tools": [
+        {
+            "block": "dna",
+            "tool": "zip",
+            "desc": "Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
+            "exec": "dna",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "dnaContainer",
+            "tool": "zip",
+            "desc": "Short description for the dna_container module.",
+            "exec": "dna_container",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna_container"
+        }
+    ],
+    "dep_pypi": [
+        "install_requires=['biobb_common==3.5.1']",
+        "python_requires='==3.7.*'",
+        "pandas>=1.2",
+        "matplotlib>=3.3",
+        "numpy>=1.20",
+        "scikit-learn>=0.24"
+    ],
+    "dep_conda": [
+        "python ==3.7.*",
+        "biobb_common ==3.5.1",
+        "nb_conda_kernels",
+        "nose",
+        "conda",
+        "curves",
+        "pytraj",
+        "pandas>=1.2",
+        "matplotlib>=3.3",
+        "numpy>=1.20",
+        "scikit-learn>=0.24"
+    ],
+    "keywords": [
+        "dna",
+        "curves",
+        "canal"
+    ]
+}
