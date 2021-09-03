@@ -146,6 +146,7 @@ class Canal():
             shutil.copy(
                 self.io_dict['in']['input_lis_file'],
                 self.tmp_folder)
+
         # change directory to temporary folder
         original_directory = os.getcwd()
         os.chdir(self.tmp_folder)

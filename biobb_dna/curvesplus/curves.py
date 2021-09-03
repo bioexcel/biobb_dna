@@ -105,6 +105,7 @@ class Curves():
 
         # Check the properties
         fu.check_properties(self, self.properties)
+
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
         if self.s2range is None:
@@ -113,6 +114,7 @@ class Curves():
             s2start = range1_end + 1
             s2end = 2 * range1_end
             self.s2range = f"{s2end}:{s2start}"
+
         # check standard library files location if not provided
         if self.stdlib_path is None:
             if os.getenv("CONDA_PREFIX", False):
@@ -135,7 +137,7 @@ class Curves():
                         "located with the stdlib_path property.")
             else:
                 # CONDA_PREFIX undefined
-                self.stdlib_path = "standard"
+                self.stdlib_path = Path.cwd() / "standard"
 
         # Restart
         if self.restart:
@@ -152,24 +154,32 @@ class Curves():
         self.tmp_folder = fu.create_unique_dir(prefix="curves_")
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
+        # copy input files to temporary folder
         shutil.copy(self.io_dict['in']['input_struc_path'], self.tmp_folder)
+        tmp_struc_input = Path(self.io_dict['in']['input_struc_path']).name
         if self.io_dict['in']['input_top_path'] is not None:
             shutil.copy(self.io_dict['in']['input_top_path'], self.tmp_folder)
+            tmp_top_input = Path(self.io_dict['in']['input_top_path']).name
+
+        # change directory to temporary folder
+        original_directory = os.getcwd()
+        os.chdir(self.tmp_folder)
 
         # create intructions
         instructions = [
             f"{self.curves_exec} <<! ",
             "&inp",
-            f"  file={self.io_dict['in']['input_struc_path']},"]
+            f"  file={tmp_struc_input},"]
         if self.io_dict['in']['input_top_path'] is not None:
             # add topology file if needed
             fu.log('Appending provided topology to command',
                    out_log, self.global_log)
             instructions.append(
-                f"  ftop={self.io_dict['in']['input_top_path']},")
+                f"  ftop={tmp_top_input},")
 
+        # create intructions
         instructions = instructions + [
-            f"  lis={Path(self.tmp_folder) / 'curves_output'},",
+            "  lis='curves_output',",
             f"  lib={self.stdlib_path},",
             f"  ions={self.ions},",
             f"  itst={self.itst},itnd={self.itnd},itdel={self.itdel},",
@@ -186,6 +196,9 @@ class Curves():
         returncode = cmd_wrapper.CmdWrapper(
             cmd, out_log, err_log, self.global_log).launch()
 
+        # change back to original directory
+        os.chdir(original_directory)
+
         # create zipfile and write output inside
         if self.io_dict["out"]["output_zip_path"] is not None:
             zf = zipfile.ZipFile(
@@ -197,6 +210,7 @@ class Curves():
                         curves_outfile,
                         arcname=curves_outfile.name)
             zf.close()
+
         # rename cda and lis files
         (Path(self.tmp_folder) / "curves_output.cda").rename(
             self.io_dict["out"]["output_cda_path"])
