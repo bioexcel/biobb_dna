@@ -34,6 +34,7 @@ class Curves():
             * **curves_exec** (*str*) - (Optional) (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
+
             from biobb_dna.curvesplus.curves import curves
             prop = { 
                 's1range': '1:12',
