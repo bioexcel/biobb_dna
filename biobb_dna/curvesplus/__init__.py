@@ -1,2 +1,2 @@
 name = "curves"
-__all__ = ["curves"]
+__all__ = ["curves", "canal"]
