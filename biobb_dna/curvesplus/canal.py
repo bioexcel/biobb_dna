@@ -38,6 +38,7 @@ class Canal():
             * **canal_exec** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
+
             from biobb_dna.curvesplus.canal import canal
             prop = { 
                 'series': '.t.',
