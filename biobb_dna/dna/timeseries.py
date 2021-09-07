@@ -46,7 +46,7 @@ class HelParTimeSeries():
                 input_ser_path='/path/to/twist.ser',
                 output_zip_path='/path/to/output/file.zip'
                 properties=prop)
-
+    Info:
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

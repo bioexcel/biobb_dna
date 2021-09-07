@@ -1,4 +1,6 @@
 # !/usr/bin/env python3
+"""Module containing the AverageStiffness class and the command line interface."""
+
 import shutil
 import argparse
 from pathlib import Path
@@ -11,9 +13,6 @@ from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
-
-
-"""Module containing the AverageStiffness class and the command line interface."""
 
 
 class AverageStiffness():
@@ -47,7 +46,7 @@ class AverageStiffness():
                 output_csv_path='/path/to/table/output.csv',
                 output_jpg_path='/path/to/table/output.jpg',
                 properties=prop)
-
+    Info:
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

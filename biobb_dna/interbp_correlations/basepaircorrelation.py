@@ -46,7 +46,7 @@ class BasePairCorrelation():
                 output_csv_path='path/to/output/file.csv',
                 output_jpg_path='path/to/output/plot.jpg',
                 properties=prop)
-
+    Info:
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

@@ -4,8 +4,8 @@ biobb_dna
 .. toctree::
    :maxdepth: 4
 
-   dna
    curvesplus
+   dna
    backbone
    stiffness
    interbp_correlations

@@ -51,7 +51,7 @@ class HelParBimodality():
                 output_csv_path='/path/to/output.csv',
                 output_jpg_path='/path/to/output.jpg',
                 properties=prop)
-
+    Info:
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

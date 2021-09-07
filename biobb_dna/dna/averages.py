@@ -1,4 +1,6 @@
 # !/usr/bin/env python3
+
+"""Module containing the HelParAverages class and the command line interface."""
 import shutil
 import argparse
 from pathlib import Path
@@ -10,9 +12,6 @@ from biobb_dna.utils.loader import read_series
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
-
-
-"""Module containing the HelParAverages class and the command line interface."""
 
 
 class HelParAverages():
@@ -31,7 +30,6 @@ class HelParAverages():
             * **seqpos** (*list*) - (None) list of base pairs (columns indices) to use.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
-
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -47,7 +45,7 @@ class HelParAverages():
                 output_csv_path='/path/to/table/output.csv',
                 output_jpg_path='/path/to/table/output.jpg',
                 properties=prop)
-
+    Info:
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl
