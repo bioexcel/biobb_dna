@@ -1,21 +1,21 @@
-curvesplus package
+stiffness package
 ==================
 
 Submodules
 ----------
 
-curvesplus.curves module
+stiffness.average_stiffness module
 ------------------------------------
 
-.. automodule:: curvesplus.curves
+.. automodule:: stiffness.average_stiffness
     :members:
     :undoc-members:
     :show-inheritance:
 
-curvesplus.canal module
+stiffness.basepair_stiffness module
 ------------------------------------
 
-.. automodule:: curvesplus.canal
+.. automodule:: stiffness.basepair_stiffness
     :members:
     :undoc-members:
     :show-inheritance:
