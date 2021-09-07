@@ -1,2 +1,2 @@
 name = "dna"
-__all__ = ["dna"]
+__all__ = ["averages", "bimodality", "timeseries"]
