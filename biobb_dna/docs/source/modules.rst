@@ -1,7 +1,7 @@
-biobb_template
+biobb_dna
 ==============
 
 .. toctree::
    :maxdepth: 4
 
-   template
+   biobb_dna.curvesplus

@@ -1,21 +1,13 @@
-template package
-=====================
+biobb_dna package
+==================
 
 Submodules
 ----------
 
-template.template module
-------------------------
+biobb_dna.curvesplus.curves module
+--------------------------
 
-.. automodule:: template.template
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-template.template_container module
-----------------------------------
-
-.. automodule:: template.template_container
+.. automodule:: biobb_dna.curvesplus.curves
     :members:
     :undoc-members:
     :show-inheritance:
