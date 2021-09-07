@@ -35,13 +35,12 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-
+    'recommonmark'
 ]
 
 # Using Google docstring style
 napoleon_numpy_docstring = False
 napoleon_google_docstring = True
-
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,9 +51,9 @@ templates_path = ['_templates']
 # source_suffix = ['.rst', '.md']
 
 # -- Integrate markdown ---------------------------------------------------
-source_parsers = {
-   '.md': 'recommonmark.parser.CommonMarkParser',
-}
+# source_parsers = {
+#     '.md': 'recommonmark.parser.CommonMarkParser',
+# }
 
 source_suffix = ['.rst', '.md']
 
@@ -65,8 +64,8 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = u'biobb_template'
-copyright = u'2020, Bioexcel Project'
+project = u'biobb_dna'
+copyright = u'2021, Bioexcel Project'
 author = u'Bioexcel Project'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -223,29 +222,29 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'biobb_template_doc'
+htmlhelp_basename = 'biobb_dna_doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    # 'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    # 'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    # 'preamble': '',
 
-# Latex figure (float) alignment
-#'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    # 'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'biobb_template.tex', u'biobb_template Documentation',
+    (master_doc, 'biobb_dna.tex', u'biobb_dna Documentation',
      u'Bioexcel Project', 'manual'),
 ]
 
@@ -275,7 +274,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'biobb_template', u'biobb_template Documentation',
+    (master_doc, 'biobb_dna', u'biobb_dna Documentation',
      [author], 1)
 ]
 
@@ -289,8 +288,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'biobb_template', u'biobb_template Documentation',
-     author, 'biobb_template', 'biobb_template template building block',
+    (master_doc, 'biobb_dna', u'biobb_dna Documentation',
+     author, 'biobb_dna', 'biobb_dna template building block',
      'Miscellaneous'),
 ]
 
