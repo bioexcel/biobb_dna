@@ -12,10 +12,10 @@ backbone.bipopulations module
     :undoc-members:
     :show-inheritance:
 
-backbone.canonical_alpha_gamma module
+backbone.canonicalag module
 ------------------------------------
 
-.. automodule:: backbone.canonical_alpha_gamma
+.. automodule:: backbone.canonicalag
     :members:
     :undoc-members:
     :show-inheritance:

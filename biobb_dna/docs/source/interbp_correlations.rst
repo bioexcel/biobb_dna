@@ -6,26 +6,26 @@ Correlation functions for inter-base pairs.
 Submodules
 ----------
 
-interbp_correlations.helparcorrelation module
+interbp_correlations.interhpcorr module
 ------------------------------------
 
-.. automodule:: interbp_correlations.helparcorrelation
+.. automodule:: interbp_correlations.interhpcorr
     :members:
     :undoc-members:
     :show-inheritance:
 
-interbp_correlations.sequencecorrelation module
+interbp_correlations.interseqcorr module
 ------------------------------------
 
-.. automodule:: interbp_correlations.sequencecorrelation
+.. automodule:: interbp_correlations.interseqcorr
     :members:
     :undoc-members:
     :show-inheritance:
 
-interbp_correlations.basepaircorrelation module
+interbp_correlations.interbpcorr module
 ------------------------------------
 
-.. automodule:: interbp_correlations.basepaircorrelation
+.. automodule:: interbp_correlations.interbpcorr
     :members:
     :undoc-members:
     :show-inheritance:

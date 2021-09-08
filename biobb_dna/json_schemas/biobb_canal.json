@@ -1,0 +1,158 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/biobb_canal",
+    "name": "biobb_dna Canal",
+    "title": "Wrapper for the Canal executable that is part of the Curves+ software suite.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "Canal",
+            "version": ">=2.6",
+            "license": "BSD 3-Clause"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_cda_file",
+        "input_lis_file",
+        "output_zip_path"
+    ],
+    "properties": {
+        "input_cda_file": {
+            "type": "string",
+            "description": "Input cda file, from Cur+ output",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.cda$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.cda$",
+                    "description": "Input cda file, from Cur+ output",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_lis_file": {
+            "type": "string",
+            "description": "(Optional) Input lis file, from Cur+ output",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.lis$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.lis$",
+                    "description": "(Optional) Input lis file, from Cur+ output",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_zip_path": {
+            "type": "string",
+            "description": "zip filename for output files",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "zip filename for output files",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "bases": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence)."
+                },
+                "itst": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Iteration start index."
+                },
+                "itnd": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Iteration end index."
+                },
+                "itdel": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Iteration delimiter."
+                },
+                "lev1": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Lower base level limit (i.e. base pairs) used for analysis."
+                },
+                "lev2": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels)."
+                },
+                "nastr": {
+                    "type": "string",
+                    "default": "NA",
+                    "wf_prop": false,
+                    "description": "character string used to indicate missing data in .ser files."
+                },
+                "cormin": {
+                    "type": "number",
+                    "default": 0.6,
+                    "wf_prop": false,
+                    "description": "minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables."
+                },
+                "series": {
+                    "type": "string",
+                    "default": "False",
+                    "wf_prop": false,
+                    "description": "if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories."
+                },
+                "histo": {
+                    "type": "string",
+                    "default": "False",
+                    "wf_prop": false,
+                    "description": "if True then output histogram data."
+                },
+                "corr": {
+                    "type": "string",
+                    "default": "False",
+                    "wf_prop": false,
+                    "description": "if True than output linear correlation coefficients between all variables."
+                },
+                "sequence": {
+                    "type": "string",
+                    "default": "Optional",
+                    "wf_prop": false,
+                    "description": "sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file."
+                },
+                "canal_exec": {
+                    "type": "string",
+                    "default": "Canal",
+                    "wf_prop": false,
+                    "description": "Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.backbone.canonical_alpha_gamma import canonicalag
+from biobb_dna.backbone.canonicalag import canonicalag
 
 
 class TestCanonicalAlphaGamma():

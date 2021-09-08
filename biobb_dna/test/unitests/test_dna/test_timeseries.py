@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.dna.timeseries import helpartimeseries
+from biobb_dna.dna.dna_timeseries import helpartimeseries
 
 
 import logging
@@ -9,7 +9,7 @@ mpl_logger.setLevel(logging.ERROR)
 
 class TestTimeSeries():
     def setUp(self):
-        fx.test_setup(self, 'timeseries')
+        fx.test_setup(self, 'dna_timeseries')
 
     def tearDown(self):
         fx.test_teardown(self)

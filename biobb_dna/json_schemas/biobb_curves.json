@@ -1,0 +1,166 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/biobb_curves",
+    "name": "biobb_dna Curves",
+    "title": "Wrapper for the Cur+ executable  that is part of the Curves+ software suite.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "Curves",
+            "version": ">=2.6",
+            "license": "BSD 3-Clause"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_struc_path",
+        "output_cda_path",
+        "output_lis_path"
+    ],
+    "properties": {
+        "input_struc_path": {
+            "type": "string",
+            "description": "Trajectory or PDB input file",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.trj$",
+                ".*\\.pdb$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.trj$",
+                    "description": "Trajectory or PDB input file",
+                    "edam": "format_3910"
+                },
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Trajectory or PDB input file",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "input_top_path": {
+            "type": "string",
+            "description": "Topology file, needed along with .trj file (optional)",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.top$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.top$",
+                    "description": "Topology file, needed along with .trj file (optional)",
+                    "edam": "format_3881"
+                }
+            ]
+        },
+        "output_cda_path": {
+            "type": "string",
+            "description": "Filename for Curves+ output .cda file",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.cda$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.cda$",
+                    "description": "Filename for Curves+ output .cda file",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_lis_path": {
+            "type": "string",
+            "description": "Filename for Curves+ output .lis file",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.lis$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.lis$",
+                    "description": "Filename for Curves+ output .lis file",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_zip_path": {
+            "type": "string",
+            "description": "Filename for .zip files containing Curves+ output that is not .cda or .lis files",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Filename for .zip files containing Curves+ output that is not .cda or .lis files",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "s1range": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Range of first strand. Must be specified in the form \"start:end\"."
+                },
+                "s2range": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Range of second strand. Must be specified in the form \"start:end\"."
+                },
+                "stdlib_path": {
+                    "type": "string",
+                    "default": "standard",
+                    "wf_prop": false,
+                    "description": "Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory."
+                },
+                "itst": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Iteration start index."
+                },
+                "itnd": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Iteration end index."
+                },
+                "itdel": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Iteration delimiter."
+                },
+                "ions": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out."
+                },
+                "curves_exec": {
+                    "type": "string",
+                    "default": "Cur+",
+                    "wf_prop": false,
+                    "description": "Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

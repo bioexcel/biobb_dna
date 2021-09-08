@@ -4,26 +4,26 @@ dna package
 Submodules
 ------------
 
-dna.averages module
+dna.dna_averages module
 ------------------------------------
 
-.. automodule:: dna.averages
+.. automodule:: dna.dna_averages
     :members:
     :undoc-members:
     :show-inheritance:
 
-dna.timeseries module
+dna.dna_timeseries module
 ------------------------------------
 
-.. automodule:: dna.timeseries
+.. automodule:: dna.dna_timeseries
     :members:
     :undoc-members:
     :show-inheritance:
 
-dna.bimodality module
+dna.dna_bimodality module
 ------------------------------------
 
-.. automodule:: dna.bimodality
+.. automodule:: dna.dna_bimodality
     :members:
     :undoc-members:
     :show-inheritance:

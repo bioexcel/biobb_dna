@@ -1,0 +1,182 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrahpcorr",
+    "name": "biobb_dna IntraHelParCorrelation",
+    "title": "Calculate correlation between helical parameters for a single intra-base pair.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_filename_shear",
+        "input_filename_stretch",
+        "input_filename_stagger",
+        "input_filename_buckle",
+        "input_filename_propel",
+        "input_filename_opening",
+        "output_csv_path",
+        "output_jpg_path"
+    ],
+    "properties": {
+        "input_filename_shear": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'shear'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'shear'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_stretch": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'stretch'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'stretch'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_stagger": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'stagger'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'stagger'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_buckle": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'buckle'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'buckle'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_propel": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'propeller'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'propeller'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_opening": {
+            "type": "string",
+            "description": "Path to .csv file with data for helical parameter 'opening'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with data for helical parameter 'opening'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_csv_path": {
+            "type": "string",
+            "description": "Path to directory where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to directory where output is saved",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_jpg_path": {
+            "type": "string",
+            "description": "Path to .jpg file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "Path to .jpg file where output is saved",
+                    "edam": "format_3579"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "base": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Name of base analyzed."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

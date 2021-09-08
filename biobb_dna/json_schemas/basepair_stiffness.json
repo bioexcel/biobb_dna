@@ -1,0 +1,188 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/basepair_stiffness",
+    "name": "biobb_dna BPStiffness",
+    "title": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_filename_shift",
+        "input_filename_slide",
+        "input_filename_rise",
+        "input_filename_tilt",
+        "input_filename_roll",
+        "input_filename_twist",
+        "output_csv_path",
+        "output_jpg_path"
+    ],
+    "properties": {
+        "input_filename_shift": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'shift'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'shift'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_slide": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'slide'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'slide'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_rise": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'rise'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'rise'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_tilt": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'tilt'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'tilt'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_roll": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'roll'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'roll'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_filename_twist": {
+            "type": "string",
+            "description": "Path to csv file with data for helical parameter 'twist'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to csv file with data for helical parameter 'twist'",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_csv_path": {
+            "type": "string",
+            "description": "Path to directory where stiffness matrix file is saved as a csv file",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to directory where stiffness matrix file is saved as a csv file",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_jpg_path": {
+            "type": "string",
+            "description": "Path to directory where stiffness heatmap image is saved as a jpg file",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "Path to directory where stiffness heatmap image is saved as a jpg file",
+                    "edam": "format_3579"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "KT": {
+                    "type": "number",
+                    "default": 0.592186827,
+                    "wf_prop": false,
+                    "description": "Value of Boltzmann temperature factor."
+                },
+                "scaling": {
+                    "type": "array",
+                    "default": "[1, 1, 1, 10.6, 10.6, 10.6]",
+                    "wf_prop": false,
+                    "description": "Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}
