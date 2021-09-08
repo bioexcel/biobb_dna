@@ -27,8 +27,8 @@ class CanonicalAG():
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
-            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
+            * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+            * **seqpos** (*list*) - (None) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -51,6 +51,9 @@ class CanonicalAG():
                 output_jpg_path='/path/to/table/output.jpg',
                 properties=prop)
     Info:
+        * wrapped_software:
+            * name: In house
+            * license: Apache-2.0
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

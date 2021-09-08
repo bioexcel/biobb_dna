@@ -1,0 +1,154 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/canonical_alpha_gamma",
+    "name": "biobb_dna CanonicalAG",
+    "title": "Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_alphaC_path",
+        "input_alphaW_path",
+        "input_gammaC_path",
+        "input_gammaW_path",
+        "output_csv_path",
+        "output_jpg_path"
+    ],
+    "properties": {
+        "input_alphaC_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'alphaC'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'alphaC'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_alphaW_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'alphaW'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'alphaW'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_gammaC_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'gammaC'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'gammaC'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_gammaW_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'gammaW'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'gammaW'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_csv_path": {
+            "type": "string",
+            "description": "Path to .csv file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file where output is saved",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_jpg_path": {
+            "type": "string",
+            "description": "Path to .jpg file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "Path to .jpg file where output is saved",
+                    "edam": "format_3579"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "sequence": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
+                },
+                "seqpos": {
+                    "type": "array",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

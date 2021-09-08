@@ -52,6 +52,9 @@ class HelParBimodality():
                 output_jpg_path='/path/to/output.jpg',
                 properties=prop)
     Info:
+        * wrapped_software:
+            * name: In house
+            * license: Apache-2.0
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

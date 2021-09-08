@@ -1,0 +1,154 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/bipopulations",
+    "name": "biobb_dna BIPopulations",
+    "title": "Calculate BI/BII populations from epsilon and zeta parameters.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_epsilC_path",
+        "input_epsilW_path",
+        "input_zetaC_path",
+        "input_zetaW_path",
+        "output_csv_path",
+        "output_jpg_path"
+    ],
+    "properties": {
+        "input_epsilC_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'epsilC'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'epsilC'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_epsilW_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'epsilW'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'epsilW'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_zetaC_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'zetaC'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'zetaC'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_zetaW_path": {
+            "type": "string",
+            "description": "Path to .ser file for helical parameter 'zetaW'",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.ser$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file for helical parameter 'zetaW'",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_csv_path": {
+            "type": "string",
+            "description": "Path to .csv file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file where output is saved",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_jpg_path": {
+            "type": "string",
+            "description": "Path to .jpg file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "Path to .jpg file where output is saved",
+                    "edam": "format_3579"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "sequence": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
+                },
+                "seqpos": {
+                    "type": "array",
+                    "default": "(None",
+                    "wf_prop": false,
+                    "description": ") list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

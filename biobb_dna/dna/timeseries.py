@@ -24,11 +24,11 @@ class HelParTimeSeries():
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. Accepted formats: ser (edam:format_2330).
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. Accepted formats: .zip
         properties (dict):
-            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **bins** (*int* or *sequence* or *str*) - Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
+            * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
+            * **bins** (*int*) - (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **seqpos** (*list[int]*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
+            * **seqpos** (*list*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -47,6 +47,9 @@ class HelParTimeSeries():
                 output_zip_path='/path/to/output/file.zip'
                 properties=prop)
     Info:
+        * wrapped_software:
+            * name: In house
+            * license: Apache-2.0
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

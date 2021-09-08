@@ -1,0 +1,5 @@
+properties:
+  confidence_level: 5.0
+  helpar_name: shift
+  max_iter: 400
+  tol: 1.0e-05

@@ -5,7 +5,7 @@ from biobb_dna.stiffness.basepair_stiffness import bpstiffness
 
 class TestAvgStiffness():
     def setUp(self):
-        fx.test_setup(self, 'avgstiffness')
+        fx.test_setup(self, 'average_stiffness')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -25,7 +25,7 @@ class TestAvgStiffness():
 
 class TestBasePairStiffness():
     def setUp(self):
-        fx.test_setup(self, 'bpstiffness')
+        fx.test_setup(self, 'basepair_stiffness')
 
     def tearDown(self):
         fx.test_teardown(self)

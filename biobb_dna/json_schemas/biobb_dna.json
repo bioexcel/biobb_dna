@@ -24,98 +24,98 @@
         },
         {
             "block": "backbone",
-            "tool": "BI/BII Populations",
+            "tool": "In House",
             "desc": "Computation of BI/BII populations for the epsil/zeta helical parameters.",
             "exec": "bipopulations",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "backbone",
-            "tool": "Canonical Alpha-Gamma",
+            "tool": "In House",
             "desc": "Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.",
             "exec": "canonicalag",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "backbone",
-            "tool": "Puckering",
+            "tool": "In House",
             "desc": "Calculate Puckering from phase parameters.",
             "exec": "puckering",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "dna",
-            "tool": "averages",
+            "tool": "In House",
             "desc": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
             "exec": "dna_averages",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "dna",
-            "tool": "timeseries",
+            "tool": "In House",
             "desc": "Created time series and histogram plots for each base pair from a helical parameter series file.",
             "exec": "dna_timeseries",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "dna",
-            "tool": "bimodality",
+            "tool": "In House",
             "desc": "Determine binormality/bimodality from a helical parameter series dataset.",
             "exec": "dna_bimodality",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "stiffness",
-            "tool": "average_stiffness",
+            "tool": "In House",
             "desc": "Calculate average stiffness constants for each base pair of a trajectory's series.",
             "exec": "avgstiff",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "stiffness",
-            "tool": "basepair_stiffness",
+            "tool": "In House",
             "desc": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
             "exec": "bpstiff",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "interbp_correlations",
-            "tool": "basepaircorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
             "exec": "inter_bpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "interbp_correlations",
-            "tool": "helparcorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between helical parameters for a single inter-base pair.",
             "exec": "inter_hpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "interbp_correlations",
-            "tool": "sequencecorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
             "exec": "inter_seqcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "intrabp_correlations",
-            "tool": "basepaircorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
             "exec": "intra_bpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "intrabp_correlations",
-            "tool": "helparcorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between helical parameters for a single intra-base pair.",
             "exec": "intra_hpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
         },
         {
             "block": "intrabp_correlations",
-            "tool": "sequencecorrelation",
+            "tool": "In House",
             "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
             "exec": "intra_seqcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
@@ -132,11 +132,7 @@
     "dep_conda": [
         "python ==3.7.*",
         "biobb_common ==3.5.1",
-        "nb_conda_kernels",
-        "nose",
-        "conda",
         "curves",
-        "pytraj",
         "pandas>=1.2",
         "matplotlib>=3.3",
         "numpy>=1.20",

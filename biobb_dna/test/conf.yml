@@ -1,6 +1,6 @@
 working_dir_path: /tmp/biobb/unitests
 
-curves_trj:
+curves:
   paths:
     input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
     input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
@@ -10,24 +10,6 @@ curves_trj:
   properties:
     s1range: "1:12"
 
-curves_nc:
-  paths:
-    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.nc
-    input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
-    output_cda_path: curves_output.cda
-    output_lis_path: curves_output.lis
-    ref_cda_output: file:test_reference_dir/curvesplus/curves_nc_output.cda
-  properties:
-    s1range: "1:12"
-
-curves_pdb:
-  paths:
-    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.pdb
-    output_cda_path: curves_output.cda
-    output_lis_path: curves_output.lis
-    ref_cda_output: file:test_reference_dir/curvesplus/curves_pdb_output.cda
-  properties:
-    s1range: "1:12"
 
 canal:
   paths:
@@ -37,13 +19,6 @@ canal:
     series: true
     sequence: "CGCGAATTCGCG"
 
-canal_noseq:
-  paths:
-    input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
-    input_lis_file: file:test_data_dir/curvesplus/curves_output.lis
-    output_zip_path: canal_output.zip
-  properties:
-    series: true
   
 timeseries:
   paths:
@@ -79,7 +54,7 @@ bimodality:
     max_iter: 400
     tol: 0.00001
 
-avgstiffness:
+average_stiffness:
   paths:
     input_ser_path: file:test_data_dir/stiffness/canal_output_roll.ser
     output_csv_path: avgstiff.csv
@@ -89,7 +64,7 @@ avgstiffness:
   properties:
     sequence: "CGCGAATTCGCG"
 
-bpstiffness:
+basepair_stiffness:
   paths:
     input_filename_shift: file:test_data_dir/stiffness/series_shift_AA.csv
     input_filename_slide: file:test_data_dir/stiffness/series_slide_AA.csv
@@ -101,6 +76,8 @@ bpstiffness:
     output_jpg_path: bpstiff.jpg
     ref_csv_output: file:test_reference_dir/stiffness/stiffbp_ref.csv
     ref_jpg_output: file:test_reference_dir/stiffness/stiffbp_ref.jpg
+  properties:
+    remove_tmp: false
 
 bipopulations:
   paths:
@@ -115,7 +92,7 @@ bipopulations:
   properties:
     sequence: "CGCGAATTCGCG"
 
-canonicalag:
+canonical_alpha_gamma:
   paths:
     input_alphaC_path: file:test_data_dir/backbone/canal_output_alphaC.ser
     input_alphaW_path: file:test_data_dir/backbone/canal_output_alphaW.ser
@@ -139,7 +116,7 @@ puckering:
   properties:
     sequence: "CGCGAATTCGCG"
 
-inter_hpcorrelation:
+interhelparcorrelation:
   paths:
     input_filename_shift: file:test_data_dir/stiffness/series_shift_AA.csv
     input_filename_slide: file:test_data_dir/stiffness/series_slide_AA.csv
@@ -151,8 +128,10 @@ inter_hpcorrelation:
     output_jpg_path: inter_hpcorr.jpg
     ref_csv_output: file:test_reference_dir/correlation/inter_hpcorr_ref.csv
     ref_jpg_output: file:test_reference_dir/correlation/inter_hpcorr_ref.jpg
+  properties:
+    remove_tmp: false
 
-inter_seqcorrelation:
+intersequencecorrelation:
   paths:
     input_ser_path: file:test_data_dir/correlation/canal_output_roll.ser
     output_csv_path: inter_seqcorr.csv
@@ -162,7 +141,7 @@ inter_seqcorrelation:
   properties:
     sequence: "CGCGAATTCGCG"
 
-inter_bpcorrelation:
+interbasepaircorrelation:
   paths:
     input_filename_roll: file:test_data_dir/correlation/canal_output_roll.ser
     input_filename_tilt: file:test_data_dir/correlation/canal_output_tilt.ser
@@ -177,7 +156,7 @@ inter_bpcorrelation:
   properties:
     sequence: "CGCGAATTCGCG"
 
-intra_hpcorrelation:
+intrahelparcorrelation:
   paths:
     input_filename_buckle: file:test_data_dir/correlation/series_buckle_A.csv
     input_filename_propel: file:test_data_dir/correlation/series_propel_A.csv
@@ -189,8 +168,10 @@ intra_hpcorrelation:
     output_jpg_path: intra_hpcorr.jpg
     ref_csv_output: file:test_reference_dir/correlation/intra_hpcorr_ref.csv
     ref_jpg_output: file:test_reference_dir/correlation/intra_hpcorr_ref.jpg
+  properties:
+    remove_tmp: false
 
-intra_seqcorrelation:
+intrasequencecorrelation:
   paths:
     input_ser_path: file:test_data_dir/correlation/canal_output_buckle.ser
     output_csv_path: intra_seqcorr.csv
@@ -200,7 +181,7 @@ intra_seqcorrelation:
   properties:
     sequence: "CGCGAATTCGCG"
 
-intra_bpcorrelation:
+intrabasepaircorrelation:
   paths:
     input_filename_buckle: file:test_data_dir/correlation/canal_output_buckle.ser
     input_filename_propel: file:test_data_dir/correlation/canal_output_propel.ser

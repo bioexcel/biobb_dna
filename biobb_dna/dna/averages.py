@@ -24,7 +24,7 @@ class HelParAverages():
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **sequence** (*str*) - Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+            * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
             * **seqpos** (*list*) - (None) list of base pairs (columns indices) to use.
@@ -45,7 +45,11 @@ class HelParAverages():
                 output_csv_path='/path/to/table/output.csv',
                 output_jpg_path='/path/to/table/output.jpg',
                 properties=prop)
+
     Info:
+        * wrapped_software:
+            * name: In house
+            * license: Apache-2.0
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl

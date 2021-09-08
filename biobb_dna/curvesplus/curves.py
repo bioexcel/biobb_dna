@@ -25,13 +25,13 @@ class Curves():
         output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end". 
-            * **s2range** (*str*) - (Optional) (None) Range of second strand. Must be specified in the form "start:end".
-            * **stdlib_path** (*path*) - (Optional) ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
-            * **itst** (*int*) - (Optional) (0) Iteration start index.
-            * **itnd** (*int*) - (Optional) (0) Iteration end index.
-            * **itdel** (*int*) - (Optional) (1) Iteration delimiter. 
-            * **ions** (*bool*) - (Optional) (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
-            * **curves_exec** (*str*) - (Optional) (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
+            * **stdlib_path** (*str*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
+            * **itst** (*int*) - (0) Iteration start index.
+            * **itnd** (*int*) - (0) Iteration end index.
+            * **itdel** (*int*) - (1) Iteration delimiter. 
+            * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
+            * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
 

@@ -14,17 +14,3 @@ class TestCanal():
             properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_zip_path'])
         assert fx.exe_success(returncode)
-
-
-class TestCanalNoSeq():
-    def setUp(self):
-        fx.test_setup(self, 'canal_noseq')
-
-    def tearDown(self):
-        fx.test_teardown(self)
-
-    def test_canal(self):
-        returncode = canal(
-            properties=self.properties, **self.paths)
-        assert fx.not_empty(self.paths['output_zip_path'])
-        assert fx.exe_success(returncode)

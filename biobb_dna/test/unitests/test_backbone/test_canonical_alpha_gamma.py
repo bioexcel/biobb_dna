@@ -4,7 +4,7 @@ from biobb_dna.backbone.canonical_alpha_gamma import canonicalag
 
 class TestCanonicalAlphaGamma():
     def setUp(self):
-        fx.test_setup(self, 'canonicalag')
+        fx.test_setup(self, 'canonical_alpha_gamma')
 
     def tearDown(self):
         fx.test_teardown(self)
