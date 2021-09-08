@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module containing the InterSequenceCorrelation class and the command line interface."""
+"""Module containing the IntraSequenceCorrelation class and the command line interface."""
 import argparse
 from pathlib import Path
 
@@ -14,10 +14,10 @@ from biobb_dna.utils.loader import read_series
 from biobb_dna.utils import constants
 
 
-class InterSequenceCorrelation():
+class IntraSequenceCorrelation():
     """
-    | biobb_dna InterSequenceCorrelation
-    | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
+    | biobb_dna IntraSequenceCorrelation
+    | Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.
 
     Args:
         input_ser_path (str): Path to .ser file with data for single helical parameter. File type: input. Accepted formats: ser (edam:format_2330).
@@ -33,9 +33,9 @@ class InterSequenceCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.intersequencecorrelation import intersequencecorrelation
+            from biobb_dna.intrabp_correlations.intraseqcorr import intrasequencecorrelation
 
-            intersequencecorrelation(
+            intrasequencecorrelation(
                 input_ser_path='path/to/input/file.ser',
                 output_csv_path='path/to/output/file.csv',
                 output_jpg_path='path/to/output/plot.jpg',
@@ -83,7 +83,7 @@ class InterSequenceCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <correlations.intersequencecorrelation.InterSequenceCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <intrabp_correlations.intraseqcorr.IntraSequenceCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -142,9 +142,9 @@ class InterSequenceCorrelation():
             # discard first and last base(pairs) from strands
             sequence = self.sequence[1:]
             labels = [
-                f"{sequence[i:i+2]}" for i in range(len(ser_data.columns))]
+                f"{sequence[i:i+1]}" for i in range(len(ser_data.columns))]
         else:
-            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
+            labels = [f"{self.sequence[i:i+1]}" for i in self.seqpos]
         ser_data.columns = labels
 
         # rename duplicated subunits
@@ -203,14 +203,14 @@ class InterSequenceCorrelation():
         return num / den
 
 
-def intersequencecorrelation(
+def intrasequencecorrelation(
         input_ser_path: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParCorrelation <correlations.InterSequenceCorrelation.InterSequenceCorrelation>` class and
-    execute the :meth:`launch() <correlations.InterSequenceCorrelation.InterSequenceCorrelation.launch>` method."""
+    """Create :class:`HelParCorrelation <intrabp_correlations.intraseqcorr.IntraSequenceCorrelation>` class and
+    execute the :meth:`launch() <intrabp_correlations.intraseqcorr.IntraSequenceCorrelation.launch>` method."""
 
-    return InterSequenceCorrelation(
+    return IntraSequenceCorrelation(
         input_ser_path=input_ser_path,
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
@@ -235,7 +235,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    intersequencecorrelation(
+    intrasequencecorrelation(
         input_ser_path=args.input_ser_path,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,

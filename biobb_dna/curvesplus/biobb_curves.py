@@ -35,7 +35,7 @@ class Curves():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.curvesplus.curves import curves
+            from biobb_dna.curvesplus.biobb_curves import curves
             prop = { 
                 's1range': '1:12',
                 's2range': '24:13', 
@@ -98,7 +98,7 @@ class Curves():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`Curves <biobb_dna.curvesplus.Curves>` object."""
+        """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -230,8 +230,8 @@ def curves(
         input_struc_path: str, output_lis_path: str, output_cda_path: str,
         input_top_path: str = None, output_zip_path: str = None,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`Curves <biobb_dna.curvesplus.curves.Curves>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.curves.Curves.launch>` method."""
+    """Create :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` class and
+    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_curves.Curves.launch>` method."""
 
     return Curves(
         input_struc_path=input_struc_path,

@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.dna.averages import helparaverages
+from biobb_dna.dna.dna_averages import helparaverages
 
 import logging
 mpl_logger = logging.getLogger("matplotlib")
@@ -8,7 +8,7 @@ mpl_logger.setLevel(logging.ERROR)
 
 class TestAverages():
     def setUp(self):
-        fx.test_setup(self, 'averages')
+        fx.test_setup(self, 'dna_averages')
 
     def tearDown(self):
         fx.test_teardown(self)

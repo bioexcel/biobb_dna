@@ -19,9 +19,9 @@ class Canal():
     | Wrapper for the Canal executable that is part of the Curves+ software suite. 
 
     Args:        
-        input_cda_file (str): Input .cda file, from Cur+ output. File type: input. Accepted formats: cda (edam:format_2330).
-        input_lis_file (str): (Optional) Input .lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
-        output_zip_path (str): zip filename for output files. File type: output.  Accepted formats: zip.
+        input_cda_file (str): Input cda file, from Cur+ output. File type: input. Accepted formats: cda (edam:format_2330).
+        input_lis_file (str): (Optional) Input lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
+        output_zip_path (str): zip filename for output files. File type: output.  Accepted formats: zip (edam:format_3987).
         properties (dic):
             * **bases** (*str*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 
             * **itst** (*int*) - (0) Iteration start index.
@@ -39,7 +39,7 @@ class Canal():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.curvesplus.canal import canal
+            from biobb_dna.curvesplus.biobb_canal import canal
             prop = { 
                 'series': '.t.',
                 'histo': '.t.',
@@ -102,7 +102,7 @@ class Canal():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`Canal <biobb_dna.curvesplus.Canal>` object."""
+        """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -212,8 +212,8 @@ def canal(
         input_lis_file: str = None,
         properties: dict = None,
         **kwargs) -> int:
-    """Create :class:`Canal <biobb_dna.curvesplus.canal.Canal>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.canal.Canal.launch>` method."""
+    """Create :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` class and
+    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canal.Canal.launch>` method."""
 
     return Canal(
         input_cda_file=input_cda_file,

@@ -35,7 +35,7 @@ class CanonicalAG():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.backbone.canonical_alpha_gamma import canonicalag
+            from biobb_dna.backbone.canonicalag import canonicalag
 
             prop = {
                 'helpar_name': 'twist',
@@ -99,7 +99,7 @@ class CanonicalAG():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`CanonicalAG <backbone.canonical_alpha_gamma.CanonicalAG>` object."""
+        """Execute the :class:`CanonicalAG <backbone.canonicalag.CanonicalAG>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -262,8 +262,8 @@ def canonicalag(
         input_gammaC_path: str, input_gammaW_path: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`CanonicalAG <dna.backbone.canonical_alpha_gamma.CanonicalAG>` class and
-    execute the: meth: `launch() <dna.backbone.canonical_alpha_gamma.CanonicalAG.launch>` method. """
+    """Create :class:`CanonicalAG <dna.backbone.canonicalag.CanonicalAG>` class and
+    execute the: meth: `launch() <dna.backbone.canonicalag.CanonicalAG.launch>` method. """
 
     return CanonicalAG(
         input_alphaC_path=input_alphaC_path,

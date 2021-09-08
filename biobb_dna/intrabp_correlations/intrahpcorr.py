@@ -35,7 +35,7 @@ class IntraHelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.intrabp_correlations.intrahelparcorrelation import intrahelparcorrelation
+            from biobb_dna.intrabp_correlations.intrahpcorr import intrahelparcorrelation
 
             prop = { 
                 'base': 'A',
@@ -99,7 +99,7 @@ class IntraHelParCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`IntraHelParCorrelation <intrahelparcorrelation.intrahelparcorrelation.IntraHelParCorrelation>` object."""
+        """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -277,8 +277,8 @@ def intrahelparcorrelation(
         input_filename_propel: str, input_filename_opening: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`IntraHelParCorrelation <intrabp_correlations.intrahelparcorrelation.IntraHelParCorrelation>` class and
-    execute the :meth:`launch() <intrabp_correlations.intrahelparcorrelation.IntraHelParCorrelation.launch>` method."""
+    """Create :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` class and
+    execute the :meth:`launch() <intrabp_correlations.intrahpcorr.IntraHelParCorrelation.launch>` method."""
 
     return IntraHelParCorrelation(
         input_filename_shear=input_filename_shear,

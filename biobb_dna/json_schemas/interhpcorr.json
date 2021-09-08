@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrahelparcorrelation",
-    "name": "biobb_dna IntraHelParCorrelation",
-    "title": "Calculate correlation between helical parameters for a single intra-base pair.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/interhpcorr",
+    "name": "biobb_dna InterHelParCorrelation",
+    "title": "Calculate correlation between helical parameters for a single inter-base pair.",
     "description": null,
     "type": "object",
     "info": {
@@ -16,19 +16,19 @@
         }
     },
     "required": [
-        "input_filename_shear",
-        "input_filename_stretch",
-        "input_filename_stagger",
-        "input_filename_buckle",
-        "input_filename_propel",
-        "input_filename_opening",
+        "input_filename_shift",
+        "input_filename_slide",
+        "input_filename_rise",
+        "input_filename_tilt",
+        "input_filename_roll",
+        "input_filename_twist",
         "output_csv_path",
         "output_jpg_path"
     ],
     "properties": {
-        "input_filename_shear": {
+        "input_filename_shift": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'shear'",
+            "description": "Path to .csv file with data for helical parameter 'shift'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -37,14 +37,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'shear'",
+                    "description": "Path to .csv file with data for helical parameter 'shift'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_stretch": {
+        "input_filename_slide": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'stretch'",
+            "description": "Path to .csv file with data for helical parameter 'slide'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -53,14 +53,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'stretch'",
+                    "description": "Path to .csv file with data for helical parameter 'slide'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_stagger": {
+        "input_filename_rise": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'stagger'",
+            "description": "Path to .csv file with data for helical parameter 'rise'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -69,14 +69,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'stagger'",
+                    "description": "Path to .csv file with data for helical parameter 'rise'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_buckle": {
+        "input_filename_tilt": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'buckle'",
+            "description": "Path to .csv file with data for helical parameter 'tilt'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -85,14 +85,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'buckle'",
+                    "description": "Path to .csv file with data for helical parameter 'tilt'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_propel": {
+        "input_filename_roll": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'propeller'",
+            "description": "Path to .csv file with data for helical parameter 'roll'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -101,14 +101,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'propeller'",
+                    "description": "Path to .csv file with data for helical parameter 'roll'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_opening": {
+        "input_filename_twist": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'opening'",
+            "description": "Path to .csv file with data for helical parameter 'twist'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -117,7 +117,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'opening'",
+                    "description": "Path to .csv file with data for helical parameter 'twist'",
                     "edam": "format_3752"
                 }
             ]
@@ -169,11 +169,11 @@
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
                 },
-                "base": {
+                "basepair": {
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Name of base analyzed."
+                    "description": "Name of basepair analyzed."
                 }
             }
         }

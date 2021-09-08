@@ -1,15 +1,15 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.interbp_correlations.intersequencecorrelation import interhelparcorrelation
-from biobb_dna.interbp_correlations.intersequencecorrelation import intersequencecorrelation
-from biobb_dna.interbp_correlations.interbasepaircorrelation import interbasepaircorrelation
-from biobb_dna.intrabp_correlations.intrahelparcorrelation import intrahelparcorrelation
-from biobb_dna.intrabp_correlations.intrasequencecorrelation import intrasequencecorrelation
-from biobb_dna.intrabp_correlations.intrabasepaircorrelation import intrabasepaircorrelation
+from biobb_dna.interbp_correlations.interhpcorr import interhelparcorrelation
+from biobb_dna.interbp_correlations.interseqcorr import intersequencecorrelation
+from biobb_dna.interbp_correlations.interbpcorr import interbasepaircorrelation
+from biobb_dna.intrabp_correlations.intrahpcorr import intrahelparcorrelation
+from biobb_dna.intrabp_correlations.intraseqcorr import intrasequencecorrelation
+from biobb_dna.intrabp_correlations.intrabpcorr import intrabasepaircorrelation
 
 
 class TestInterHelparCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'interhelparcorrelation')
+        fx.test_setup(self, 'interhpcorr')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -29,7 +29,7 @@ class TestInterHelparCorrelation():
 
 class TestInterSequenceCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'intersequencecorrelation')
+        fx.test_setup(self, 'interseqcorr')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -51,7 +51,7 @@ class TestInterSequenceCorrelation():
 
 class TestInterBasepairCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'interbasepaircorrelation')
+        fx.test_setup(self, 'interbpcorr')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -73,7 +73,7 @@ class TestInterBasepairCorrelation():
 
 class TestIntraHelparCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'intrahelparcorrelation')
+        fx.test_setup(self, 'intrahpcorr')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -93,7 +93,7 @@ class TestIntraHelparCorrelation():
 
 class TestIntraSequenceCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'intrasequencecorrelation')
+        fx.test_setup(self, 'intraseqcorr')
 
     def tearDown(self):
         fx.test_teardown(self)
@@ -115,7 +115,7 @@ class TestIntraSequenceCorrelation():
 
 class TestIntraBasepairCorrelation():
     def setUp(self):
-        fx.test_setup(self, 'intrabasepaircorrelation')
+        fx.test_setup(self, 'intrabpcorr')
 
     def tearDown(self):
         fx.test_teardown(self)

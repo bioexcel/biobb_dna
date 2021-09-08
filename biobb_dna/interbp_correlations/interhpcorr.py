@@ -35,7 +35,7 @@ class InterHelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.interhelparcorrelation import interhelparcorrelation
+            from biobb_dna.interbp_correlations.interhpcorr import interhelparcorrelation
 
             prop = { 
                 'basepair': 'AA',
@@ -99,7 +99,7 @@ class InterHelParCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhelparcorrelation.InterHelParCorrelation>` object."""
+        """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -271,8 +271,8 @@ def interhelparcorrelation(
         input_filename_roll: str, input_filename_twist: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`InterHelParCorrelation <interbp_correlations.interhelparcorrelation.InterHelParCorrelation>` class and
-    execute the :meth:`launch() <interbp_correlations.interhelparcorrelation.InterHelParCorrelation.launch>` method."""
+    """Create :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` class and
+    execute the :meth:`launch() <interbp_correlations.interhpcorr.InterHelParCorrelation.launch>` method."""
 
     return InterHelParCorrelation(
         input_filename_shift=input_filename_shift,

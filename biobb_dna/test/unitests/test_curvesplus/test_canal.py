@@ -1,10 +1,10 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.curvesplus.canal import canal
+from biobb_dna.curvesplus.biobb_canal import canal
 
 
 class TestCanal():
     def setUp(self):
-        fx.test_setup(self, 'canal')
+        fx.test_setup(self, 'biobb_canal')
 
     def tearDown(self):
         fx.test_teardown(self)

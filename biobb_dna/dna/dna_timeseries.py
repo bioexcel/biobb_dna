@@ -35,7 +35,7 @@ class HelParTimeSeries():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.timeseries import helpartimeseries
+            from biobb_dna.dna.dna_timeseries import helpartimeseries
 
             prop = {
                 'helpar_name': 'twist',
@@ -112,7 +112,7 @@ class HelParTimeSeries():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParTimeSeries <dna.timeseries.HelParTimeSeries>` object."""
+        """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -246,8 +246,8 @@ class HelParTimeSeries():
 def helpartimeseries(
         input_ser_path: str, output_zip_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParTimeSeries <dna.timeseries.HelParTimeSeries>` class and
-    execute the :meth:`launch() <dna.timeseries.HelParTimeSeries.launch>` method."""
+    """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
+    execute the :meth:`launch() <dna.dna_timeseries.HelParTimeSeries.launch>` method."""
 
     return HelParTimeSeries(
         input_ser_path=input_ser_path,

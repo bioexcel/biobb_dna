@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrasequencecorrelation",
-    "name": "biobb_dna IntraSequenceCorrelation",
-    "title": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_timeseries",
+    "name": "biobb_dna HelParTimeSeries",
+    "title": "Created time series and histogram plots for each base pair from a helical parameter series file.",
     "description": null,
     "type": "object",
     "info": {
@@ -17,13 +17,12 @@
     },
     "required": [
         "input_ser_path",
-        "output_csv_path",
-        "output_jpg_path"
+        "output_zip_path"
     ],
     "properties": {
         "input_ser_path": {
             "type": "string",
-            "description": "Path to .ser file with data for single helical parameter",
+            "description": "Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -32,40 +31,24 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for single helical parameter",
+                    "description": "Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair",
                     "edam": "format_2330"
                 }
             ]
         },
-        "output_csv_path": {
+        "output_zip_path": {
             "type": "string",
-            "description": "Path to directory where output is saved",
+            "description": "Path to output .zip files where data is saved",
             "filetype": "output",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.zip$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to directory where output is saved",
-                    "edam": "format_3752"
-                }
-            ]
-        },
-        "output_jpg_path": {
-            "type": "string",
-            "description": "Path to .jpg file where output is saved",
-            "filetype": "output",
-            "sample": null,
-            "enum": [
-                ".*\\.jpg$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.jpg$",
-                    "description": "Path to .jpg file where output is saved",
-                    "edam": "format_3579"
+                    "extension": ".*\\.zip$",
+                    "description": "Path to output .zip files where data is saved",
+                    "edam": "format_3987"
                 }
             ]
         },
@@ -76,17 +59,29 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
+                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)."
+                },
+                "bins": {
+                    "type": "integer",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Bins for histogram. Parameter has same options as matplotlib.pyplot.hist."
                 },
                 "helpar_name": {
                     "type": "string",
-                    "default": null,
+                    "default": "Optional",
                     "wf_prop": false,
                     "description": "helical parameter name."
                 },
+                "stride": {
+                    "type": "integer",
+                    "default": 1000,
+                    "wf_prop": false,
+                    "description": "granularity of the number of snapshots for plotting time series."
+                },
                 "seqpos": {
                     "type": "array",
-                    "default": null,
+                    "default": "Optional",
                     "wf_prop": false,
                     "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
                 },

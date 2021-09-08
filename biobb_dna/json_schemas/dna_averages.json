@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/timeseries",
-    "name": "biobb_dna HelParTimeSeries",
-    "title": "Created time series and histogram plots for each base pair from a helical parameter series file.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_averages",
+    "name": "biobb_dna HelParAverages",
+    "title": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
     "description": null,
     "type": "object",
     "info": {
@@ -17,7 +17,8 @@
     },
     "required": [
         "input_ser_path",
-        "output_zip_path"
+        "output_csv_path",
+        "output_jpg_path"
     ],
     "properties": {
         "input_ser_path": {
@@ -36,19 +37,35 @@
                 }
             ]
         },
-        "output_zip_path": {
+        "output_csv_path": {
             "type": "string",
-            "description": "Path to output .zip files where data is saved",
+            "description": "Path to .csv file where output is saved",
             "filetype": "output",
             "sample": null,
             "enum": [
-                ".*\\.zip$"
+                ".*\\.csv$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.zip$",
-                    "description": "Path to output .zip files where data is saved",
-                    "edam": "format_3987"
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file where output is saved",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_jpg_path": {
+            "type": "string",
+            "description": "Path to .jpg file where output is saved",
+            "filetype": "output",
+            "sample": null,
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "Path to .jpg file where output is saved",
+                    "edam": "format_3579"
                 }
             ]
         },
@@ -59,13 +76,7 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)."
-                },
-                "bins": {
-                    "type": "integer",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Bins for histogram. Parameter has same options as matplotlib.pyplot.hist."
+                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
                 },
                 "helpar_name": {
                     "type": "string",
@@ -81,9 +92,9 @@
                 },
                 "seqpos": {
                     "type": "array",
-                    "default": "Optional",
+                    "default": null,
                     "wf_prop": false,
-                    "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                    "description": "list of base pairs (columns indices) to use."
                 },
                 "remove_tmp": {
                     "type": "boolean",

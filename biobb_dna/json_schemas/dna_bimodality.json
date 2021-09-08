@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/averages",
-    "name": "biobb_dna HelParAverages",
-    "title": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_bimodality",
+    "name": "biobb_dna HelParBimodality",
+    "title": "Determine binormality/bimodality from a helical parameter series dataset.",
     "description": null,
     "type": "object",
     "info": {
@@ -16,24 +16,41 @@
         }
     },
     "required": [
-        "input_ser_path",
+        "input_csv_file",
+        "input_zip_file",
         "output_csv_path",
         "output_jpg_path"
     ],
     "properties": {
-        "input_ser_path": {
+        "input_csv_file": {
             "type": "string",
-            "description": "Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair",
+            "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.ser$"
+                ".*\\.csv$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.ser$",
-                    "description": "Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair",
-                    "edam": "format_2330"
+                    "extension": ".*\\.csv$",
+                    "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "input_zip_file": {
+            "type": "string",
+            "description": "(Optional) .zip file containing the `input_csv_file` .csv file",
+            "filetype": "input",
+            "sample": null,
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "(Optional) .zip file containing the `input_csv_file` .csv file",
+                    "edam": "format_3987"
                 }
             ]
         },
@@ -72,29 +89,29 @@
         "properties": {
             "type": "object",
             "properties": {
-                "sequence": {
-                    "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
-                },
                 "helpar_name": {
                     "type": "string",
                     "default": "Optional",
                     "wf_prop": false,
                     "description": "helical parameter name."
                 },
-                "stride": {
-                    "type": "integer",
-                    "default": 1000,
+                "confidence_level": {
+                    "type": "number",
+                    "default": 5.0,
                     "wf_prop": false,
-                    "description": "granularity of the number of snapshots for plotting time series."
+                    "description": "Confidence level for Byes Factor test (in percentage)."
                 },
-                "seqpos": {
-                    "type": "array",
-                    "default": null,
+                "max_iter": {
+                    "type": "integer",
+                    "default": 400,
                     "wf_prop": false,
-                    "description": "list of base pairs (columns indices) to use."
+                    "description": "Number of maximum iterations for EM algorithm."
+                },
+                "tol": {
+                    "type": "number",
+                    "default": 1e-05,
+                    "wf_prop": false,
+                    "description": "Tolerance value for EM algorithm."
                 },
                 "remove_tmp": {
                     "type": "boolean",
@@ -106,7 +123,7 @@
                     "type": "boolean",
                     "default": false,
                     "wf_prop": true,
-                    "description": "Do not execute if output files exist."
+                    "description": "Do not execute if output files exist.1"
                 }
             }
         }

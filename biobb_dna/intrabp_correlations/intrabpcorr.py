@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module containing the InterBasePairCorrelation class and the command line interface."""
+"""Module containing the IntraBasePairCorrelation class and the command line interface."""
 import argparse
 from itertools import product
 
@@ -16,18 +16,18 @@ from biobb_dna.utils.loader import read_series
 from biobb_dna.utils import constants
 
 
-class InterBasePairCorrelation():
+class IntraBasePairCorrelation():
     """
-    | biobb_dna InterBasePairCorrelation
-    | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
+    | biobb_dna IntraBasePairCorrelation
+    | Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.
 
     Args:
-        input_filename_shift (str): Path to .ser file with data for helical parameter 'shift'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_filename_slide (str): Path to .ser file with data for helical parameter 'slide'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_filename_rise (str): Path to .ser file with data for helical parameter 'rise'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_filename_tilt (str): Path to .ser file with data for helical parameter 'tilt'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_filename_roll (str): Path to .ser file with data for helical parameter 'roll'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_filename_twist (str): Path to .ser file with data for helical parameter 'twist'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_shear (str): Path to .ser file with data for helical parameter 'shear'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_stretch (str): Path to .ser file with data for helical parameter 'stretch'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_stagger (str): Path to .ser file with data for helical parameter 'stagger'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_buckle (str): Path to .ser file with data for helical parameter 'buckle'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_propel (str): Path to .ser file with data for helical parameter 'propel'. File type: input. Accepted formats: ser (edam:format_2330).
+        input_filename_opening (str): Path to .ser file with data for helical parameter 'opening'. File type: input. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
@@ -39,9 +39,9 @@ class InterBasePairCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.interbasepaircorrelation import interbasepaircorrelation
+            from biobb_dna.intrabp_correlations.intrabpcorr import intrabasepaircorrelation
 
-            interbasepaircorrelation(
+            intrabasepaircorrelation(
                 input_ser_path='path/to/input/file.ser',
                 output_csv_path='path/to/output/file.csv',
                 output_jpg_path='path/to/output/plot.jpg',
@@ -57,9 +57,9 @@ class InterBasePairCorrelation():
     """
 
     def __init__(
-            self, input_filename_shift, input_filename_slide,
-            input_filename_rise, input_filename_tilt,
-            input_filename_roll, input_filename_twist,
+            self, input_filename_shear, input_filename_stretch,
+            input_filename_stagger, input_filename_buckle,
+            input_filename_propel, input_filename_opening,
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
         properties = properties or {}
@@ -67,12 +67,12 @@ class InterBasePairCorrelation():
         # Input/Output files
         self.io_dict = {
             'in': {
-                'input_filename_shift': input_filename_shift,
-                'input_filename_slide': input_filename_slide,
-                'input_filename_rise': input_filename_rise,
-                'input_filename_tilt': input_filename_tilt,
-                'input_filename_roll': input_filename_roll,
-                'input_filename_twist': input_filename_twist
+                'input_filename_shear': input_filename_shear,
+                'input_filename_stretch': input_filename_stretch,
+                'input_filename_stagger': input_filename_stagger,
+                'input_filename_buckle': input_filename_buckle,
+                'input_filename_propel': input_filename_propel,
+                'input_filename_opening': input_filename_opening
             },
             'out': {
                 'output_csv_path': output_csv_path,
@@ -96,7 +96,7 @@ class InterBasePairCorrelation():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParCorrelation <correlations.interbasepaircorrelation.InterBasePairCorrelation>` object."""
+        """Execute the :class:`HelParCorrelation <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -130,60 +130,60 @@ class InterBasePairCorrelation():
         fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
 
         # read input
-        shift = read_series(
-            self.io_dict["in"]["input_filename_shift"], usecols=self.seqpos)
-        slide = read_series(
-            self.io_dict["in"]["input_filename_slide"], usecols=self.seqpos)
-        rise = read_series(
-            self.io_dict["in"]["input_filename_rise"], usecols=self.seqpos)
-        tilt = read_series(
-            self.io_dict["in"]["input_filename_tilt"], usecols=self.seqpos)
-        roll = read_series(
-            self.io_dict["in"]["input_filename_roll"], usecols=self.seqpos)
-        twist = read_series(
-            self.io_dict["in"]["input_filename_twist"], usecols=self.seqpos)
+        shear = read_series(
+            self.io_dict["in"]["input_filename_shear"], usecols=self.seqpos)
+        stretch = read_series(
+            self.io_dict["in"]["input_filename_stretch"], usecols=self.seqpos)
+        stagger = read_series(
+            self.io_dict["in"]["input_filename_stagger"], usecols=self.seqpos)
+        buckle = read_series(
+            self.io_dict["in"]["input_filename_buckle"], usecols=self.seqpos)
+        propel = read_series(
+            self.io_dict["in"]["input_filename_propel"], usecols=self.seqpos)
+        opening = read_series(
+            self.io_dict["in"]["input_filename_opening"], usecols=self.seqpos)
 
         if self.seqpos is None:
             # drop first and last columns
-            shift = shift[shift.columns[1:-2]]
-            slide = slide[slide.columns[1:-2]]
-            rise = rise[rise.columns[1:-2]]
-            tilt = tilt[tilt.columns[1:-2]]
-            roll = roll[roll.columns[1:-2]]
-            twist = twist[twist.columns[1:-2]]
+            shear = shear[shear.columns[1:-1]]
+            stretch = stretch[stretch.columns[1:-1]]
+            stagger = stagger[stagger.columns[1:-1]]
+            buckle = buckle[buckle.columns[1:-1]]
+            propel = propel[propel.columns[1:-1]]
+            opening = opening[opening.columns[1:-1]]
             labels = [
-                f"{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
+                f"{self.sequence[i:i+1]}" for i in range(1, len(shear.columns) + 1)]
             corr_index = [
-                f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)]
+                f"{self.sequence[i:i+2]}" for i in range(1, len(shear.columns) + 1)]
         else:
-            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
-            corr_index = [f"{self.sequence[i:i+3]}" for i in self.seqpos]
+            labels = [f"{self.sequence[i:i+1]}" for i in self.seqpos]
+            corr_index = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
 
         # rename duplicated subunits
-        shift.columns = labels
-        while any(shift.columns.duplicated()):
-            shift.columns = [
+        shear.columns = labels
+        while any(shear.columns.duplicated()):
+            shear.columns = [
                 name if not duplicated else name + "_dup"
                 for duplicated, name
-                in zip(shift.columns.duplicated(), shift.columns)]
-        unique_labels = shift.columns
-        slide.columns = unique_labels
-        rise.columns = unique_labels
-        tilt.columns = unique_labels
-        roll.columns = unique_labels
-        twist.columns = unique_labels
+                in zip(shear.columns.duplicated(), shear.columns)]
+        unique_labels = shear.columns
+        stretch.columns = unique_labels
+        stagger.columns = unique_labels
+        buckle.columns = unique_labels
+        propel.columns = unique_labels
+        opening.columns = unique_labels
 
         # set names to each dataset
-        shift.name = "shift"
-        slide.name = "slide"
-        rise.name = "rise"
-        tilt.name = "tilt"
-        roll.name = "roll"
-        twist.name = "twist"
+        shear.name = "shear"
+        stretch.name = "stretch"
+        stagger.name = "stagger"
+        buckle.name = "buckle"
+        propel.name = "propel"
+        opening.name = "opening"
 
         # get correlation between neighboring basepairs among all helical parameters
         results = {}
-        datasets = [shift, slide, rise, tilt, roll, twist]
+        datasets = [shear, stretch, stagger, buckle, propel, opening]
         for ser1, ser2 in product(datasets, datasets):
             ser2_shifted = ser2.shift(axis=1)
             ser2_shifted[unique_labels[0]] = ser2[unique_labels[-1]]
@@ -286,22 +286,22 @@ class InterBasePairCorrelation():
         return correlation
 
 
-def interbasepaircorrelation(
-        input_filename_shift: str, input_filename_slide: str,
-        input_filename_rise: str, input_filename_tilt: str,
-        input_filename_roll: str, input_filename_twist: str,
+def intrabasepaircorrelation(
+        input_filename_shear: str, input_filename_stretch: str,
+        input_filename_stagger: str, input_filename_buckle: str,
+        input_filename_propel: str, input_filename_opening: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParCorrelation <correlations.InterBasePairCorrelation.InterBasePairCorrelation>` class and
-    execute the :meth:`launch() <correlations.InterBasePairCorrelation.InterBasePairCorrelation.launch>` method."""
+    """Create :class:`HelParCorrelation <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation>` class and
+    execute the :meth:`launch() <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation.launch>` method."""
 
-    return InterBasePairCorrelation(
-        input_filename_shift=input_filename_shift,
-        input_filename_slide=input_filename_slide,
-        input_filename_rise=input_filename_rise,
-        input_filename_tilt=input_filename_tilt,
-        input_filename_roll=input_filename_roll,
-        input_filename_twist=input_filename_twist,
+    return IntraBasePairCorrelation(
+        input_filename_shear=input_filename_shear,
+        input_filename_stretch=input_filename_stretch,
+        input_filename_stagger=input_filename_stagger,
+        input_filename_buckle=input_filename_buckle,
+        input_filename_propel=input_filename_propel,
+        input_filename_opening=input_filename_opening,
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
         properties=properties, **kwargs).launch()
@@ -314,18 +314,18 @@ def main():
     parser.add_argument('--config', required=False, help='Configuration file')
 
     required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_filename_shift', required=True,
-                               help='Path to ser file for helical parameter shift. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_slide', required=True,
-                               help='Path to ser file for helical parameter slide. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_rise', required=True,
-                               help='Path to ser file for helical parameter rise. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_tilt', required=True,
-                               help='Path to ser file for helical parameter tilt. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_roll', required=True,
-                               help='Path to ser file for helical parameter roll. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_twist', required=True,
-                               help='Path to ser file for helical parameter twist. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_shear', required=True,
+                               help='Path to ser file for helical parameter shear. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_stretch', required=True,
+                               help='Path to ser file for helical parameter stretch. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_stagger', required=True,
+                               help='Path to ser file for helical parameter stagger. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_buckle', required=True,
+                               help='Path to ser file for helical parameter buckle. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_propel', required=True,
+                               help='Path to ser file for helical parameter propel. Accepted formats: ser.')
+    required_args.add_argument('--input_filename_opening', required=True,
+                               help='Path to ser file for helical parameter opening. Accepted formats: ser.')
     required_args.add_argument('--output_csv_path', required=True,
                                help='Path to output file. Accepted formats: csv.')
     required_args.add_argument('--output_jpg_path', required=True,
@@ -335,13 +335,13 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    interbasepaircorrelation(
-        input_filename_shift=args.input_filename_shift,
-        input_filename_slide=args.input_filename_slide,
-        input_filename_rise=args.input_filename_rise,
-        input_filename_tilt=args.input_filename_tilt,
-        input_filename_roll=args.input_filename_roll,
-        input_filename_twist=args.input_filename_twist,
+    intrabasepaircorrelation(
+        input_filename_shear=args.input_filename_shear,
+        input_filename_stretch=args.input_filename_stretch,
+        input_filename_stagger=args.input_filename_stagger,
+        input_filename_buckle=args.input_filename_buckle,
+        input_filename_propel=args.input_filename_propel,
+        input_filename_opening=args.input_filename_opening,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
         properties=properties)

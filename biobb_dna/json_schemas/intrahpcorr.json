@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/basepair_stiffness",
-    "name": "biobb_dna BPStiffness",
-    "title": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrahpcorr",
+    "name": "biobb_dna IntraHelParCorrelation",
+    "title": "Calculate correlation between helical parameters for a single intra-base pair.",
     "description": null,
     "type": "object",
     "info": {
@@ -16,19 +16,19 @@
         }
     },
     "required": [
-        "input_filename_shift",
-        "input_filename_slide",
-        "input_filename_rise",
-        "input_filename_tilt",
-        "input_filename_roll",
-        "input_filename_twist",
+        "input_filename_shear",
+        "input_filename_stretch",
+        "input_filename_stagger",
+        "input_filename_buckle",
+        "input_filename_propel",
+        "input_filename_opening",
         "output_csv_path",
         "output_jpg_path"
     ],
     "properties": {
-        "input_filename_shift": {
+        "input_filename_shear": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'shift'",
+            "description": "Path to .csv file with data for helical parameter 'shear'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -37,14 +37,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'shift'",
+                    "description": "Path to .csv file with data for helical parameter 'shear'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_slide": {
+        "input_filename_stretch": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'slide'",
+            "description": "Path to .csv file with data for helical parameter 'stretch'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -53,14 +53,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'slide'",
+                    "description": "Path to .csv file with data for helical parameter 'stretch'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_rise": {
+        "input_filename_stagger": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'rise'",
+            "description": "Path to .csv file with data for helical parameter 'stagger'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -69,14 +69,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'rise'",
+                    "description": "Path to .csv file with data for helical parameter 'stagger'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_tilt": {
+        "input_filename_buckle": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'tilt'",
+            "description": "Path to .csv file with data for helical parameter 'buckle'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -85,14 +85,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'tilt'",
+                    "description": "Path to .csv file with data for helical parameter 'buckle'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_roll": {
+        "input_filename_propel": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'roll'",
+            "description": "Path to .csv file with data for helical parameter 'propeller'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -101,14 +101,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'roll'",
+                    "description": "Path to .csv file with data for helical parameter 'propeller'",
                     "edam": "format_3752"
                 }
             ]
         },
-        "input_filename_twist": {
+        "input_filename_opening": {
             "type": "string",
-            "description": "Path to csv file with data for helical parameter 'twist'",
+            "description": "Path to .csv file with data for helical parameter 'opening'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -117,14 +117,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to csv file with data for helical parameter 'twist'",
+                    "description": "Path to .csv file with data for helical parameter 'opening'",
                     "edam": "format_3752"
                 }
             ]
         },
         "output_csv_path": {
             "type": "string",
-            "description": "Path to directory where stiffness matrix file is saved as a csv file",
+            "description": "Path to directory where output is saved",
             "filetype": "output",
             "sample": null,
             "enum": [
@@ -133,14 +133,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to directory where stiffness matrix file is saved as a csv file",
+                    "description": "Path to directory where output is saved",
                     "edam": "format_3752"
                 }
             ]
         },
         "output_jpg_path": {
             "type": "string",
-            "description": "Path to directory where stiffness heatmap image is saved as a jpg file",
+            "description": "Path to .jpg file where output is saved",
             "filetype": "output",
             "sample": null,
             "enum": [
@@ -149,7 +149,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.jpg$",
-                    "description": "Path to directory where stiffness heatmap image is saved as a jpg file",
+                    "description": "Path to .jpg file where output is saved",
                     "edam": "format_3579"
                 }
             ]
@@ -157,18 +157,6 @@
         "properties": {
             "type": "object",
             "properties": {
-                "KT": {
-                    "type": "number",
-                    "default": 0.592186827,
-                    "wf_prop": false,
-                    "description": "Value of Boltzmann temperature factor."
-                },
-                "scaling": {
-                    "type": "array",
-                    "default": "[1, 1, 1, 10.6, 10.6, 10.6]",
-                    "wf_prop": false,
-                    "description": "Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist."
-                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
@@ -180,6 +168,12 @@
                     "default": false,
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
+                },
+                "base": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Name of base analyzed."
                 }
             }
         }

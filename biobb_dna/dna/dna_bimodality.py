@@ -26,7 +26,7 @@ class HelParBimodality():
 
     Args:        
         input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. Accepted formats: csv (edam:format_3752) 
-        input_zip_file (str): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip. (edam:format_3987).
+        input_zip_file (str): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip (edam:format_3987).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
@@ -40,7 +40,7 @@ class HelParBimodality():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.bimodality import helparbimodality
+            from biobb_dna.dna.dna_bimodality import helparbimodality
 
             prop = { 
                 'max_iter': 500,
@@ -100,7 +100,7 @@ class HelParBimodality():
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the :class:`HelParBimodality <dna.bimodality.HelParBimodality>` object."""
+        """Execute the :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` object."""
 
         # Get local loggers from launchlogger decorator
         out_log = getattr(self, 'out_log', None)
@@ -300,8 +300,8 @@ class HelParBimodality():
 def helparbimodality(
         input_csv_file, output_csv_path, output_jpg_path,
         input_zip_file: str = None, properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParBimodality <dna.bimodality.HelParBimodality>` class and
-    execute the :meth:`launch() <dna.bimodality.HelParBimodality.launch>` method."""
+    """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
+    execute the :meth:`launch() <dna.dna_bimodality.HelParBimodality.launch>` method."""
 
     return HelParBimodality(
         input_csv_file=input_csv_file,

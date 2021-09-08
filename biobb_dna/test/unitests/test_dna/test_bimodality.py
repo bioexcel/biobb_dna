@@ -1,10 +1,10 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.dna.bimodality import helparbimodality
+from biobb_dna.dna.dna_bimodality import helparbimodality
 
 
 class TestBimodality():
     def setUp(self):
-        fx.test_setup(self, 'bimodality')
+        fx.test_setup(self, 'dna_bimodality')
 
     def tearDown(self):
         fx.test_teardown(self)

@@ -1,2 +1,2 @@
 name = "backbone"
-__all__ = ["bipopulations", "canonical_alpha_gamma", "puckering"]
+__all__ = ["bipopulations", "canonicalag", "puckering"]

@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/interhelparcorrelation",
-    "name": "biobb_dna InterHelParCorrelation",
-    "title": "Calculate correlation between helical parameters for a single inter-base pair.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/interbpcorr",
+    "name": "biobb_dna InterBasePairCorrelation",
+    "title": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
     "description": null,
     "type": "object",
     "info": {
@@ -28,97 +28,97 @@
     "properties": {
         "input_filename_shift": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'shift'",
+            "description": "Path to .ser file with data for helical parameter 'shift'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'shift'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'shift'",
+                    "edam": "format_2330"
                 }
             ]
         },
         "input_filename_slide": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'slide'",
+            "description": "Path to .ser file with data for helical parameter 'slide'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'slide'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'slide'",
+                    "edam": "format_2330"
                 }
             ]
         },
         "input_filename_rise": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'rise'",
+            "description": "Path to .ser file with data for helical parameter 'rise'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'rise'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'rise'",
+                    "edam": "format_2330"
                 }
             ]
         },
         "input_filename_tilt": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'tilt'",
+            "description": "Path to .ser file with data for helical parameter 'tilt'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'tilt'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'tilt'",
+                    "edam": "format_2330"
                 }
             ]
         },
         "input_filename_roll": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'roll'",
+            "description": "Path to .ser file with data for helical parameter 'roll'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'roll'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'roll'",
+                    "edam": "format_2330"
                 }
             ]
         },
         "input_filename_twist": {
             "type": "string",
-            "description": "Path to .csv file with data for helical parameter 'twist'",
+            "description": "Path to .ser file with data for helical parameter 'twist'",
             "filetype": "input",
             "sample": null,
             "enum": [
-                ".*\\.csv$"
+                ".*\\.ser$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with data for helical parameter 'twist'",
-                    "edam": "format_3752"
+                    "extension": ".*\\.ser$",
+                    "description": "Path to .ser file with data for helical parameter 'twist'",
+                    "edam": "format_2330"
                 }
             ]
         },
@@ -157,6 +157,18 @@
         "properties": {
             "type": "object",
             "properties": {
+                "sequence": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
+                },
+                "seqpos": {
+                    "type": "array",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
@@ -168,12 +180,6 @@
                     "default": false,
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
-                },
-                "basepair": {
-                    "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Name of basepair analyzed."
                 }
             }
         }

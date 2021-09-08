@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/canal",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/biobb_canal",
     "name": "biobb_dna Canal",
     "title": "Wrapper for the Canal executable that is part of the Curves+ software suite.",
     "description": null,
@@ -24,7 +24,7 @@
     "properties": {
         "input_cda_file": {
             "type": "string",
-            "description": "Input .cda file, from Cur+ output",
+            "description": "Input cda file, from Cur+ output",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -33,14 +33,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.cda$",
-                    "description": "Input .cda file, from Cur+ output",
+                    "description": "Input cda file, from Cur+ output",
                     "edam": "format_2330"
                 }
             ]
         },
         "input_lis_file": {
             "type": "string",
-            "description": "(Optional) Input .lis file, from Cur+ output",
+            "description": "(Optional) Input lis file, from Cur+ output",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -49,7 +49,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.lis$",
-                    "description": "(Optional) Input .lis file, from Cur+ output",
+                    "description": "(Optional) Input lis file, from Cur+ output",
                     "edam": "format_2330"
                 }
             ]
@@ -65,7 +65,8 @@
             "file_formats": [
                 {
                     "extension": ".*\\.zip$",
-                    "description": "zip filename for output files"
+                    "description": "zip filename for output files",
+                    "edam": "format_3987"
                 }
             ]
         },

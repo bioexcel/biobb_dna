@@ -33,7 +33,7 @@ class HelParAverages():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.averages import helparaverages
+            from biobb_dna.dna.dna_averages import helparaverages
 
             prop = { 
                 'helpar_name': 'twist',
@@ -225,8 +225,8 @@ class HelParAverages():
 def helparaverages(
         input_ser_path: str, output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
-    """Create :class:`HelParAverages <dna.averages.HelParAverages>` class and
-    execute the :meth:`launch() <dna.averages.HelParAverages.launch>` method."""
+    """Create :class:`HelParAverages <dna.dna_averages.HelParAverages>` class and
+    execute the :meth:`launch() <dna.dna_averages.HelParAverages.launch>` method."""
 
     return HelParAverages(input_ser_path=input_ser_path,
                           output_csv_path=output_csv_path,

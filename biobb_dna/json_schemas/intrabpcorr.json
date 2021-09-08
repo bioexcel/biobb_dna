@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/interbasepaircorrelation",
-    "name": "biobb_dna InterBasePairCorrelation",
-    "title": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrabpcorr",
+    "name": "biobb_dna IntraBasePairCorrelation",
+    "title": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
     "description": null,
     "type": "object",
     "info": {
@@ -16,19 +16,19 @@
         }
     },
     "required": [
-        "input_filename_shift",
-        "input_filename_slide",
-        "input_filename_rise",
-        "input_filename_tilt",
-        "input_filename_roll",
-        "input_filename_twist",
+        "input_filename_shear",
+        "input_filename_stretch",
+        "input_filename_stagger",
+        "input_filename_buckle",
+        "input_filename_propel",
+        "input_filename_opening",
         "output_csv_path",
         "output_jpg_path"
     ],
     "properties": {
-        "input_filename_shift": {
+        "input_filename_shear": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'shift'",
+            "description": "Path to .ser file with data for helical parameter 'shear'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -37,14 +37,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'shift'",
+                    "description": "Path to .ser file with data for helical parameter 'shear'",
                     "edam": "format_2330"
                 }
             ]
         },
-        "input_filename_slide": {
+        "input_filename_stretch": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'slide'",
+            "description": "Path to .ser file with data for helical parameter 'stretch'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -53,14 +53,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'slide'",
+                    "description": "Path to .ser file with data for helical parameter 'stretch'",
                     "edam": "format_2330"
                 }
             ]
         },
-        "input_filename_rise": {
+        "input_filename_stagger": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'rise'",
+            "description": "Path to .ser file with data for helical parameter 'stagger'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -69,14 +69,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'rise'",
+                    "description": "Path to .ser file with data for helical parameter 'stagger'",
                     "edam": "format_2330"
                 }
             ]
         },
-        "input_filename_tilt": {
+        "input_filename_buckle": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'tilt'",
+            "description": "Path to .ser file with data for helical parameter 'buckle'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -85,14 +85,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'tilt'",
+                    "description": "Path to .ser file with data for helical parameter 'buckle'",
                     "edam": "format_2330"
                 }
             ]
         },
-        "input_filename_roll": {
+        "input_filename_propel": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'roll'",
+            "description": "Path to .ser file with data for helical parameter 'propel'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -101,14 +101,14 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'roll'",
+                    "description": "Path to .ser file with data for helical parameter 'propel'",
                     "edam": "format_2330"
                 }
             ]
         },
-        "input_filename_twist": {
+        "input_filename_opening": {
             "type": "string",
-            "description": "Path to .ser file with data for helical parameter 'twist'",
+            "description": "Path to .ser file with data for helical parameter 'opening'",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -117,7 +117,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file with data for helical parameter 'twist'",
+                    "description": "Path to .ser file with data for helical parameter 'opening'",
                     "edam": "format_2330"
                 }
             ]
