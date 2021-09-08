@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_dna",
-    version="1.1.1",
+    version="3.6.1",
     author="Biobb developers",
     author_email="lucia.fabio@irbbarcelona.com",
     description="Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
