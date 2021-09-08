@@ -42,12 +42,13 @@
             "filetype": "output",
             "sample": null,
             "enum": [
-                ".*\\.$"
+                ".*\\.zip$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.$",
-                    "description": "Path to output .zip files where data is saved"
+                    "extension": ".*\\.zip$",
+                    "description": "Path to output .zip files where data is saved",
+                    "edam": "format_3987"
                 }
             ]
         },
