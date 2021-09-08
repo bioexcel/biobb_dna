@@ -27,22 +27,22 @@ setuptools.setup(
     python_requires='==3.7.*',
     entry_points={
         "console_scripts": [
-            "biobb_curves = biobb_dna.curvesplus.curves:main",
-            "biobb_canal = biobb_dna.curvesplus.canal:main",
-            "dna_averages = biobb_dna.dna.averages:main",
-            "dna_timeseries = biobb_dna.dna.timeseries:main",
-            "dna_bimodality = biobb_dna.dna.bimodality:main",
+            "biobb_curves = biobb_dna.curvesplus.biobb_curves:main",
+            "biobb_canal = biobb_dna.curvesplus.biobb_canal:main",
+            "dna_averages = biobb_dna.dna.dna_averages:main",
+            "dna_timeseries = biobb_dna.dna.dna_timeseries:main",
+            "dna_bimodality = biobb_dna.dna.dna_bimodality:main",
             "bipopulations = biobb_dna.backbone.bipopulations:main",
-            "canonicalag = biobb_dna.backbone.canonical_alpha_gamma:main",
+            "canonicalag = biobb_dna.backbone.canonicalag:main",
             "puckering = biobb_dna.backbone.puckering:main",
-            "inter_bpcorr = biobb_dna.interbp_correlations.basepaircorrelation:main",
-            "inter_hpcorr = biobb_dna.interbp_correlations.helparcorrelation:main",
-            "inter_seqcorr = biobb_dna.interbp_correlations.sequencecorrelation:main",
-            "intra_bpcorr = biobb_dna.intrabp_correlations.basepaircorrelation:main",
-            "intra_hpcorr = biobb_dna.intrabp_correlations.helparcorrelation:main",
-            "intra_seqcorr = biobb_dna.intrabp_correlations.sequencecorrelation:main",
-            "avgstiff = biobb_dna.stiffness.average_stiffness:main",
-            "bpstiff = biobb_dna.stiffness.basepair_stiffness:main"
+            "interbpcorr = biobb_dna.interbp_correlations.interbpcorr:main",
+            "interhpcorr = biobb_dna.interbp_correlations.interhpcorr:main",
+            "interseqcorr = biobb_dna.interbp_correlations.interseqcorr:main",
+            "intrabpcorr = biobb_dna.intrabp_correlations.intrabpcorr:main",
+            "intrahpcorr = biobb_dna.intrabp_correlations.intrahpcorr:main",
+            "intraseqcorr = biobb_dna.intrabp_correlations.intraseqcorr:main",
+            "average_stiffness = biobb_dna.stiffness.average_stiffness:main",
+            "basepair_stiffness = biobb_dna.stiffness.basepair_stiffness:main"
         ]
     },
     classifiers=(
