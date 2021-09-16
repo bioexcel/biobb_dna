@@ -28,7 +28,7 @@ class HelParTimeSeries():
             * **bins** (*int*) - (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **seqpos** (*list*) - (Optional) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
+            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -89,12 +89,17 @@ class HelParTimeSeries():
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
+        else:
+            if self.helpar_name not in constants.helical_parameters:
+                raise ValueError(
+                    "Helical parameter name is invalid! "
+                    f"Options: {constants.helical_parameters}")
 
         # get base length and unit from helical parameter name
-        if self.helpar_name.lower() in constants.hp_basepairs:
-            self.baselen = 1
-        elif self.helpar_name.lower() in constants.hp_singlebases:
+        if self.helpar_name.lower() in constants.hp_singlebases:
             self.baselen = 0
+        else:
+            self.baselen = 1
         if self.helpar_name in constants.hp_angular:
             self.hp_unit = "Degrees"
         else:
@@ -158,21 +163,14 @@ class HelParTimeSeries():
             # discard first and last base(pairs) from sequence
             sequence = self.sequence[1:]
             subunits = [
-                f"{sequence[i:i+1+self.baselen]}"
+                f"{i+1}_{sequence[i:i+1+self.baselen]}"
                 for i in range(len(ser_data.columns))]
         else:
             sequence = self.sequence
             subunits = [
-                f"{sequence[i:i+1+self.baselen]}"
+                f"{i+1}_{sequence[i:i+1+self.baselen]}"
                 for i in [c for c in self.seqpos]]
         ser_data.columns = subunits
-
-        # rename duplicated subunits
-        while any(ser_data.columns.duplicated()):
-            ser_data.columns = [
-                name if not duplicated else name + "_dup"
-                for duplicated, name
-                in zip(ser_data.columns.duplicated(), ser_data.columns)]
 
         # write output files for all selected bases (one per column)
         zf = zipfile.ZipFile(

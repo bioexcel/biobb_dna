@@ -222,6 +222,7 @@ class InterHelParCorrelation():
         fig.savefig(
             self.io_dict['out']['output_jpg_path'],
             format="jpg")
+        plt.close()
 
         # Remove temporary file(s)
         if self.remove_tmp:

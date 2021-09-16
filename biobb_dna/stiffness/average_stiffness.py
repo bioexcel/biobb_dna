@@ -28,7 +28,7 @@ class AverageStiffness():
             * **KT** (*float*) - (0.592186827) Value of Boltzmann temperature factor.
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **helpar_name** (*str*) - (None) helical parameter name.
-            * **seqpos** (*list*) - (None) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
+            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -113,14 +113,19 @@ class AverageStiffness():
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
+        else:
+            if self.helpar_name not in constants.helical_parameters:
+                raise ValueError(
+                    "Helical parameter name is invalid! "
+                    f"Options: {constants.helical_parameters}")
 
-            # get base length and unit from helical parameter name
-            if self.helpar_name in ["roll", "tilt", "twist"]:
-                self.hp_unit = "kcal/(mol*degree²)"
-                self.scale = 1
-            else:
-                self.hp_unit = "kcal/(mol*Å²)"
-                self.scale = 10.6
+        # get base length and unit from helical parameter name
+        if self.helpar_name.lower() in ["roll", "tilt", "twist"]:
+            self.hp_unit = "kcal/(mol*degree²)"
+            scale = 1
+        else:
+            self.hp_unit = "kcal/(mol*Å²)"
+            scale = 10.6
 
         # check seqpos
         if self.seqpos is not None:
@@ -168,7 +173,7 @@ class AverageStiffness():
         # calculate average stiffness
         cov = ser_data.cov()
         stiff = np.linalg.inv(cov) * self.KT
-        avg_stiffness = np.diag(stiff) * self.scale
+        avg_stiffness = np.diag(stiff) * scale
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)

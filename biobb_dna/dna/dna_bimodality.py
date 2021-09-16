@@ -126,6 +126,11 @@ class HelParBimodality():
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
+        else:
+            if self.helpar_name not in constants.helical_parameters:
+                raise ValueError(
+                    "Helical parameter name is invalid! "
+                    f"Options: {constants.helical_parameters}")
 
         # get  unit from helical parameter name
         if self.helpar_name in constants.hp_angular:
@@ -142,6 +147,12 @@ class HelParBimodality():
                 fu.log('Restart is enabled, this step: %s will the skipped' %
                        self.step, out_log, self.global_log)
                 return 0
+
+        # resolve output
+        output_csv_path = Path(
+            self.io_dict['out']['output_csv_path']).resolve()
+        output_jpg_path = Path(
+            self.io_dict['out']['output_jpg_path']).resolve()
 
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="bimodality_")
@@ -164,7 +175,7 @@ class HelParBimodality():
         # change directory to temporary folder
         original_directory = os.getcwd()
         os.chdir(self.tmp_folder)
-        data = load_data(self.io_dict['in']['input_csv_file'])
+        data = load_data(Path(self.io_dict['in']['input_csv_file']).name)
 
         means, variances, bics, weights = self.fit_to_model(data)
         uninormal, binormal, insuf_ev = self.bayes_factor_criteria(
@@ -199,8 +210,7 @@ class HelParBimodality():
             w2=w2)
 
         # save tables
-        pd.DataFrame(info, index=data.columns).to_csv(
-            self.io_dict["out"]["output_csv_path"])
+        pd.DataFrame(info, index=data.columns).to_csv(output_csv_path)
 
         # make and save plot
         data_size = len(data)
@@ -233,7 +243,8 @@ class HelParBimodality():
         plt.ylabel("Density")
         plt.xlabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
         plt.title(f"Distribution of {self.helpar_name} states")
-        plt.savefig(self.io_dict['out']['output_jpg_path'], format="jpg")
+        plt.savefig(output_jpg_path, format="jpg")
+        plt.close()
 
         # change back to original directory
         os.chdir(original_directory)

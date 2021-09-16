@@ -51,4 +51,19 @@ hp_translational = [
     "slide"
 ]
 
-helical_parameters = hp_basepairs + hp_singlebases
+hp_backbone = [
+    "alphaC",
+    "alphaW",
+    "betaC",
+    "betaW",
+    "gammaC",
+    "gammaW",
+    "deltaC",
+    "deltaW",
+    "chiC",
+    "chiW",
+    "phaseC",
+    "phaseW"
+]
+
+helical_parameters = hp_basepairs + hp_singlebases + hp_backbone

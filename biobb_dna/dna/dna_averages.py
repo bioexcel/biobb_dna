@@ -27,7 +27,7 @@ class HelParAverages():
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
             * **helpar_name** (*str*) - (Optional) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **seqpos** (*list*) - (None) list of base pairs (columns indices) to use.
+            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     Examples:
@@ -117,6 +117,11 @@ class HelParAverages():
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
                     "so it must be specified!")
+        else:
+            if self.helpar_name not in constants.helical_parameters:
+                raise ValueError(
+                    "Helical parameter name is invalid! "
+                    f"Options: {constants.helical_parameters}")
 
         # get base length and unit from helical parameter name
         if self.helpar_name.lower() in constants.hp_basepairs:

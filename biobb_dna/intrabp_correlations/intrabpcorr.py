@@ -32,7 +32,7 @@ class IntraBasePairCorrelation():
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
-            * **seqpos** (*list*) - (None) list of sequence positions to analyze. If not specified it will analyse the complete sequence.
+            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -42,7 +42,12 @@ class IntraBasePairCorrelation():
             from biobb_dna.intrabp_correlations.intrabpcorr import intrabasepaircorrelation
 
             intrabasepaircorrelation(
-                input_ser_path='path/to/input/file.ser',
+                input_filename_shear='path/to/input/shear.ser',
+                input_filename_stretch='path/to/input/stretch.ser',
+                input_filename_stagger='path/to/input/stagger.ser',
+                input_filename_buckle='path/to/input/buckle.ser',
+                input_filename_propel='path/to/input/propel.ser',
+                input_filename_opening='path/to/input/opening.ser',
                 output_csv_path='path/to/output/file.csv',
                 output_jpg_path='path/to/output/plot.jpg',
                 properties=prop)
@@ -254,6 +259,7 @@ class IntraBasePairCorrelation():
         fig.savefig(
             self.io_dict['out']['output_jpg_path'],
             format="jpg")
+        plt.close()
 
         # Remove temporary file(s)
         if self.remove_tmp:
