@@ -31,6 +31,9 @@ class Curves():
             * **itnd** (*int*) - (0) Iteration end index.
             * **itdel** (*int*) - (1) Iteration delimiter. 
             * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
+            * **test** (*bool*) - (False) If True, provide addition output in .lis file on fitting and axis generation.
+            * **line** (*bool*) - (False) if True, find the best linear helical axis.
+            * **fit** (*bool*) - (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
             * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
@@ -84,6 +87,9 @@ class Curves():
         self.itnd = properties.get('itnd', 0)
         self.itdel = properties.get('itdel', 1)
         self.ions = properties.get('ions', '.f.')
+        self.test = properties.get('test', '.f.')
+        self.line = properties.get('line', '.f.')
+        self.fit = properties.get('fit', '.f.')
         self.properties = properties
 
         # Properties common in all BB
@@ -183,6 +189,9 @@ class Curves():
             "  lis='curves_output',",
             f"  lib={self.stdlib_path},",
             f"  ions={self.ions},",
+            f"  test={self.test},",
+            f"  line={self.line},",
+            f"  fit={self.fit},",
             f"  itst={self.itst},itnd={self.itnd},itdel={self.itdel},",
             "&end",
             "2 1 -1 0 0",
