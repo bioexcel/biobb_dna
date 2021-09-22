@@ -63,7 +63,11 @@ hp_backbone = [
     "chiC",
     "chiW",
     "phaseC",
-    "phaseW"
+    "phaseW",
+    "epsilC",
+    "epsilW",
+    "zetaC",
+    "zetaW"
 ]
 
 helical_parameters = hp_basepairs + hp_singlebases + hp_backbone
