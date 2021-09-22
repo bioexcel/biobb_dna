@@ -218,16 +218,6 @@ class IntraBasePairCorrelation():
         result_df.to_csv(self.io_dict["out"]["output_csv_path"])
 
         # create heatmap
-        fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
-        # define colormap
-        # cmap = mpl.colors.ListedColormap([
-        #     "blue",
-        #     "cornflowerblue",
-        #     "lightskyblue",
-        #     "white",
-        #     "mistyrose",
-        #     "tomato",
-        #     "red"])
         cmap = plt.get_cmap("bwr")
         bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
         num = cmap.N
