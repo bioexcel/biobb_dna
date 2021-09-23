@@ -29,6 +29,7 @@ setuptools.setup(
         "console_scripts": [
             "biobb_curves = biobb_dna.curvesplus.biobb_curves:main",
             "biobb_canal = biobb_dna.curvesplus.biobb_canal:main",
+            "biobb_canion = biobb_dna.curvesplus.biobb_canion:main",
             "dna_averages = biobb_dna.dna.dna_averages:main",
             "dna_timeseries = biobb_dna.dna.dna_timeseries:main",
             "dna_bimodality = biobb_dna.dna.dna_bimodality:main",
