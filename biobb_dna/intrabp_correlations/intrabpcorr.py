@@ -157,26 +157,20 @@ class IntraBasePairCorrelation():
             propel = propel[propel.columns[1:-1]]
             opening = opening[opening.columns[1:-1]]
             labels = [
-                f"{self.sequence[i:i+1]}" for i in range(1, len(shear.columns) + 1)]
+                f"{i+1}_{self.sequence[i:i+1]}" for i in range(1, len(shear.columns) + 1)]
             corr_index = [
                 f"{self.sequence[i:i+2]}" for i in range(1, len(shear.columns) + 1)]
         else:
-            labels = [f"{self.sequence[i:i+1]}" for i in self.seqpos]
+            labels = [f"{i+1}_{self.sequence[i:i+1]}" for i in self.seqpos]
             corr_index = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
 
         # rename duplicated subunits
         shear.columns = labels
-        while any(shear.columns.duplicated()):
-            shear.columns = [
-                name if not duplicated else name + "_dup"
-                for duplicated, name
-                in zip(shear.columns.duplicated(), shear.columns)]
-        unique_labels = shear.columns
-        stretch.columns = unique_labels
-        stagger.columns = unique_labels
-        buckle.columns = unique_labels
-        propel.columns = unique_labels
-        opening.columns = unique_labels
+        stretch.columns = labels
+        stagger.columns = labels
+        buckle.columns = labels
+        propel.columns = labels
+        opening.columns = labels
 
         # set names to each dataset
         shear.name = "shear"
@@ -191,7 +185,7 @@ class IntraBasePairCorrelation():
         datasets = [shear, stretch, stagger, buckle, propel, opening]
         for ser1, ser2 in product(datasets, datasets):
             ser2_shifted = ser2.shift(axis=1)
-            ser2_shifted[unique_labels[0]] = ser2[unique_labels[-1]]
+            ser2_shifted[labels[0]] = ser2[labels[-1]]
             if (
                     ser1.name in constants.hp_angular and
                     ser2.name in constants.hp_angular):
@@ -218,7 +212,7 @@ class IntraBasePairCorrelation():
         result_df.to_csv(self.io_dict["out"]["output_csv_path"])
 
         # create heatmap
-        cmap = plt.get_cmap("bwr")
+        cmap = plt.get_cmap("bwr").copy()
         bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
         num = cmap.N
         norm = mpl.colors.BoundaryNorm(bounds, num)

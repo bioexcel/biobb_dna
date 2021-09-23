@@ -169,7 +169,7 @@ class HelParTimeSeries():
             sequence = self.sequence
             subunits = [
                 f"{i+1}_{sequence[i:i+1+self.baselen]}"
-                for i in [c for c in self.seqpos]]
+                for i in self.seqpos]
         ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)

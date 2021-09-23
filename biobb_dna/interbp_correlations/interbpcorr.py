@@ -157,26 +157,20 @@ class InterBasePairCorrelation():
             roll = roll[roll.columns[1:-2]]
             twist = twist[twist.columns[1:-2]]
             labels = [
-                f"{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
+                f"{i+1}_{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
             corr_index = [
                 f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)]
         else:
-            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
+            labels = [f"{i+1}_{self.sequence[i:i+2]}" for i in self.seqpos]
             corr_index = [f"{self.sequence[i:i+3]}" for i in self.seqpos]
 
         # rename duplicated subunits
         shift.columns = labels
-        while any(shift.columns.duplicated()):
-            shift.columns = [
-                name if not duplicated else name + "_dup"
-                for duplicated, name
-                in zip(shift.columns.duplicated(), shift.columns)]
-        unique_labels = shift.columns
-        slide.columns = unique_labels
-        rise.columns = unique_labels
-        tilt.columns = unique_labels
-        roll.columns = unique_labels
-        twist.columns = unique_labels
+        slide.columns = labels
+        rise.columns = labels
+        tilt.columns = labels
+        roll.columns = labels
+        twist.columns = labels
 
         # set names to each dataset
         shift.name = "shift"
@@ -191,7 +185,7 @@ class InterBasePairCorrelation():
         datasets = [shift, slide, rise, tilt, roll, twist]
         for ser1, ser2 in product(datasets, datasets):
             ser2_shifted = ser2.shift(axis=1)
-            ser2_shifted[unique_labels[0]] = ser2[unique_labels[-1]]
+            ser2_shifted[labels[0]] = ser2[labels[-1]]
             if (
                     ser1.name in constants.hp_angular and
                     ser2.name in constants.hp_angular):
@@ -218,7 +212,7 @@ class InterBasePairCorrelation():
         result_df.to_csv(self.io_dict["out"]["output_csv_path"])
 
         # create heatmap
-        cmap = plt.get_cmap("bwr")
+        cmap = plt.get_cmap("bwr").copy()
         bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
         num = cmap.N
         norm = mpl.colors.BoundaryNorm(bounds, num)

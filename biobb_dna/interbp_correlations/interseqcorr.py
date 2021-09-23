@@ -151,17 +151,10 @@ class InterSequenceCorrelation():
             # discard first and last base(pairs) from strands
             sequence = self.sequence[1:]
             labels = [
-                f"{sequence[i:i+2]}" for i in range(len(ser_data.columns))]
+                f"{i+1}_{sequence[i:i+2]}" for i in range(len(ser_data.columns))]
         else:
-            labels = [f"{self.sequence[i:i+2]}" for i in self.seqpos]
+            labels = [f"{i+1}_{self.sequence[i:i+2]}" for i in self.seqpos]
         ser_data.columns = labels
-
-        # rename duplicated subunits
-        while any(ser_data.columns.duplicated()):
-            ser_data.columns = [
-                name if not duplicated else name + "_dup"
-                for duplicated, name
-                in zip(ser_data.columns.duplicated(), ser_data.columns)]
 
         # make matrix
         corr_data = ser_data.corr(method=self.method)
