@@ -20,3 +20,11 @@ curvesplus.biobb_canal module
     :undoc-members:
     :show-inheritance:
 
+curvesplus.biobb_canion module
+------------------------------------
+
+.. automodule:: curvesplus.biobb_canion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

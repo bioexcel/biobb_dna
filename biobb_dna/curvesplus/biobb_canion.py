@@ -18,9 +18,9 @@ class Canion():
     | Wrapper for the Canion executable  that is part of the Curves+ software suite. 
 
     Args:        
-        input_cdi_path (str): Trajectory input file. File type: input. Accepted formats: cdi
-        input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. Accepted formats: afr
-        input_avg_struc_path (str): Average DNA conformation. Accepted formats: pdb
+        input_cdi_path (str): Trajectory input file. File type: input. Accepted formats: cdi (edam:format_2330).
+        input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. Accepted formats: afr (edam:format_2330).
+        input_avg_struc_path (str): Average DNA conformation. File type: input. Accepted formats: pdb (edam:format_1476).
         output_zip_path (str) (Optional): Filename for .zip files containing Canion output files. File type: output. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **bases** (*str*) - (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence). 

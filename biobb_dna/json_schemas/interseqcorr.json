@@ -82,13 +82,13 @@
                     "type": "string",
                     "default": null,
                     "wf_prop": false,
-                    "description": "helical parameter name."
+                    "description": "helical parameter name to add to plot title."
                 },
                 "seqpos": {
                     "type": "array",
                     "default": null,
                     "wf_prop": false,
-                    "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                    "description": "list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence."
                 },
                 "remove_tmp": {
                     "type": "boolean",

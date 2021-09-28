@@ -81,9 +81,9 @@
                 },
                 "seqpos": {
                     "type": "array",
-                    "default": "Optional",
+                    "default": null,
                     "wf_prop": false,
-                    "description": "list of sequence positions to analyze. If not specified it will analyse the complete sequence."
+                    "description": "list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence."
                 },
                 "remove_tmp": {
                     "type": "boolean",
