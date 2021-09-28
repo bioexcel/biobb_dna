@@ -1,4 +1,7 @@
 [![](https://readthedocs.org/projects/biobb-dna/badge/?version=latest)](https://biobb-dna.readthedocs.io/en/latest/?badge=latest)
+[![](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](https://anaconda.org/bioconda/biobb_dna)
+[![](https://img.shields.io/badge/docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_dna)
+[![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # biobb_dna
 
@@ -11,79 +14,53 @@ bioinformatics tools.
 The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_dna.readthedocs.io/en/latest/).
 
-## Version
-v2.0.0 2020.4
+### Version
+v3.6.2 2021.2
 
-## Installation
+### Installation
+Using PIP:
 
-If you have no experience with anaconda, please first take a look to the [New with anaconda?](https://biobb-documentation.readthedocs.io/en/latest/first_steps.html#new-with-anaconda) section of the [official documentation](https://biobb-documentation.readthedocs.io/en/latest/).
+> **Important:** PIP only installs the package. All the dependencies must be installed separately. To perform a complete installation, please use ANACONDA, DOCKER or SINGULARITY.
 
-### Download repository
+* Installation:
 
-Although the biobb_dna repository is available at GitHub and thus you can clone it, we strongly recommend you to [**download it compressed**](https://github.com/bioexcel/biobb_dna/archive/master.zip) and start your new project from scratch. 
 
-### Create new conda environment
+        pip install "biobb_dna>=3.6.2"
 
-Once you have the project unzipped in your computer, please follow the next steps to create a new conda environment:
 
-```console
-cd biobb_dna-master
-conda env create -f conda_env/environment.yml
-```
+* Usage: [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html)
 
-### Update environment paths
+Using ANACONDA:
 
-Edit **conda_env/biobb_dna.pth** with the paths to your *biobb_dna* folder. Example:
+* Installation:
 
-```console
-/home/user_name/projects/biobb_dna/
-/home/user_name/projects/biobb_dna/biobb_dna/biobb_dna
-```
 
-Copy the edited **conda_env/biobb_dna.pth** file to the site-packages folder of your environment. This folder is in */[anaconda-path]/envs/biobb_dna/lib/python3.7/site-packages*, where */[anaconda-path]* is usually */anaconda3* or */opt/conda*.
+        conda install -c bioconda "biobb_dna>=3.6.2"
 
-```console
-cp conda_env/biobb_dna.pth /[anaconda-path]/envs/biobb_dna/lib/python3.7/site-packages
-```
 
-### Activate environment
+* Usage: With conda installation BioBBs can be used with the [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html) and the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html)
 
-Then, activate the recently created *biobb_dna* conda environment:
+Using DOCKER:
 
-```console
-conda activate biobb_dna
-```
+* Installation:
 
-### Create repository
 
-This template includes some folders not standard for a biobb, such as **biobb_dna/adapters/**, **biobb_dna/notebooks/** or **conda_env/**. For the sake of having a pure biobb structure, you should uncomment the three last lines of the **.gitignore** file before creating a new git repository:
+        docker pull quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1
 
-```console
-biobb_dna/adapters
-biobb_dna/notebooks
-conda_env
-```
-Then, inialitize repository:
 
-```console
-git init
-```
+* Usage:
 
-### Binary paths configuration
 
-Additionally, it's recommendable to configure binary paths in your environment in order to ease the command line execution. More info about this subject in the [Binary path configuration](https://biobb-documentation.readthedocs.io/en/latest/execution.html#binary-path-configuration) section of the [official documentation](https://biobb-documentation.readthedocs.io/en/latest/).
+        docker run quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1 <command>
 
-## Documentation
 
-[Click here to find the API Documentation example](https://biobb-dna.readthedocs.io/en/latest/template.html) for this template and [here for Command Line documentation](http://biobb_dna.readthedocs.io/en/latest/command_line.html).
+The command list and specification can be found at the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html).
 
-And here you can find [the full documentation](https://biobb-documentation.readthedocs.io/en/latest/) about how to build a new **BioExcel building block** from scratch.
-
-## Copyright & Licensing
+### Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
 
-* (c) 2015-2020 [Barcelona Supercomputing Center](https://www.bsc.es/)
-* (c) 2015-2020 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
+* (c) 2015-2021 [Barcelona Supercomputing Center](https://www.bsc.es/)
+* (c) 2015-2021 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
 
 Licensed under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), see the file LICENSE for details.

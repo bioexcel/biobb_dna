@@ -1,0 +1,146 @@
+{
+    "_id": "biobb_dna",
+    "desc": "Biobb_dna is a package composed of different analyses for nucleic acid trajectories",
+    "github": "https://github.com/bioexcel/biobb_dna",
+    "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
+    "conda": "https://anaconda.org/bioconda/biobb_dna",
+    "docker": "https://quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1",
+    "singularity": "",
+    "version": "3.6.2",
+    "tools": [
+        {
+            "block": "curvesplus",
+            "tool": "Curves",
+            "desc": "Wrapper for the Cur+ program that is part of the Curves+ software suite.",
+            "exec": "biobb_curves",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "curvesplus",
+            "tool": "Canal",
+            "desc": "Wrapper for the Canal program that is part of the Curves+ software suite.",
+            "exec": "biobb_canal",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "backbone",
+            "tool": "In House",
+            "desc": "Computation of BI/BII populations for the epsil/zeta helical parameters.",
+            "exec": "bipopulations",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "backbone",
+            "tool": "In House",
+            "desc": "Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.",
+            "exec": "canonicalag",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "backbone",
+            "tool": "In House",
+            "desc": "Calculate Puckering from phase parameters.",
+            "exec": "puckering",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "dna",
+            "tool": "In House",
+            "desc": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
+            "exec": "dna_averages",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "dna",
+            "tool": "In House",
+            "desc": "Created time series and histogram plots for each base pair from a helical parameter series file.",
+            "exec": "dna_timeseries",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "dna",
+            "tool": "In House",
+            "desc": "Determine binormality/bimodality from a helical parameter series dataset.",
+            "exec": "dna_bimodality",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "stiffness",
+            "tool": "In House",
+            "desc": "Calculate average stiffness constants for each base pair of a trajectory's series.",
+            "exec": "avgstiff",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "stiffness",
+            "tool": "In House",
+            "desc": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
+            "exec": "bpstiff",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "interbp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
+            "exec": "inter_bpcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "interbp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between helical parameters for a single inter-base pair.",
+            "exec": "inter_hpcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "interbp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
+            "exec": "inter_seqcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "intrabp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
+            "exec": "intra_bpcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "intrabp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between helical parameters for a single intra-base pair.",
+            "exec": "intra_hpcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        },
+        {
+            "block": "intrabp_correlations",
+            "tool": "In House",
+            "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
+            "exec": "intra_seqcorr",
+            "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna"
+        }
+    ],
+    "dep_pypi": [
+        "install_requires=['biobb_common==3.6.0']",
+        "python_requires='==3.7.*'",
+        "pandas>=1.2",
+        "matplotlib>=3.3",
+        "numpy>=1.20",
+        "scikit-learn>=0.24"
+    ],
+    "dep_conda": [
+        "python ==3.7.*",
+        "biobb_common ==3.6.0",
+        "curves",
+        "pandas>=1.2",
+        "matplotlib>=3.3",
+        "numpy>=1.20",
+        "scikit-learn>=0.24"
+    ],
+    "keywords": [
+        "dna",
+        "curves",
+        "canal"
+    ]
+}
