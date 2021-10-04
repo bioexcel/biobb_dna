@@ -12,21 +12,21 @@
             "block": "Curves",
             "tool": "Curves",
             "desc": "Wrapper for the Cur+ program that is part of the Curves+ software suite.",
-            "exec": "canal",
+            "exec": "biobb_curves",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/curvesplus.html#module-curvesplus.biobb_curves"
         },
         {
             "block": "Canal",
             "tool": "Canal",
             "desc": "Wrapper for the Canal program that is part of the Curves+ software suite.",
-            "exec": "canion",
+            "exec": "biobb_canal",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/curvesplus.html#module-curvesplus.biobb_canal"
         },
         {
             "block": "Canion",
             "tool": "Canion",
             "desc": "Wrapper for the Canion executable  that is part of the Curves+ software suite. ",
-            "exec": "curves",
+            "exec": "biobb_canion",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/curvesplus.html#module-curvesplus.biobb_canion"
         },
         {
