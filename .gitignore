@@ -1,6 +1,12 @@
+.gitignore 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 
 # ipynb checkpoints
 .ipynb_checkpoints
+.DS_Store
+.vscode
+*.egg-info
+build/
+dist/

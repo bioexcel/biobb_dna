@@ -10,12 +10,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
 
-class HelParTimeSeries():
+class HelParTimeSeries(BiobbObject):
     """
     | biobb_dna HelParTimeSeries
     | Created time series and histogram plots for each base pair from a helical parameter series file.
@@ -35,14 +36,14 @@ class HelParTimeSeries():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.dna_timeseries import helpartimeseries
+            from biobb_dna.dna.dna_timeseries import dna_timeseries
 
             prop = {
                 'helpar_name': 'twist',
                 'seqpos': [1,2,3,4,5],
                 'sequence': 'GCAACGTGCTATGGAAGC',
             }
-            helpartimeseries(
+            dna_timeseries(
                 input_ser_path='/path/to/twist.ser',
                 output_zip_path='/path/to/output/file.zip'
                 properties=prop)
@@ -59,6 +60,7 @@ class HelParTimeSeries():
     def __init__(self, input_ser_path, output_zip_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -105,23 +107,9 @@ class HelParTimeSeries():
         else:
             self.hp_unit = "Angstroms"
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
-
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -139,17 +127,9 @@ class HelParTimeSeries():
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Restart
-        if self.restart:
-            output_file_list = [self.io_dict['out']['output_zip_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="timeseries_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # Copy input_ser_path to temporary folder
         shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
@@ -235,13 +215,13 @@ class HelParTimeSeries():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
 
-def helpartimeseries(
+def dna_timeseries(
         input_ser_path: str, output_zip_path: str,
         properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
@@ -270,7 +250,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    helpartimeseries(
+    dna_timeseries(
         input_ser_path=args.input_ser_path,
         output_zip_path=args.output_zip_path,
         properties=properties)

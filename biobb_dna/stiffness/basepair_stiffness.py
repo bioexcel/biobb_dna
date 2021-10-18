@@ -8,13 +8,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
 
-class BPStiffness():
+class BPStiffness(BiobbObject):
     """
     | biobb_dna BPStiffness
     | Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
@@ -37,13 +38,13 @@ class BPStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.stiffness.basepair_stiffness import bpstiffness
+            from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness
 
             prop = { 
                 'KT': 0.592186827,
                 'scaling': [1, 1, 1, 10.6, 10.6, 10.6]
             }
-            bpstiffness(
+            basepair_stiffness(
                 input_filename_shift='path/to/basepair/shift.csv',
                 input_filename_slide='path/to/basepair/slide.csv',
                 input_filename_rise='path/to/basepair/rise.csv',
@@ -68,6 +69,7 @@ class BPStiffness():
                  input_filename_roll, input_filename_twist,
                  output_csv_path, output_jpg_path, properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -91,40 +93,16 @@ class BPStiffness():
         self.scaling = properties.get(
             "scaling", [1, 1, 1, 10.6, 10.6, 10.6])
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # Check the properties
         fu.check_properties(self, self.properties)
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="bp_stiffness_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # read input
         shift = load_data(
@@ -193,13 +171,13 @@ class BPStiffness():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
 
-def bpstiffness(
+def basepair_stiffness(
         input_filename_shift: str, input_filename_slide: str,
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
@@ -247,7 +225,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    bpstiffness(
+    basepair_stiffness(
         input_filename_shift=args.input_filename_shift,
         input_filename_slide=args.input_filename_slide,
         input_filename_rise=args.input_filename_rise,

@@ -13,13 +13,14 @@ import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
 
 from biobb_dna.utils import constants
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
 
-class HelParBimodality():
+class HelParBimodality(BiobbObject):
     """
     | biobb_dna HelParBimodality
     | Determine binormality/bimodality from a helical parameter series dataset.
@@ -40,12 +41,12 @@ class HelParBimodality():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.dna.dna_bimodality import helparbimodality
+            from biobb_dna.dna.dna_bimodality import dna_bimodality
 
             prop = { 
                 'max_iter': 500,
             }
-            helparbimodality(
+            helparbimodaldna_bimodalityity(
                 input_csv_file='filename.csv',
                 input_zip_file='/path/to/input.zip',
                 output_csv_path='/path/to/output.csv',
@@ -65,6 +66,7 @@ class HelParBimodality():
                  output_jpg_path, input_zip_file=None,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -88,23 +90,9 @@ class HelParBimodality():
         self.helpar_name = properties.get("helpar_name", None)
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` object."""
-
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -138,16 +126,6 @@ class HelParBimodality():
         else:
             self.hp_unit = "Angstroms"
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # resolve output
         output_csv_path = Path(
             self.io_dict['out']['output_csv_path']).resolve()
@@ -156,7 +134,7 @@ class HelParBimodality():
 
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="bimodality_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # read input
         if self.io_dict['in']['input_zip_file'] is not None:
@@ -251,8 +229,8 @@ class HelParBimodality():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
@@ -308,7 +286,7 @@ class HelParBimodality():
         return bimodal
 
 
-def helparbimodality(
+def dna_bimodality(
         input_csv_file, output_csv_path, output_jpg_path,
         input_zip_file: str = None, properties: dict = None, **kwargs) -> int:
     """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
@@ -342,7 +320,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    helparbimodality(
+    dna_bimodality(
         input_csv_file=args.input_csv_file,
         input_zip_file=args.input_zip_file,
         output_csv_path=args.output_csv_path,

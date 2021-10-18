@@ -11,7 +11,6 @@ from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-#from biobb_common.command_wrapper import cmd_wrapper
 
 
 class Canal(BiobbObject):
@@ -63,8 +62,6 @@ class Canal(BiobbObject):
     def __init__(self, input_cda_file, input_lis_file=None,
                  output_zip_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
-
-        # 2.0 Call parent class constructor
         super().__init__(properties)
 
         # Input/Output files
@@ -94,16 +91,6 @@ class Canal(BiobbObject):
         self.canal_exec = properties.get('canal_exec', 'Canal')
         self.properties = properties
 
-        # Properties common in all BB
-        '''self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)'''
-
         # Check the properties
         self.check_properties(properties)
 
@@ -112,12 +99,9 @@ class Canal(BiobbObject):
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
-
-        # Get local loggers from launchlogger decorator
-        '''out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)'''
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -136,14 +120,6 @@ class Canal(BiobbObject):
                         f"using sequence {self.sequence} "
                         f"from {self.io_dict['in']['input_lis_file']}",
                         self.out_log)
-
-        # Restart
-        '''if self.restart:
-            output_file_list = [self.io_dict['out']['output_zip_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0'''
 
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="canal_")
@@ -193,9 +169,6 @@ class Canal(BiobbObject):
         self.cmd = ["\n".join(instructions)]
         fu.log('Creating command line with instructions and required arguments',
                self.out_log, self.global_log)
-        # Launch execution
-        '''returncode = cmd_wrapper.CmdWrapper(
-            cmd, self.out_log, err_log, self.global_log).launch()'''
 
         # Run Biobb block
         self.run_biobb()
@@ -216,10 +189,7 @@ class Canal(BiobbObject):
         if self.remove_tmp:
             self.tmp_files.append(self.tmp_folder)
             self.remove_tmp_files()
-            '''fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), self.out_log)'''
 
-        #return returncode
         return self.return_code
 
 

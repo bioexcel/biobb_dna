@@ -6,13 +6,13 @@ import zipfile
 import argparse
 import shutil
 from pathlib import Path
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.command_wrapper import cmd_wrapper
 
 
-class Curves():
+class Curves(BiobbObject):
     """
     | biobb_dna Curves
     | Wrapper for the Cur+ executable  that is part of the Curves+ software suite. 
@@ -43,7 +43,7 @@ class Curves():
                 's1range': '1:12',
                 's2range': '24:13', 
             }
-            curves(
+            biobb_curves(
                 input_struc_path='/path/to/structure/file.trj',
                 input_top_path='/path/to/topology/file.top',
                 output_cda_path='/path/to/output/file.cda',
@@ -64,6 +64,7 @@ class Curves():
             output_cda_path, output_zip_path=None,
             input_top_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -92,23 +93,14 @@ class Curves():
         self.fit = properties.get('fit', '.f.')
         self.properties = properties
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
+        # Setup Biobb
+        if self.check_restart():
+            return 0
+        self.stage_files()
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -146,20 +138,9 @@ class Curves():
                 # CONDA_PREFIX undefined
                 self.stdlib_path = Path.cwd() / "standard"
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_lis_path'],
-                self.io_dict['out']['output_cda_path'],
-                self.io_dict['out']['output_zip_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="curves_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # copy input files to temporary folder
         shutil.copy(self.io_dict['in']['input_struc_path'], self.tmp_folder)
@@ -180,7 +161,7 @@ class Curves():
         if self.io_dict['in']['input_top_path'] is not None:
             # add topology file if needed
             fu.log('Appending provided topology to command',
-                   out_log, self.global_log)
+                   self.out_log, self.global_log)
             instructions.append(
                 f"  ftop={tmp_top_input},")
 
@@ -199,12 +180,12 @@ class Curves():
             f"{self.s2range}",
             "!"
         ]
-        cmd = ["\n".join(instructions)]
+        self.cmd = ["\n".join(instructions)]
         fu.log('Creating command line with instructions and required arguments',
-               out_log, self.global_log)
-        # Launch execution
-        returncode = cmd_wrapper.CmdWrapper(
-            cmd, out_log, err_log, self.global_log).launch()
+               self.out_log, self.global_log)
+
+        # Run Biobb block
+        self.run_biobb()
 
         # change back to original directory
         os.chdir(original_directory)
@@ -229,13 +210,13 @@ class Curves():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
-        return returncode
+        return self.returncode
 
 
-def curves(
+def biobb_curves(
         input_struc_path: str, output_lis_path: str, output_cda_path: str,
         input_top_path: str = None, output_zip_path: str = None,
         properties: dict = None, **kwargs) -> int:
@@ -273,7 +254,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    curves(
+    biobb_curves(
         input_struc_path=args.input_struc_path,
         input_top_path=args.input_top_path,
         output_cda_path=args.output_cda_path,

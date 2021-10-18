@@ -7,13 +7,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
 
-class IntraHelParCorrelation():
+class IntraHelParCorrelation(BiobbObject):
     """
     | biobb_dna IntraHelParCorrelation
     | Calculate correlation between helical parameters for a single intra-base pair.
@@ -35,12 +36,12 @@ class IntraHelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.intrabp_correlations.intrahpcorr import intrahelparcorrelation
+            from biobb_dna.intrabp_correlations.intrahpcorr import intrahpcorr
 
             prop = { 
                 'base': 'A',
             }
-            intrahelparcorrelation(
+            intrahpcorr(
                 input_filename_shear='path/to/shear.csv',
                 input_filename_stretch='path/to/stretch.csv',
                 input_filename_stagger='path/to/stagger.csv',
@@ -67,6 +68,7 @@ class IntraHelParCorrelation():
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -87,40 +89,16 @@ class IntraHelParCorrelation():
         self.properties = properties
         self.base = properties.get("base", None)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # Check the properties
         fu.check_properties(self, self.properties)
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="hpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # read input
         shear = load_data(self.io_dict["in"]["input_filename_shear"])
@@ -232,8 +210,8 @@ class IntraHelParCorrelation():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
@@ -272,7 +250,7 @@ class IntraHelParCorrelation():
         return correlation
 
 
-def intrahelparcorrelation(
+def intrahpcorr(
         input_filename_shear: str, input_filename_stretch: str,
         input_filename_stagger: str, input_filename_buckle: str,
         input_filename_propel: str, input_filename_opening: str,
@@ -321,7 +299,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    intrahelparcorrelation(
+    intrahpcorr(
         input_filename_shear=args.input_filename_shear,
         input_filename_stretch=args.input_filename_stretch,
         input_filename_stagger=args.input_filename_stagger,

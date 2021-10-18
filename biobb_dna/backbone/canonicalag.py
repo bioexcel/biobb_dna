@@ -9,12 +9,13 @@ import pandas as pd
 import numpy as np
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
 
 
-class CanonicalAG():
+class CanonicalAG(BiobbObject):
     """
     | biobb_dna CanonicalAG
     | Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.
@@ -42,7 +43,7 @@ class CanonicalAG():
                 'seqpos': [1,2],
                 'sequence': 'GCAT',
             }
-            CanonicalAG(
+            canonicalag(
                 input_alphaC_path='/path/to/alphaC.ser',
                 input_alphaW_path='/path/to/alphaW.ser',
                 input_gammaC_path='/path/to/gammaC.ser',
@@ -65,6 +66,7 @@ class CanonicalAG():
                  output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -87,23 +89,9 @@ class CanonicalAG():
         self.seqpos = properties.get(
             "seqpos", None)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`CanonicalAG <backbone.canonicalag.CanonicalAG>` object."""
-
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -121,19 +109,9 @@ class CanonicalAG():
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="backbone_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # Copy input_file_path1 to temporary folder
         shutil.copy(self.io_dict['in']['input_alphaC_path'], self.tmp_folder)
@@ -206,8 +184,8 @@ class CanonicalAG():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 

@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -14,7 +15,7 @@ from biobb_dna.utils.loader import read_series
 from biobb_dna.utils import constants
 
 
-class InterSequenceCorrelation():
+class InterSequenceCorrelation(BiobbObject):
     """
     | biobb_dna InterSequenceCorrelation
     | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
@@ -33,13 +34,13 @@ class InterSequenceCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.interseqcorr import intersequencecorrelation
+            from biobb_dna.interbp_correlations.interseqcorr import interseqcorr
 
             prop = { 
                 "helpar_name": "helpar",
                 "sequence": "CGTAATCG"
             }
-            intersequencecorrelation(
+            interseqcorr(
                 input_ser_path='path/to/input/file.ser',
                 output_csv_path='path/to/output/file.csv',
                 output_jpg_path='path/to/output/plot.jpg',
@@ -58,6 +59,7 @@ class InterSequenceCorrelation():
             self, input_ser_path, output_csv_path,
             output_jpg_path, properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -75,23 +77,9 @@ class InterSequenceCorrelation():
         self.seqpos = properties.get("seqpos", None)
         self.helpar_name = properties.get("helpar_name", None)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` object."""
-
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -128,19 +116,9 @@ class InterSequenceCorrelation():
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="bpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # read input .ser file
         ser_data = read_series(
@@ -190,8 +168,8 @@ class InterSequenceCorrelation():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
@@ -206,7 +184,7 @@ class InterSequenceCorrelation():
         return num / den
 
 
-def intersequencecorrelation(
+def interseqcorr(
         input_ser_path: str,
         output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
@@ -238,7 +216,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    intersequencecorrelation(
+    interseqcorr(
         input_ser_path=args.input_ser_path,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,

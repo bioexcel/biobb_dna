@@ -7,13 +7,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
 
-class InterHelParCorrelation():
+class InterHelParCorrelation(BiobbObject):
     """
     | biobb_dna InterHelParCorrelation
     | Calculate correlation between helical parameters for a single inter-base pair.
@@ -35,12 +36,12 @@ class InterHelParCorrelation():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.interbp_correlations.interhpcorr import interhelparcorrelation
+            from biobb_dna.interbp_correlations.interhpcorr import interhpcorr
 
             prop = { 
                 'basepair': 'AA',
             }
-            interhelparcorrelation(
+            interhpcorr(
                 input_filename_shift='path/to/shift.csv',
                 input_filename_slide='path/to/slide.csv',
                 input_filename_rise='path/to/rise.csv',
@@ -67,6 +68,7 @@ class InterHelParCorrelation():
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -87,40 +89,16 @@ class InterHelParCorrelation():
         self.properties = properties
         self.basepair = properties.get("basepair", None)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
-
         # Check the properties
         fu.check_properties(self, self.properties)
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="hpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # read input
         shift = load_data(self.io_dict["in"]["input_filename_shift"])
@@ -226,8 +204,8 @@ class InterHelParCorrelation():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
@@ -266,7 +244,7 @@ class InterHelParCorrelation():
         return correlation
 
 
-def interhelparcorrelation(
+def interhpcorr(
         input_filename_shift: str, input_filename_slide: str,
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
@@ -315,7 +293,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    interhelparcorrelation(
+    interhpcorr(
         input_filename_shift=args.input_filename_shift,
         input_filename_slide=args.input_filename_slide,
         input_filename_rise=args.input_filename_rise,

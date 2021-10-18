@@ -10,12 +10,13 @@ import pandas as pd
 import numpy as np
 from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
 
 
-class AverageStiffness():
+class AverageStiffness(BiobbObject):
     """
     | biobb_dna AverageStiffness
     | Calculate average stiffness constants for each base pair of a trajectory's series.
@@ -35,13 +36,13 @@ class AverageStiffness():
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.stiffness.average_stiffness import averagestiffness
+            from biobb_dna.stiffness.average_stiffness import average_stiffness
 
             prop = { 
                 'helpar_name': 'twist',
                 'sequence': 'GCAT',
             }
-            averagestiffness(
+            average_stiffness(
                 input_ser_path='/path/to/twist.ser',
                 output_csv_path='/path/to/table/output.csv',
                 output_jpg_path='/path/to/table/output.jpg',
@@ -59,6 +60,7 @@ class AverageStiffness():
     def __init__(self, input_ser_path, output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -78,23 +80,9 @@ class AverageStiffness():
         self.seqpos = properties.get("seqpos", None)
         self.helpar_name = properties.get("helpar_name", None)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get(
-            'can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` object."""
-
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
 
         # Check the properties
         fu.check_properties(self, self.properties)
@@ -136,19 +124,9 @@ class AverageStiffness():
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Restart
-        if self.restart:
-            output_file_list = [
-                self.io_dict['out']['output_csv_path'],
-                self.io_dict['out']['output_jpg_path']]
-            if fu.check_complete_files(output_file_list):
-                fu.log('Restart is enabled, this step: %s will the skipped' %
-                       self.step, out_log, self.global_log)
-                return 0
-
         # Creating temporary folder
         self.tmp_folder = fu.create_unique_dir(prefix="avgstiffness_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, out_log)
+        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
 
         # Copy input_file_path1 to temporary folder
         shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
@@ -203,13 +181,13 @@ class AverageStiffness():
 
         # Remove temporary file(s)
         if self.remove_tmp:
-            fu.rm(self.tmp_folder)
-            fu.log('Removed: %s' % str(self.tmp_folder), out_log)
+            self.tmp_files.append(self.tmp_folder)
+            self.remove_tmp_files()
 
         return 0
 
 
-def averagestiffness(
+def average_stiffness(
         input_ser_path: str, output_csv_path: str, output_jpg_path: str,
         properties: dict = None, **kwargs) -> int:
     """Create :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` class and
@@ -240,7 +218,7 @@ def main():
     args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config).get_prop_dic()
 
-    averagestiffness(
+    average_stiffness(
         input_ser_path=args.input_ser_path,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
