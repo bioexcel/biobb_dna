@@ -46,7 +46,7 @@ class HelParBimodality(BiobbObject):
             prop = { 
                 'max_iter': 500,
             }
-            helparbimodaldna_bimodalityity(
+            dna_bimodality(
                 input_csv_file='filename.csv',
                 input_zip_file='/path/to/input.zip',
                 output_csv_path='/path/to/output.csv',

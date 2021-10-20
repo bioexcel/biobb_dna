@@ -38,7 +38,7 @@ class Curves(BiobbObject):
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.curvesplus.biobb_curves import curves
+            from biobb_dna.curvesplus.biobb_curves import biobb_curves
             prop = { 
                 's1range': '1:12',
                 's2range': '24:13', 

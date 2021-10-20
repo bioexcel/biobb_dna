@@ -40,7 +40,7 @@ class Canion(BiobbObject):
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_dna.curvesplus.biobb_canion import canion
+            from biobb_dna.curvesplus.biobb_canion import biobb_canion
             prop = { 
                 'type': 'K+',
                 'bases': 'G'
