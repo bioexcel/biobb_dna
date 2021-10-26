@@ -15,7 +15,7 @@ The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_dna.readthedocs.io/en/latest/).
 
 ### Version
-v3.6.2 2021.2
+v3.7.0 2021.3
 
 ### Installation
 Using PIP:
@@ -25,7 +25,7 @@ Using PIP:
 * Installation:
 
 
-        pip install "biobb_dna>=3.6.2"
+        pip install "biobb_dna>=3.7.0"
 
 
 * Usage: [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html)
@@ -35,7 +35,7 @@ Using ANACONDA:
 * Installation:
 
 
-        conda install -c bioconda "biobb_dna>=3.6.2"
+        conda install -c bioconda "biobb_dna>=3.7.0"
 
 
 * Usage: With conda installation BioBBs can be used with the [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html) and the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html)
@@ -45,13 +45,13 @@ Using DOCKER:
 * Installation:
 
 
-        docker pull quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1
+        docker pull quay.io/biocontainers/biobb_dna:3.7.0--pyhdfd78af_0
 
 
 * Usage:
 
 
-        docker run quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1 <command>
+        docker run quay.io/biocontainers/biobb_dna:3.7.0--pyhdfd78af_0 <command>
 
 
 The command list and specification can be found at the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html).

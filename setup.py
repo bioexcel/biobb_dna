@@ -19,7 +19,7 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
     install_requires=[
-        'biobb_common>=3.6.0',
+        'biobb_common>=3.7.0',
         'pandas>=1.3',
         'matplotlib>=3.4',
         'numpy>=1.21',

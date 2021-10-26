@@ -4,9 +4,9 @@
     "github": "https://github.com/bioexcel/biobb_dna",
     "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_dna",
-    "docker": "https://quay.io/biocontainers/biobb_dna:3.6.2--pyhdfd78af_1",
+    "docker": "https://quay.io/biocontainers/biobb_dna:3.7.0--pyhdfd78af_0",
     "singularity": "",
-    "version": "3.6.2",
+    "version": "3.7.0",
     "tools": [
         {
             "block": "Curves",
@@ -54,56 +54,56 @@
             "block": "HelParAverages",
             "tool": "In House",
             "desc": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
-            "exec": "helparaverages",
+            "exec": "dna_averages",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna_averages"
         },
         {
             "block": "HelParTimeSeries",
             "tool": "In House",
             "desc": "Created time series and histogram plots for each base pair from a helical parameter series file.",
-            "exec": "helpartimeseries",
+            "exec": "dna_timeseries",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna_timeseries"
         },
         {
             "block": "HelParBimodality",
             "tool": "In House",
             "desc": "Determine binormality/bimodality from a helical parameter series dataset.",
-            "exec": "helparbimodality",
+            "exec": "dna_bimodality",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/dna.html#module-dna.dna_bimodality"
         },
         {
             "block": "AverageStiffness",
             "tool": "In House",
             "desc": "Calculate average stiffness constants for each base pair of a trajectory's series.",
-            "exec": "averagestiffness",
+            "exec": "average_stiffness",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/stiffness.html#module-stiffness.average_stiffness"
         },
         {
             "block": "BPStiffness",
             "tool": "In House",
             "desc": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
-            "exec": "bpstiffness",
+            "exec": "basepair_stiffness",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/stiffness.html#module-stiffness.basepair_stiffness"
         },
         {
             "block": "InterBasePairCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
-            "exec": "interbasepaircorrelation",
+            "exec": "interbpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/interbp_correlations.html#interbp-correlations-interbpcorr-module"
         },
         {
             "block": "InterHelParCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between helical parameters for a single inter-base pair.",
-            "exec": "interhelparcorrelation",
+            "exec": "interhpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/interbp_correlations.html#interbp-correlations-interhpcorr-module"
         },
         {
             "block": "InterSequenceCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between all base pairs of a single sequence and for a single helical parameter.",
-            "exec": "intersequencecorrelation",
+            "exec": "interseqcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/interbp_correlations.html#interbp-correlations-interseqcorr-module"
         },
         {
@@ -129,7 +129,7 @@
         }
     ],
     "dep_pypi": [
-        "install_requires=['biobb_common==3.6.0']",
+        "install_requires=['biobb_common==3.7.0']",
         "python_requires='==3.7.*'",
         "pandas>=1.2",
         "matplotlib>=3.3",
@@ -138,7 +138,7 @@
     ],
     "dep_conda": [
         "python ==3.7.*",
-        "biobb_common ==3.6.0",
+        "biobb_common ==3.7.0",
         "curves",
         "pandas>=1.2",
         "matplotlib>=3.3",
