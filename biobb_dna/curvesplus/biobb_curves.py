@@ -34,6 +34,7 @@ class Curves(BiobbObject):
             * **test** (*bool*) - (False) If True, provide addition output in .lis file on fitting and axis generation.
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
             * **fit** (*bool*) - (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
+            * **axfrm** (*bool*) - (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
             * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
     Examples:
         This is a use example of how to use the building block from Python::
@@ -91,6 +92,7 @@ class Curves(BiobbObject):
         self.test = properties.get('test', '.f.')
         self.line = properties.get('line', '.f.')
         self.fit = properties.get('fit', '.f.')
+        self.axfrm = properties.get('axfrm', '.f.')
         self.properties = properties
 
     @launchlogger
@@ -173,6 +175,7 @@ class Curves(BiobbObject):
             f"  test={self.test},",
             f"  line={self.line},",
             f"  fit={self.fit},",
+            f"  axfrm={self.axfrm},",
             f"  itst={self.itst},itnd={self.itnd},itdel={self.itdel},",
             "&end",
             "2 1 -1 0 0",
@@ -213,7 +216,7 @@ class Curves(BiobbObject):
             self.tmp_files.append(self.tmp_folder)
             self.remove_tmp_files()
 
-        return self.returncode
+        return self.return_code
 
 
 def biobb_curves(

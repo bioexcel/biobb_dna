@@ -184,7 +184,7 @@ class Canion(BiobbObject):
             self.tmp_files.append(self.tmp_folder)
             self.remove_tmp_files()
 
-        return self.returncode
+        return self.return_code
 
 
 def biobb_canion(
