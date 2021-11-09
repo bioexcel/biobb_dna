@@ -1,6 +1,6 @@
 {
     "_id": "biobb_dna",
-    "desc": "Biobb_dna is a package composed of different analyses for nucleic acid trajectories",
+    "desc": "Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
     "github": "https://github.com/bioexcel/biobb_dna",
     "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_dna",
