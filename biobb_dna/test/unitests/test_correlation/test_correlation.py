@@ -1,10 +1,10 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.interbp_correlations.interhpcorr import interhelparcorrelation
-from biobb_dna.interbp_correlations.interseqcorr import intersequencecorrelation
-from biobb_dna.interbp_correlations.interbpcorr import interbasepaircorrelation
-from biobb_dna.intrabp_correlations.intrahpcorr import intrahelparcorrelation
-from biobb_dna.intrabp_correlations.intraseqcorr import intrasequencecorrelation
-from biobb_dna.intrabp_correlations.intrabpcorr import intrabasepaircorrelation
+from biobb_dna.interbp_correlations.interhpcorr import interhpcorr
+from biobb_dna.interbp_correlations.interseqcorr import interseqcorr
+from biobb_dna.interbp_correlations.interbpcorr import interbpcorr
+from biobb_dna.intrabp_correlations.intrahpcorr import intrahpcorr
+from biobb_dna.intrabp_correlations.intraseqcorr import intraseqcorr
+from biobb_dna.intrabp_correlations.intrabpcorr import intrabpcorr
 
 
 class TestInterHelparCorrelation():
@@ -15,7 +15,7 @@ class TestInterHelparCorrelation():
         fx.test_teardown(self)
 
     def test_helparcorrelation(self):
-        returncode = interhelparcorrelation(**self.paths)
+        returncode = interhpcorr(**self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])
         assert fx.not_empty(self.paths['output_jpg_path'])
         assert fx.exe_success(returncode)
@@ -35,7 +35,7 @@ class TestInterSequenceCorrelation():
         fx.test_teardown(self)
 
     def test_sequencecorrelation(self):
-        returncode = intersequencecorrelation(
+        returncode = interseqcorr(
             properties=self.properties,
             **self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])
@@ -57,7 +57,7 @@ class TestInterBasepairCorrelation():
         fx.test_teardown(self)
 
     def test_basepaircorrelation(self):
-        returncode = interbasepaircorrelation(
+        returncode = interbpcorr(
             properties=self.properties,
             **self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])
@@ -79,7 +79,7 @@ class TestIntraHelparCorrelation():
         fx.test_teardown(self)
 
     def test_helparcorrelation(self):
-        returncode = intrahelparcorrelation(**self.paths)
+        returncode = intrahpcorr(**self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])
         assert fx.not_empty(self.paths['output_jpg_path'])
         assert fx.exe_success(returncode)
@@ -95,11 +95,11 @@ class TestIntraSequenceCorrelation():
     def setUp(self):
         fx.test_setup(self, 'intraseqcorr')
 
-    def tearDown(self):
-        fx.test_teardown(self)
+    # def tearDown(self):
+    #     fx.test_teardown(self)
 
     def test_sequencecorrelation(self):
-        returncode = intrasequencecorrelation(
+        returncode = intraseqcorr(
             properties=self.properties,
             **self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])
@@ -121,7 +121,7 @@ class TestIntraBasepairCorrelation():
         fx.test_teardown(self)
 
     def test_basepaircorrelation(self):
-        returncode = intrabasepaircorrelation(
+        returncode = intrabpcorr(
             properties=self.properties,
             **self.paths)
         assert fx.not_empty(self.paths['output_csv_path'])

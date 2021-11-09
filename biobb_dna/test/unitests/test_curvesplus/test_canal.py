@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.curvesplus.biobb_canal import canal
+from biobb_dna.curvesplus.biobb_canal import biobb_canal
 
 
 class TestCanal():
@@ -10,7 +10,7 @@ class TestCanal():
         fx.test_teardown(self)
 
     def test_canal(self):
-        returncode = canal(
+        returncode = biobb_canal(
             properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_zip_path'])
         assert fx.exe_success(returncode)

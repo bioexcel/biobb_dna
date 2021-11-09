@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.curvesplus.biobb_curves import curves
+from biobb_dna.curvesplus.biobb_curves import biobb_curves
 
 
 class TestCurves():
@@ -10,7 +10,7 @@ class TestCurves():
         fx.test_teardown(self)
 
     def test_curves(self):
-        returncode = curves(
+        returncode = biobb_curves(
             properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_cda_path'])
         assert fx.not_empty(self.paths['output_lis_path'])

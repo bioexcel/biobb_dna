@@ -1,5 +1,5 @@
 from biobb_common.tools import test_fixtures as fx
-from biobb_dna.dna.dna_timeseries import helpartimeseries
+from biobb_dna.dna.dna_timeseries import dna_timeseries
 
 
 import logging
@@ -15,7 +15,7 @@ class TestTimeSeries():
         fx.test_teardown(self)
 
     def test_helpartimeseries(self):
-        returncode = helpartimeseries(properties=self.properties, **self.paths)
+        returncode = dna_timeseries(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_zip_path'])
         assert fx.exe_success(returncode)
         assert fx.equal(
