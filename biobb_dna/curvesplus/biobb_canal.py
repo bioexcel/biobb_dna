@@ -20,7 +20,7 @@ class Canal(BiobbObject):
 
     Args:        
         input_cda_file (str): Input cda file, from Cur+ output. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/curves_output.cda>`_. Accepted formats: cda (edam:format_2330).
-        input_lis_file (str): (Optional) Input lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
+        input_lis_file (str) (Optional): Input lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
         output_zip_path (str): zip filename for output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dic):
             * **bases** (*str*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 

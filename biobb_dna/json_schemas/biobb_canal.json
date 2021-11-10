@@ -18,7 +18,6 @@
     },
     "required": [
         "input_cda_file",
-        "input_lis_file",
         "output_zip_path"
     ],
     "properties": {
