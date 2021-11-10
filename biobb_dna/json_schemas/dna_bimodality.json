@@ -17,7 +17,6 @@
     },
     "required": [
         "input_csv_file",
-        "input_zip_file",
         "output_csv_path",
         "output_jpg_path"
     ],

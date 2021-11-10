@@ -27,7 +27,7 @@ class HelParBimodality(BiobbObject):
 
     Args:        
         input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv>`_. Accepted formats: csv (edam:format_3752) 
-        input_zip_file (str): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip (edam:format_3987).
+        input_zip_file (str) (Optional): .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip (edam:format_3987).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
