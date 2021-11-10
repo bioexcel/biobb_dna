@@ -39,7 +39,7 @@
         },
         "input_lis_file": {
             "type": "string",
-            "description": "(Optional) Input lis file, from Cur+ output",
+            "description": "Input lis file, from Cur+ output",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -48,7 +48,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.lis$",
-                    "description": "(Optional) Input lis file, from Cur+ output",
+                    "description": "Input lis file, from Cur+ output",
                     "edam": "format_2330"
                 }
             ]
