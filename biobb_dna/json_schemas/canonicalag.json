@@ -91,7 +91,7 @@
         "output_csv_path": {
             "type": "string",
             "description": "Path to .csv file where output is saved. File type: output",
-            "filetype": "input",
+            "filetype": "output",
             "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.csv",
             "enum": [
                 ".*\\.csv$"
@@ -107,7 +107,7 @@
         "output_jpg_path": {
             "type": "string",
             "description": "Path to .jpg file where output is saved. File type: output",
-            "filetype": "input",
+            "filetype": "output",
             "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
