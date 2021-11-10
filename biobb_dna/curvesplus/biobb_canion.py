@@ -18,10 +18,10 @@ class Canion(BiobbObject):
     | Wrapper for the Canion executable  that is part of the Curves+ software suite. 
 
     Args:        
-        input_cdi_path (str): Trajectory input file. File type: input. Accepted formats: cdi (edam:format_2330).
-        input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. Accepted formats: afr (edam:format_2330).
-        input_avg_struc_path (str): Average DNA conformation. File type: input. Accepted formats: pdb (edam:format_1476).
-        output_zip_path (str) (Optional): Filename for .zip files containing Canion output files. File type: output. Accepted formats: zip (edam:format_3987).
+        input_cdi_path (str): Trajectory input file. File type: input. `Sample file <https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi>`_. Accepted formats: cdi (edam:format_2330).
+        input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr>`_. Accepted formats: afr (edam:format_2330).
+        input_avg_struc_path (str): Average DNA conformation. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        output_zip_path (str) (Optional): Filename for .zip files containing Canion output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **bases** (*str*) - (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence). 
             * **type** (*str*) - ('*') Ions (or atoms) to be analyzed. Options are 'Na+', 'K', 'K+', 'Cl', 'Cl-', 'CL', 'P', 'C1*', 'NH1', 'NH2', 'NZ', '1' for all cations, '-1' for all anions, '0' for neutral species or '*' for all available data.
@@ -46,7 +46,10 @@ class Canion(BiobbObject):
                 'bases': 'G'
             }
             biobb_canion(
-                input=,
+                input_cdi_path='/path/to/input.cdi',
+                input_afr_path='/path/to/input.afr',
+                input_avg_struc_path='/path/to/input.pdb',
+                output_zip_path='/path/to/output.zip',
                 properties=prop)
     Info:
         * wrapped_software:

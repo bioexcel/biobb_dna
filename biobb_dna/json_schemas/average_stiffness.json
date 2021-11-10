@@ -25,7 +25,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/canal_output_roll.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -41,7 +41,7 @@
             "type": "string",
             "description": "Path to .csv file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/stiffness/stiffavg_roll.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -57,7 +57,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/stiffness/stiffavg_roll.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

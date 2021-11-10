@@ -26,7 +26,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'phaseC'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_phaseC.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -42,7 +42,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'phaseW'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_phaseW.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -58,7 +58,7 @@
             "type": "string",
             "description": "Path to .csv file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/puckering_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -74,7 +74,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/puckering_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

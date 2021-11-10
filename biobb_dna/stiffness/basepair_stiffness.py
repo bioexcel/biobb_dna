@@ -21,14 +21,14 @@ class BPStiffness(BiobbObject):
     | Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
 
     Args:        
-        input_filename_shift (str): Path to csv file with data for helical parameter 'shift'. File type: input. Accepted formats: csv (edam:format_3752)
-        input_filename_slide (str): Path to csv file with data for helical parameter 'slide'. File type: input. Accepted formats: csv (edam:format_3752)
-        input_filename_rise (str): Path to csv file with data for helical parameter 'rise'. File type: input. Accepted formats: csv (edam:format_3752)
-        input_filename_tilt (str): Path to csv file with data for helical parameter 'tilt'. File type: input. Accepted formats: csv (edam:format_3752)
-        input_filename_roll (str): Path to csv file with data for helical parameter 'roll'. File type: input. Accepted formats: csv (edam:format_3752)
-        input_filename_twist (str): Path to csv file with data for helical parameter 'twist'. File type: input. Accepted formats: csv (edam:format_3752)
-        output_csv_path (str): Path to directory where stiffness matrix file is saved as a csv file. File type: output. Accepted formats: csv (edam:format_3752)
-        output_jpg_path (str): Path to directory where stiffness heatmap image is saved as a jpg file. File type: output. Accepted formats: jpg (edam:format_3579)
+        input_filename_shift (str): Path to csv file with data for helical parameter 'shift'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_shift_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        input_filename_slide (str): Path to csv file with data for helical parameter 'slide'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_slide_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        input_filename_rise (str): Path to csv file with data for helical parameter 'rise'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_rise_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        input_filename_tilt (str): Path to csv file with data for helical parameter 'tilt'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_tilt_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        input_filename_roll (str): Path to csv file with data for helical parameter 'roll'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_roll_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        input_filename_twist (str): Path to csv file with data for helical parameter 'twist'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_twist_AA.csv>`_. Accepted formats: csv (edam:format_3752)
+        output_csv_path (str): Path to directory where stiffness matrix file is saved as a csv file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/stiffness/stiffbp_ref.csv>`_. Accepted formats: csv (edam:format_3752)
+        output_jpg_path (str): Path to directory where stiffness heatmap image is saved as a jpg file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/stiffness/stiffbp_ref.jpg>`_. Accepted formats: jpg (edam:format_3579)
         properties (dict):
             * **KT** (*float*) - (0.592186827) Value of Boltzmann temperature factor.
             * **scaling** (*list*) - ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist.

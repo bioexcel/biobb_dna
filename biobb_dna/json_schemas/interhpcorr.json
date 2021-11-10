@@ -30,7 +30,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'shift'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_shift_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -46,7 +46,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'slide'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_slide_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -62,7 +62,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'rise'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_rise_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -78,7 +78,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'tilt'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_tilt_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -94,7 +94,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'roll'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_roll_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -110,7 +110,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'twist'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_twist_AA.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -126,7 +126,7 @@
             "type": "string",
             "description": "Path to directory where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_hpcorr_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -142,7 +142,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_hpcorr_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

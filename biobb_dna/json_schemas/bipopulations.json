@@ -28,7 +28,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'epsilC'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_epsilC.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -44,7 +44,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'epsilW'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_epsilW.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -60,7 +60,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'zetaC'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_zetaC.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -76,7 +76,7 @@
             "type": "string",
             "description": "Path to .ser file for helical parameter 'zetaW'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_zetaW.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -92,7 +92,7 @@
             "type": "string",
             "description": "Path to .csv file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/bipop_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -108,7 +108,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/bipop_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],
@@ -134,18 +134,6 @@
                     "default": null,
                     "wf_prop": false,
                     "description": "list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence."
-                },
-                "remove_tmp": {
-                    "type": "boolean",
-                    "default": true,
-                    "wf_prop": true,
-                    "description": "Remove temporal files."
-                },
-                "restart": {
-                    "type": "boolean",
-                    "default": false,
-                    "wf_prop": true,
-                    "description": "Do not execute if output files exist."
                 }
             }
         }
