@@ -31,7 +31,7 @@
             "desc": "Wrapper for the Canion executable  that is part of the Curves+ software suite. ",
             "exec": "biobb_canion",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/curvesplus.html#module-curvesplus.biobb_canion",
-            "rest": false
+            "rest": true
         },
         {
             "block": "BIPopulations",
