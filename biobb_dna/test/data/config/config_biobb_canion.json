@@ -1,0 +1,9 @@
+{
+  "properties": {
+    "dlow": 5.8,
+    "dhig": 7.2,
+    "type": "K+",
+    "rlow": 0,
+    "rhig": 18
+  }
+}

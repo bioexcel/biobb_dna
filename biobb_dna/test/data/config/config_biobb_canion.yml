@@ -1,0 +1,6 @@
+properties:
+  dhig: 7.2
+  dlow: 5.8
+  rhig: 18
+  rlow: 0
+  type: K+

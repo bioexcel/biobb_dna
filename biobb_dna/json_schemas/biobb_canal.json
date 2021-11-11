@@ -18,7 +18,6 @@
     },
     "required": [
         "input_cda_file",
-        "input_lis_file",
         "output_zip_path"
     ],
     "properties": {
@@ -26,7 +25,7 @@
             "type": "string",
             "description": "Input cda file, from Cur+ output",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/curves_output.cda",
             "enum": [
                 ".*\\.cda$"
             ],
@@ -40,7 +39,7 @@
         },
         "input_lis_file": {
             "type": "string",
-            "description": "(Optional) Input lis file, from Cur+ output",
+            "description": "Input lis file, from Cur+ output",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -49,7 +48,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.lis$",
-                    "description": "(Optional) Input lis file, from Cur+ output",
+                    "description": "Input lis file, from Cur+ output",
                     "edam": "format_2330"
                 }
             ]
@@ -58,7 +57,7 @@
             "type": "string",
             "description": "zip filename for output files",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_output.zip",
             "enum": [
                 ".*\\.zip$"
             ],

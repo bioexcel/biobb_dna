@@ -18,10 +18,10 @@ class Curves(BiobbObject):
     | Wrapper for the Cur+ executable  that is part of the Curves+ software suite. 
 
     Args:        
-        input_struc_path (str): Trajectory or PDB input file. File type: input. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
-        input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. Accepted formats: top (edam:format_3881).
-        output_cda_path (str): Filename for Curves+ output .cda file. File type: output. Accepted formats: cda (edam:format_2330).
-        output_lis_path (str): Filename for Curves+ output .lis file. File type: output. Accepted formats: lis (edam:format_2330).
+        input_struc_path (str): Trajectory or PDB input file. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
+        input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top>`_. Accepted formats: top (edam:format_3881).
+        output_cda_path (str): Filename for Curves+ output .cda file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda>`_. Accepted formats: cda (edam:format_2330).
+        output_lis_path (str): Filename for Curves+ output .lis file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis>`_. Accepted formats: lis (edam:format_2330).
         output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end". 
@@ -94,6 +94,9 @@ class Curves(BiobbObject):
         self.fit = properties.get('fit', '.f.')
         self.axfrm = properties.get('axfrm', '.f.')
         self.properties = properties
+
+        # Check the properties
+        self.check_properties(properties)
 
     @launchlogger
     def launch(self) -> int:

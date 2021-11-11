@@ -21,12 +21,12 @@ class BIPopulations(BiobbObject):
     | Calculate BI/BII populations from epsilon and zeta parameters.
 
     Args:
-        input_epsilC_path (str): Path to .ser file for helical parameter 'epsilC'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_epsilW_path (str): Path to .ser file for helical parameter 'epsilW'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_zetaC_path (str): Path to .ser file for helical parameter 'zetaC'. File type: input. Accepted formats: ser (edam:format_2330).
-        input_zetaW_path (str): Path to .ser file for helical parameter 'zetaW'. File type: input. Accepted formats: ser (edam:format_2330).
-        output_csv_path (str): Path to .csv file where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
-        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
+        input_epsilC_path (str): Path to .ser file for helical parameter 'epsilC'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_epsilC.ser>`_. Accepted formats: ser (edam:format_2330).
+        input_epsilW_path (str): Path to .ser file for helical parameter 'epsilW'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_epsilW.ser>`_. Accepted formats: ser (edam:format_2330).
+        input_zetaC_path (str): Path to .ser file for helical parameter 'zetaC'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_zetaC.ser>`_. Accepted formats: ser (edam:format_2330).
+        input_zetaW_path (str): Path to .ser file for helical parameter 'zetaW'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_zetaW.ser>`_. Accepted formats: ser (edam:format_2330).
+        output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/bipop_ref.csv>`_. Accepted formats: csv (edam:format_3752).
+        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/bipop_ref.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
             * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.

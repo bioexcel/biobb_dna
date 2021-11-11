@@ -20,14 +20,14 @@ class IntraHelParCorrelation(BiobbObject):
     | Calculate correlation between helical parameters for a single intra-base pair.
 
     Args:
-        input_filename_shear (str): Path to .csv file with data for helical parameter 'shear'. File type: input. Accepted formats: csv (edam:format_3752).
-        input_filename_stretch (str): Path to .csv file with data for helical parameter 'stretch'. File type: input. Accepted formats: csv (edam:format_3752).
-        input_filename_stagger (str): Path to .csv file with data for helical parameter 'stagger'. File type: input. Accepted formats: csv (edam:format_3752).
-        input_filename_buckle (str): Path to .csv file with data for helical parameter 'buckle'. File type: input. Accepted formats: csv (edam:format_3752).
-        input_filename_propel (str): Path to .csv file with data for helical parameter 'propeller'. File type: input. Accepted formats: csv (edam:format_3752).
-        input_filename_opening (str): Path to .csv file with data for helical parameter 'opening'. File type: input. Accepted formats: csv (edam:format_3752).
-        output_csv_path (str): Path to directory where output is saved. File type: output. Accepted formats: csv (edam:format_3752).
-        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. Accepted formats: jpg (edam:format_3579).
+        input_filename_shear (str): Path to .csv file with data for helical parameter 'shear'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_shear_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        input_filename_stretch (str): Path to .csv file with data for helical parameter 'stretch'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_stretch_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        input_filename_stagger (str): Path to .csv file with data for helical parameter 'stagger'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_stagger_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        input_filename_buckle (str): Path to .csv file with data for helical parameter 'buckle'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_buckle_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        input_filename_propel (str): Path to .csv file with data for helical parameter 'propeller'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_propel_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        input_filename_opening (str): Path to .csv file with data for helical parameter 'opening'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_opening_A.csv>`_. Accepted formats: csv (edam:format_3752).
+        output_csv_path (str): Path to directory where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.csv>`_. Accepted formats: csv (edam:format_3752).
+        output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.

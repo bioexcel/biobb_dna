@@ -10,16 +10,29 @@ biobb_curves:
   properties:
     s1range: "1:12"
 
-
 biobb_canal:
   paths:
     input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
     output_zip_path: canal_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
   properties:
     series: true
     sequence: "CGCGAATTCGCG"
 
-  
+biobb_canion:
+  paths:
+    input_cdi_path: file:test_data_dir/curvesplus/THGA_K.cdi
+    input_afr_path: file:test_data_dir/curvesplus/THGA.afr
+    input_avg_struc_path: file:test_data_dir/curvesplus/THGA_avg.pdb
+    output_zip_path: canion_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.zip
+  properties:
+    dlow: 5.8
+    dhig: 7.2
+    type: K+
+    rlow: 0
+    rhig: 18
+
 dna_timeseries:
   paths:
     input_ser_path: file:test_data_dir/dna/canal_output_shift.ser

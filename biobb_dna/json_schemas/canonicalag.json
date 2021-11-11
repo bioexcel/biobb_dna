@@ -26,96 +26,96 @@
     "properties": {
         "input_alphaC_path": {
             "type": "string",
-            "description": "Path to .ser file for helical parameter 'alphaC'",
+            "description": "Path to .ser file for helical parameter 'alphaC'. File type: input",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_alphaC.ser",
             "enum": [
                 ".*\\.ser$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file for helical parameter 'alphaC'",
+                    "description": "Path to .ser file for helical parameter 'alphaC'. File type: input",
                     "edam": "format_2330"
                 }
             ]
         },
         "input_alphaW_path": {
             "type": "string",
-            "description": "Path to .ser file for helical parameter 'alphaW'",
+            "description": "Path to .ser file for helical parameter 'alphaW'. File type: input",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_alphaW.ser",
             "enum": [
                 ".*\\.ser$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file for helical parameter 'alphaW'",
+                    "description": "Path to .ser file for helical parameter 'alphaW'. File type: input",
                     "edam": "format_2330"
                 }
             ]
         },
         "input_gammaC_path": {
             "type": "string",
-            "description": "Path to .ser file for helical parameter 'gammaC'",
+            "description": "Path to .ser file for helical parameter 'gammaC'. File type: input",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_gammaC.ser",
             "enum": [
                 ".*\\.ser$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file for helical parameter 'gammaC'",
+                    "description": "Path to .ser file for helical parameter 'gammaC'. File type: input",
                     "edam": "format_2330"
                 }
             ]
         },
         "input_gammaW_path": {
             "type": "string",
-            "description": "Path to .ser file for helical parameter 'gammaW'",
+            "description": "Path to .ser file for helical parameter 'gammaW'. File type: input",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_gammaW.ser",
             "enum": [
                 ".*\\.ser$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.ser$",
-                    "description": "Path to .ser file for helical parameter 'gammaW'",
+                    "description": "Path to .ser file for helical parameter 'gammaW'. File type: input",
                     "edam": "format_2330"
                 }
             ]
         },
         "output_csv_path": {
             "type": "string",
-            "description": "Path to .csv file where output is saved",
+            "description": "Path to .csv file where output is saved. File type: output",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.csv$",
-                    "description": "Path to .csv file where output is saved",
+                    "description": "Path to .csv file where output is saved. File type: output",
                     "edam": "format_3752"
                 }
             ]
         },
         "output_jpg_path": {
             "type": "string",
-            "description": "Path to .jpg file where output is saved",
+            "description": "Path to .jpg file where output is saved. File type: output",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.jpg$",
-                    "description": "Path to .jpg file where output is saved",
+                    "description": "Path to .jpg file where output is saved. File type: output",
                     "edam": "format_3579"
                 }
             ]

@@ -26,7 +26,7 @@
             "type": "string",
             "description": "Trajectory input file",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi",
             "enum": [
                 ".*\\.cdi$"
             ],
@@ -42,7 +42,7 @@
             "type": "string",
             "description": "Helical axis frames corresponding to the input conformation to be analyzed",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr",
             "enum": [
                 ".*\\.afr$"
             ],
@@ -58,7 +58,7 @@
             "type": "string",
             "description": "Average DNA conformation",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb",
             "enum": [
                 ".*\\.pdb$"
             ],
@@ -74,7 +74,7 @@
             "type": "string",
             "description": "Filename for .zip files containing Canion output files",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip",
             "enum": [
                 ".*\\.zip$"
             ],

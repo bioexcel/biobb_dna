@@ -25,7 +25,7 @@
             "type": "string",
             "description": "Path to .ser file with data for single helical parameter",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_roll.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -41,7 +41,7 @@
             "type": "string",
             "description": "Path to directory where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_seqcorr_roll.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -57,7 +57,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_seqcorr_roll.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

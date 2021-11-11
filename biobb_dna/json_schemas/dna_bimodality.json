@@ -17,7 +17,6 @@
     },
     "required": [
         "input_csv_file",
-        "input_zip_file",
         "output_csv_path",
         "output_jpg_path"
     ],
@@ -26,7 +25,7 @@
             "type": "string",
             "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -58,7 +57,7 @@
             "type": "string",
             "description": "Path to .csv file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -74,7 +73,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

@@ -30,7 +30,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'shift'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_shift.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -46,7 +46,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'slide'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_slide.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -62,7 +62,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'rise'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_rise.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -78,7 +78,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'tilt'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_tilt.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -94,7 +94,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'roll'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_roll.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -110,7 +110,7 @@
             "type": "string",
             "description": "Path to .ser file with data for helical parameter 'twist'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_twist.ser",
             "enum": [
                 ".*\\.ser$"
             ],
@@ -126,7 +126,7 @@
             "type": "string",
             "description": "Path to directory where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_bpcorr_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -142,7 +142,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/inter_bpcorr_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

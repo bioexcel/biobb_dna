@@ -30,7 +30,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'shear'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_shear_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -46,7 +46,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'stretch'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_stretch_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -62,7 +62,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'stagger'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_stagger_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -78,7 +78,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'buckle'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_buckle_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -94,7 +94,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'propeller'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_propel_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -110,7 +110,7 @@
             "type": "string",
             "description": "Path to .csv file with data for helical parameter 'opening'",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_opening_A.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -126,7 +126,7 @@
             "type": "string",
             "description": "Path to directory where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.csv",
             "enum": [
                 ".*\\.csv$"
             ],
@@ -142,7 +142,7 @@
             "type": "string",
             "description": "Path to .jpg file where output is saved",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.jpg",
             "enum": [
                 ".*\\.jpg$"
             ],

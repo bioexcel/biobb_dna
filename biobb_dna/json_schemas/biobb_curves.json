@@ -26,7 +26,7 @@
             "type": "string",
             "description": "Trajectory or PDB input file",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj",
             "enum": [
                 ".*\\.trj$",
                 ".*\\.pdb$"
@@ -48,7 +48,7 @@
             "type": "string",
             "description": "Topology file, needed along with .trj file (optional)",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top",
             "enum": [
                 ".*\\.top$"
             ],
@@ -64,7 +64,7 @@
             "type": "string",
             "description": "Filename for Curves+ output .cda file",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda",
             "enum": [
                 ".*\\.cda$"
             ],
@@ -80,7 +80,7 @@
             "type": "string",
             "description": "Filename for Curves+ output .lis file",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis",
             "enum": [
                 ".*\\.lis$"
             ],
@@ -170,6 +170,12 @@
                     "default": false,
                     "wf_prop": false,
                     "description": "if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)."
+                },
+                "axfrm": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "if True, generates closely spaced helical axis frames as input for Canal and Canion."
                 },
                 "curves_exec": {
                     "type": "string",
