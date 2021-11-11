@@ -144,8 +144,8 @@ class Canion(BiobbObject):
             "&inp",
             f"  lis=canion_output,",
             f"  dat={input_cdi_file},",
-            f"  axfrm={input_afr_file},",
-            f"  solute={input_avg_struc},",
+            f"  axfrm={input_afr_file[:-4]},",
+            f"  solute={input_avg_struc[:-4]},",
             f"  type={self.type},",
             f"  dlow={self.dlow},",
             f"  dhig={self.dhig},",
@@ -158,9 +158,8 @@ class Canion(BiobbObject):
             fu.log('Appending sequence of bases to be searched to command',
                    self.out_log, self.global_log)
             instructions.append(f"  seq={self.bases},")
-        instructions.append([
-            "&end",
-            "!"])
+        instructions.append("&end")
+        instructions.append("!")
         self.cmd = ["\n".join(instructions)]
 
         fu.log('Creating command line with instructions and required arguments',
