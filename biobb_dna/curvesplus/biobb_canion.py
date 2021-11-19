@@ -145,8 +145,8 @@ class Canion(BiobbObject):
         instructions = [
             f"{self.canion_exec} <<! ",
             "&inp",
-            f"  lis=canion_output,",
-            f"  dat={input_cdi_file},",
+            "  lis=canion_output,",
+            f"  dat={input_cdi_file[:-4]},",
             f"  axfrm={input_afr_file[:-4]},",
             f"  solute={input_avg_struc[:-4]},",
             f"  type={self.type},",
