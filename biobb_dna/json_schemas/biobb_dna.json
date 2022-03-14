@@ -125,7 +125,7 @@
             "block": "IntraBasePairCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
-            "exec": "intrabasepaircorrelation",
+            "exec": "intrabpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/intrabp_correlations.html#intrabp-correlations-intrabpcorr-module",
             "rest": true
         },
@@ -133,7 +133,7 @@
             "block": "IntraHelParCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between helical parameters for a single intra-base pair.",
-            "exec": "intrahelparcorrelation",
+            "exec": "intrahpcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/intrabp_correlations.html#intrabp-correlations-intrahpcorr-module",
             "rest": true
         },
@@ -141,7 +141,7 @@
             "block": "IntraSequenceCorrelation",
             "tool": "In House",
             "desc": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
-            "exec": "intrasequencecorrelation",
+            "exec": "intraseqcorr",
             "docs": "https://biobb-dna.readthedocs.io/en/latest/intrabp_correlations.html#module-intrabp_correlations.intraseqcorr",
             "rest": true
         }

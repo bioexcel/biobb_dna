@@ -13,29 +13,13 @@ Command:
 ```python
 dna_bimodality -h
 ```
-    usage: dna_bimodality [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_zip_path OUTPUT_ZIP_PATH
-    
-    Created time series and histogram plots for each base pair from a helical parameter series file.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_csv_file INPUT_CSV_FILE
-                            Path to zip file containing csv input files. Accepted formats: zip.
-      --input_zip_file INPUT_ZIP_FILE
-                            Path to zip file containing csv input files. Accepted formats: zip.    
-      --output_csv_path OUTPUT_CSV_PATH
-                            Filename and/or path of output csv file.      
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Filename and/or path of output jpg file.
+    /bin/sh: 1: dna_bimodality: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_csv_file** (*string*): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv). Accepted formats: CSV
-* **input_zip_file** (*string*): (Optional) .zip file containing the `input_csv_file` .csv file. File type: input. [Sample file](None). Accepted formats: ZIP
+* **input_zip_file** (*string*): .zip file containing the `input_csv_file` .csv file. File type: input. [Sample file](None). Accepted formats: ZIP
 * **output_csv_path** (*string*): Path to .csv file where output is saved. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv). Accepted formats: CSV
 * **output_jpg_path** (*string*): Path to .jpg file where output is saved. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg). Accepted formats: JPG
 ### Config
@@ -86,19 +70,7 @@ Command:
 ```python
 dna_timeseries -h
 ```
-    usage: dna_timeseries [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_zip_path OUTPUT_ZIP_PATH
-    
-    Created time series and histogram plots for each base pair from a helical parameter series file.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_ser_path INPUT_SER_PATH
-                            Helical parameter input ser file path. Accepted formats: ser.
-      --output_zip_path OUTPUT_ZIP_PATH
-                            Path to output directory.
+    /bin/sh: 1: dna_timeseries: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -155,23 +127,7 @@ Command:
 ```python
 biobb_canion -h
 ```
-    usage: biobb_canion [-h] [--config CONFIG] --input_cdi_path INPUT_CDI_PATH --input_afr_path INPUT_AFR_PATH --input_avg_struc_path INPUT_AVG_STRUC_PATH [--output_zip_path OUTPUT_ZIP_PATH]
-    
-    Execute Canion form the Curves+ software suite.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --output_zip_path OUTPUT_ZIP_PATH
-                            Filename to give to output files. Accepted formats: zip.
-    
-    required arguments:
-      --input_cdi_path INPUT_CDI_PATH
-                            Ion position data file. Accepted formats: cdi.
-      --input_afr_path INPUT_AFR_PATH
-                            Helical axis frames data. Accepted formats: afr.
-      --input_avg_struc_path INPUT_AVG_STRUC_PATH
-                            Average DNA conformation fike file. Accepted formats: pdb.
+    /bin/sh: 1: biobb_canion: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -238,31 +194,7 @@ Command:
 ```python
 intrabpcorr -h
 ```
-    usage: intrabpcorr [-h] [--config CONFIG] --input_filename_shear INPUT_FILENAME_SHEAR --input_filename_stretch INPUT_FILENAME_STRETCH --input_filename_stagger INPUT_FILENAME_STAGGER --input_filename_buckle INPUT_FILENAME_BUCKLE --input_filename_propel INPUT_FILENAME_PROPEL --input_filename_opening INPUT_FILENAME_OPENING --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_filename_shear INPUT_FILENAME_SHEAR
-                            Path to ser file for helical parameter shear. Accepted formats: ser.
-      --input_filename_stretch INPUT_FILENAME_STRETCH
-                            Path to ser file for helical parameter stretch. Accepted formats: ser.
-      --input_filename_stagger INPUT_FILENAME_STAGGER
-                            Path to ser file for helical parameter stagger. Accepted formats: ser.
-      --input_filename_buckle INPUT_FILENAME_BUCKLE
-                            Path to ser file for helical parameter buckle. Accepted formats: ser.
-      --input_filename_propel INPUT_FILENAME_PROPEL
-                            Path to ser file for helical parameter propel. Accepted formats: ser.
-      --input_filename_opening INPUT_FILENAME_OPENING
-                            Path to ser file for helical parameter opening. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output plot. Accepted formats: jpg.
+    /bin/sh: 1: intrabpcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -315,31 +247,7 @@ Command:
 ```python
 interhpcorr -h
 ```
-    usage: interhpcorr [-h] [--config CONFIG] --input_filename_shift INPUT_FILENAME_SHIFT --input_filename_slide INPUT_FILENAME_SLIDE --input_filename_rise INPUT_FILENAME_RISE --input_filename_tilt INPUT_FILENAME_TILT --input_filename_roll INPUT_FILENAME_ROLL --input_filename_twist INPUT_FILENAME_TWIST --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load helical parameter file and save base data individually.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_filename_shift INPUT_FILENAME_SHIFT
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_slide INPUT_FILENAME_SLIDE
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_rise INPUT_FILENAME_RISE
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_tilt INPUT_FILENAME_TILT
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_roll INPUT_FILENAME_ROLL
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_twist INPUT_FILENAME_TWIST
-                            Path to csv file with inputs. Accepted formats: csv.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output file. Accepted formats: csv.
+    /bin/sh: 1: interhpcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -391,21 +299,7 @@ Command:
 ```python
 dna_averages -h
 ```
-    usage: dna_averages [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load helical parameter file and calculate average values for each base pair.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_ser_path INPUT_SER_PATH
-                            Helical parameter input ser file path. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output csv file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output jpg file. Accepted formats: jpg.
+    /bin/sh: 1: dna_averages: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -466,27 +360,7 @@ Command:
 ```python
 bipopulations -h
 ```
-    usage: bipopulations [-h] [--config CONFIG] --input_epsilC_path INPUT_EPSILC_PATH --input_epsilW_path INPUT_EPSILW_PATH --input_zetaC_path INPUT_ZETAC_PATH --input_zetaW_path INPUT_ZETAW_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Calculate BI/BII populations.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_epsilC_path INPUT_EPSILC_PATH
-                            Helical parameter <epsilC> input ser file path. Accepted formats: ser.
-      --input_epsilW_path INPUT_EPSILW_PATH
-                            Helical parameter <epsilW> input ser file path. Accepted formats: ser.
-      --input_zetaC_path INPUT_ZETAC_PATH
-                            Helical parameter <zetaC> input ser file path. Accepted formats: ser.
-      --input_zetaW_path INPUT_ZETAW_PATH
-                            Helical parameter <zetaW> input ser file path. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output csv file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output jpg file. Accepted formats: jpg.
+    /bin/sh: 1: bipopulations: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -535,27 +409,7 @@ Command:
 ```python
 canonicalag -h
 ```
-    usage: canonicalag [-h] [--config CONFIG] --input_alphaC_path INPUT_ALPHAC_PATH --input_alphaW_path INPUT_ALPHAW_PATH --input_gammaC_path INPUT_GAMMAC_PATH --input_gammaW_path INPUT_GAMMAW_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Calculate Canonical Alpha/Gamma distributions.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_alphaC_path INPUT_ALPHAC_PATH
-                            Helical parameter <alphaC> input ser file path. Accepted formats: ser.
-      --input_alphaW_path INPUT_ALPHAW_PATH
-                            Helical parameter <alphaW> input ser file path. Accepted formats: ser.
-      --input_gammaC_path INPUT_GAMMAC_PATH
-                            Helical parameter <gammaC> input ser file path. Accepted formats: ser.
-      --input_gammaW_path INPUT_GAMMAW_PATH
-                            Helical parameter <gammaW> input ser file path. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output csv file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output jpg file. Accepted formats: jpg.
+    /bin/sh: 1: canonicalag: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -564,8 +418,8 @@ Config input / output arguments for this building block:
 * **input_alphaW_path** (*string*): Path to .ser file for helical parameter 'alphaW'. File type: input. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_alphaW.ser). Accepted formats: SER
 * **input_gammaC_path** (*string*): Path to .ser file for helical parameter 'gammaC'. File type: input. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_gammaC.ser). Accepted formats: SER
 * **input_gammaW_path** (*string*): Path to .ser file for helical parameter 'gammaW'. File type: input. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_gammaW.ser). Accepted formats: SER
-* **output_csv_path** (*string*): Path to .csv file where output is saved. File type: output. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.csv). Accepted formats: CSV
-* **output_jpg_path** (*string*): Path to .jpg file where output is saved. File type: output. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.jpg). Accepted formats: JPG
+* **output_csv_path** (*string*): Path to .csv file where output is saved. File type: output. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.csv). Accepted formats: CSV
+* **output_jpg_path** (*string*): Path to .jpg file where output is saved. File type: output. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/canonag_ref.jpg). Accepted formats: JPG
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
 
@@ -606,27 +460,13 @@ Command:
 ```python
 biobb_canal -h
 ```
-    usage: biobb_canal [-h] [--config CONFIG] --input_cda_file INPUT_CDA_FILE --output_zip_path OUTPUT_ZIP_PATH [--input_lis_file INPUT_LIS_FILE]
-    
-    Execute Canal from the Curves+ software suite.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --input_lis_file INPUT_LIS_FILE
-                            lis input file from Curves+ output. Accepted formats: lis.
-    
-    required arguments:
-      --input_cda_file INPUT_CDA_FILE
-                            cda input file from Curves+ output. Accepted formats: cda.
-      --output_zip_path OUTPUT_ZIP_PATH
-                            Filename for .zip file with Canal output. Accepted formats: zip.
+    /bin/sh: 1: biobb_canal: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_cda_file** (*string*): Input cda file, from Cur+ output. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/curves_output.cda). Accepted formats: CDA
-* **input_lis_file** (*string*): (Optional) Input lis file, from Cur+ output. File type: input. [Sample file](None). Accepted formats: LIS
+* **input_lis_file** (*string*): Input lis file, from Cur+ output. File type: input. [Sample file](None). Accepted formats: LIS
 * **output_zip_path** (*string*): zip filename for output files. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_output.zip). Accepted formats: ZIP
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
@@ -679,21 +519,7 @@ Command:
 ```python
 average_stiffness -h
 ```
-    usage: average_stiffness [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Calculate average stiffness constants for each base pair of a trajectory's series.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_ser_path INPUT_SER_PATH
-                            Helical parameter input ser file path. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output csv file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output jpg file. Accepted formats: jpg.
+    /bin/sh: 1: average_stiffness: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -743,21 +569,7 @@ Command:
 ```python
 interseqcorr -h
 ```
-    usage: interseqcorr [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_ser_path INPUT_SER_PATH
-                            Path to ser file with inputs. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output plot. Accepted formats: jpg.
+    /bin/sh: 1: interseqcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -806,21 +618,7 @@ Command:
 ```python
 intraseqcorr -h
 ```
-    usage: intraseqcorr [-h] [--config CONFIG] --input_ser_path INPUT_SER_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_ser_path INPUT_SER_PATH
-                            Path to ser file with inputs. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output plot. Accepted formats: jpg.
+    /bin/sh: 1: intraseqcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -869,31 +667,7 @@ Command:
 ```python
 basepair_stiffness -h
 ```
-    usage: basepair_stiffness [-h] [--config CONFIG] --input_filename_shift INPUT_FILENAME_SHIFT --input_filename_slide INPUT_FILENAME_SLIDE --input_filename_rise INPUT_FILENAME_RISE --input_filename_tilt INPUT_FILENAME_TILT --input_filename_roll INPUT_FILENAME_ROLL --input_filename_twist INPUT_FILENAME_TWIST --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_filename_shift INPUT_FILENAME_SHIFT
-                            Path to csv file with shift inputs. Accepted formats: csv.
-      --input_filename_slide INPUT_FILENAME_SLIDE
-                            Path to csv file with slide inputs. Accepted formats: csv.
-      --input_filename_rise INPUT_FILENAME_RISE
-                            Path to csv file with rise inputs. Accepted formats: csv.
-      --input_filename_tilt INPUT_FILENAME_TILT
-                            Path to csv file with tilt inputs. Accepted formats: csv.
-      --input_filename_roll INPUT_FILENAME_ROLL
-                            Path to csv file with roll inputs. Accepted formats: csv.
-      --input_filename_twist INPUT_FILENAME_TWIST
-                            Path to csv file with twist inputs. Accepted formats: csv.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output covariance data file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output covariance data file. Accepted formats: csv.
+    /bin/sh: 1: basepair_stiffness: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -946,23 +720,7 @@ Command:
 ```python
 puckering -h
 ```
-    usage: puckering [-h] [--config CONFIG] --input_phaseC_path INPUT_PHASEC_PATH --input_phaseW_path INPUT_PHASEW_PATH --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Calculate North/East/West/South distribution of sugar puckering backbone torsions.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_phaseC_path INPUT_PHASEC_PATH
-                            Helical parameter <alphaC> input ser file path. Accepted formats: ser.
-      --input_phaseW_path INPUT_PHASEW_PATH
-                            Helical parameter <alphaW> input ser file path. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output csv file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output jpg file. Accepted formats: jpg.
+    /bin/sh: 1: puckering: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -1013,31 +771,7 @@ Command:
 ```python
 intrahpcorr -h
 ```
-    usage: intrahpcorr [-h] [--config CONFIG] --input_filename_shear INPUT_FILENAME_SHEAR --input_filename_stretch INPUT_FILENAME_STRETCH --input_filename_stagger INPUT_FILENAME_STAGGER --input_filename_buckle INPUT_FILENAME_BUCKLE --input_filename_propel INPUT_FILENAME_PROPEL --input_filename_opening INPUT_FILENAME_OPENING --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load helical parameter file and save base data individually.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_filename_shear INPUT_FILENAME_SHEAR
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_stretch INPUT_FILENAME_STRETCH
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_stagger INPUT_FILENAME_STAGGER
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_buckle INPUT_FILENAME_BUCKLE
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_propel INPUT_FILENAME_PROPEL
-                            Path to csv file with inputs. Accepted formats: csv.
-      --input_filename_opening INPUT_FILENAME_OPENING
-                            Path to csv file with inputs. Accepted formats: csv.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output file. Accepted formats: csv.
+    /bin/sh: 1: intrahpcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -1089,25 +823,7 @@ Command:
 ```python
 biobb_curves -h
 ```
-    usage: biobb_curves [-h] [--config CONFIG] --input_struc_path INPUT_STRUC_PATH --output_cda_path OUTPUT_CDA_PATH --output_lis_path OUTPUT_LIS_PATH [--input_top_path INPUT_TOP_PATH] [--output_zip_path OUTPUT_ZIP_PATH]
-    
-    Execute Cur+ form the Curves+ software suite.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --input_top_path INPUT_TOP_PATH
-                            Topology file, needed along with .trj file (optional). Accepted formats: top.
-      --output_zip_path OUTPUT_ZIP_PATH
-                            Filename to give to output files (except .cda and .lis files). Accepted formats: str.
-    
-    required arguments:
-      --input_struc_path INPUT_STRUC_PATH
-                            Trajectory or PDB input file. Accepted formats: trj, pdb.
-      --output_cda_path OUTPUT_CDA_PATH
-                            Filename to give to output .cda file. Accepted formats: str.
-      --output_lis_path OUTPUT_LIS_PATH
-                            Filename to give to output .lis file. Accepted formats: str.
+    /bin/sh: 1: biobb_curves: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -1165,31 +881,7 @@ Command:
 ```python
 interbpcorr -h
 ```
-    usage: interbpcorr [-h] [--config CONFIG] --input_filename_shift INPUT_FILENAME_SHIFT --input_filename_slide INPUT_FILENAME_SLIDE --input_filename_rise INPUT_FILENAME_RISE --input_filename_tilt INPUT_FILENAME_TILT --input_filename_roll INPUT_FILENAME_ROLL --input_filename_twist INPUT_FILENAME_TWIST --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
-    Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-    
-    required arguments:
-      --input_filename_shift INPUT_FILENAME_SHIFT
-                            Path to ser file for helical parameter shift. Accepted formats: ser.
-      --input_filename_slide INPUT_FILENAME_SLIDE
-                            Path to ser file for helical parameter slide. Accepted formats: ser.
-      --input_filename_rise INPUT_FILENAME_RISE
-                            Path to ser file for helical parameter rise. Accepted formats: ser.
-      --input_filename_tilt INPUT_FILENAME_TILT
-                            Path to ser file for helical parameter tilt. Accepted formats: ser.
-      --input_filename_roll INPUT_FILENAME_ROLL
-                            Path to ser file for helical parameter roll. Accepted formats: ser.
-      --input_filename_twist INPUT_FILENAME_TWIST
-                            Path to ser file for helical parameter twist. Accepted formats: ser.
-      --output_csv_path OUTPUT_CSV_PATH
-                            Path to output file. Accepted formats: csv.
-      --output_jpg_path OUTPUT_JPG_PATH
-                            Path to output plot. Accepted formats: jpg.
+    /bin/sh: 1: interbpcorr: not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 

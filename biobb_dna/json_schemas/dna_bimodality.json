@@ -39,7 +39,7 @@
         },
         "input_zip_file": {
             "type": "string",
-            "description": "(Optional) .zip file containing the `input_csv_file` .csv file",
+            "description": ".zip file containing the `input_csv_file` .csv file",
             "filetype": "input",
             "sample": null,
             "enum": [
@@ -48,7 +48,7 @@
             "file_formats": [
                 {
                     "extension": ".*\\.zip$",
-                    "description": "(Optional) .zip file containing the `input_csv_file` .csv file",
+                    "description": "zip file containing the `input_csv_file` .csv file",
                     "edam": "format_3987"
                 }
             ]
