@@ -20,10 +20,10 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
     install_requires=[
         'biobb_common==3.8.1',
-        'pandas>=1.3',
-        'matplotlib>=3.4',
+        'pandas==1.3',
+        'matplotlib==3.4',
         'numpy==1.21',
-        'scikit-learn>=0.24'],
+        'scikit-learn==0.24'],
     python_requires='>=3.7',
     entry_points={
         "console_scripts": [
