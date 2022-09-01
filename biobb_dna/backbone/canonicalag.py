@@ -1,4 +1,4 @@
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 """Module containing the CanonicalAG class and the command line interface."""
 
 import shutil
