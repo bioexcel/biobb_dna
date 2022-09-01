@@ -8,6 +8,7 @@ class TestBimodality():
 
     def tearDown(self):
         fx.test_teardown(self)
+        pass
 
     def test_helparbimodality(self):
         returncode = dna_bimodality(properties=self.properties, **self.paths)

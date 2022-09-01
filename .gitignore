@@ -11,4 +11,6 @@ __pycache__/
 build/
 dist/
 
+# biobb_dna/biobb_dna/test/data/curvesplus/THGA_K.cdi is too big for uploading it to github,
+# download it from https://mmb.irbbarcelona.org/biobb-api/rest/v1/sample/biobb_dna/biobb_canion/input_cdi_path
 THGA_K.cdi

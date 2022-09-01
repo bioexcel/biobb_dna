@@ -18,3 +18,6 @@ class TestCurves():
         assert fx.equal(
             self.paths['output_cda_path'],
             self.paths['ref_cda_output'])
+        assert fx.equal(
+            self.paths['output_lis_path'],
+            self.paths['ref_lis_output'])

@@ -5,8 +5,9 @@ biobb_curves:
     input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
     input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
     output_cda_path: curves_output.cda
-    output_lis_path: curves_output.lis
     ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
+    output_lis_path: curves_output.lis
+    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
   properties:
     s1range: "1:12"
 
