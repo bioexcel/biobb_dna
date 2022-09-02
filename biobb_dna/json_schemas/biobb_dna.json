@@ -4,9 +4,9 @@
     "github": "https://github.com/bioexcel/biobb_dna",
     "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_dna",
-    "docker": "https://quay.io/biocontainers/biobb_dna:3.8.0--pyhdfd78af_0",
+    "docker": "https://quay.io/biocontainers/biobb_dna:3.8.1--pyhdfd78af_0",
     "singularity": "",
-    "version": "3.8.0",
+    "version": "3.8.1",
     "rest": true,
     "tools": [
         {
@@ -149,19 +149,18 @@
     "dep_pypi": [
         "install_requires=['biobb_common==3.8.1']",
         "python_requires='>=3.7'",
-        "pandas>=1.2",
-        "matplotlib>=3.4",
-        "numpy>=1.20",
-        "scikit-learn>=0.24"
+        "pandas==1.3.0",
+        "matplotlib==3.4",
+        "scikit-learn==0.24.2"
     ],
     "dep_conda": [
         "python >=3.7",
         "biobb_common ==3.8.1",
-        "curves",
-        "pandas>=1.2",
-        "matplotlib>=3.4",
-        "numpy>=1.20",
-        "scikit-learn>=0.24"
+        "curves==3.0.0",
+        "pandas==1.3.0",
+        "matplotlib==3.4",
+        "numpy==1.19.5",
+        "scikit-learn==0.24.2"
     ],
     "keywords": [
         "dna",
