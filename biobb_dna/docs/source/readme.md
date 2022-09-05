@@ -45,13 +45,13 @@ Using DOCKER:
 * Installation:
 
 
-        docker pull quay.io/biocontainers/biobb_dna:3.8.2--pyhdfd78af_0
+        docker pull quay.io/biocontainers/biobb_dna:3.8.2--pyhdfd78af_1
 
 
 * Usage:
 
 
-        docker run quay.io/biocontainers/biobb_dna:3.8.2--pyhdfd78af_0 <command>
+        docker run quay.io/biocontainers/biobb_dna:3.8.2--pyhdfd78af_1 <command>
 
 
 The command list and specification can be found at the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html).
