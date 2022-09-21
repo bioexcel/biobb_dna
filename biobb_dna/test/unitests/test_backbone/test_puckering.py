@@ -3,10 +3,10 @@ from biobb_dna.backbone.puckering import puckering
 
 
 class TestPuckering():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'puckering')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_puckering(self):

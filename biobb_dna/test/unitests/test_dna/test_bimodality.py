@@ -3,10 +3,10 @@ from biobb_dna.dna.dna_bimodality import dna_bimodality
 
 
 class TestBimodality():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'dna_bimodality')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         pass
 

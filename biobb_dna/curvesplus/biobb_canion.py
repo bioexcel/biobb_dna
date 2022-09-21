@@ -36,7 +36,9 @@ class Canion(BiobbObject):
             * **itdel** (*int*) - (None) Spacing between analyzed snapshots.
             * **rmsf** (*bool*) - (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions.
             * **circ** (*bool*) - (False) If set to True, minicircles are analyzed.
-            * **canion_exec** (*str*) - (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
+            * **binary_path** (*str*) - (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
+            * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
+            * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -80,7 +82,7 @@ class Canion(BiobbObject):
         }
 
         # Properties specific for BB
-        self.canion_exec = properties.get('canion_exec', 'Canion')
+        self.binary_path = properties.get('binary_path', 'Canion')
         self.bases = properties.get('bases', None)
         self.type = properties.get('type', '*')
         self.dlow = properties.get('dlow', 0)
@@ -143,7 +145,7 @@ class Canion(BiobbObject):
 
         # create intructions
         instructions = [
-            f"{self.canion_exec} <<! ",
+            f"{self.binary_path} <<! ",
             "&inp",
             "  lis=canion_output,",
             f"  dat={input_cdi_file[:-4]},",

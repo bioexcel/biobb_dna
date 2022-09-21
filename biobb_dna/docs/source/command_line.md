@@ -50,6 +50,8 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 Config parameters for this building block:
 * **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_bipopulations.yml)
 ```python
@@ -349,7 +351,9 @@ Config parameters for this building block:
 * **histo** (*string*): (False) if True then output histogram data..
 * **corr** (*string*): (False) if True than output linear correlation coefficients between all variables..
 * **sequence** (*string*): (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file..
-* **canal_exec** (*string*): (Canal) Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder..
+* **binary_path** (*string*): (Canal) Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal.yml)
 ```python
@@ -426,7 +430,9 @@ Config parameters for this building block:
 * **itdel** (*integer*): (None) Spacing between analyzed snapshots..
 * **rmsf** (*boolean*): (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions..
 * **circ** (*boolean*): (False) If set to True, minicircles are analyzed..
-* **canion_exec** (*string*): (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder..
+* **binary_path** (*string*): (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion.yml)
 ```python
@@ -1209,7 +1215,9 @@ Config parameters for this building block:
 * **line** (*boolean*): (False) if True, find the best linear helical axis..
 * **fit** (*boolean*): (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)..
 * **axfrm** (*boolean*): (False) if True, generates closely spaced helical axis frames as input for Canal and Canion..
-* **curves_exec** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder..
+* **binary_path** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.yml)
 ```python

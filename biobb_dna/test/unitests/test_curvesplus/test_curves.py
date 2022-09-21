@@ -3,10 +3,10 @@ from biobb_dna.curvesplus.biobb_curves import biobb_curves
 
 
 class TestCurves():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'biobb_curves')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_curves(self):

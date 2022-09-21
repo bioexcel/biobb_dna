@@ -35,7 +35,9 @@ class Curves(BiobbObject):
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
             * **fit** (*bool*) - (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
             * **axfrm** (*bool*) - (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
-            * **curves_exec** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **binary_path** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
+            * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -82,7 +84,7 @@ class Curves(BiobbObject):
 
         # Properties specific for BB
         self.s1range = properties.get('s1range', None)
-        self.curves_exec = properties.get('curves_exec', 'Cur+')
+        self.binary_path = properties.get('binary_path', 'Cur+')
         self.stdlib_path = properties.get('stdlib_path', None)
         self.s2range = properties.get('s2range', None)
         self.itst = properties.get('itst', 0)
@@ -160,7 +162,7 @@ class Curves(BiobbObject):
 
         # create intructions
         instructions = [
-            f"{self.curves_exec} <<! ",
+            f"{self.binary_path} <<! ",
             "&inp",
             f"  file={tmp_struc_input},"]
         if self.io_dict['in']['input_top_path'] is not None:

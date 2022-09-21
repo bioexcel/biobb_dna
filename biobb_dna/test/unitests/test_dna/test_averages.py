@@ -7,10 +7,10 @@ mpl_logger.setLevel(logging.ERROR)
 
 
 class TestAverages():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'dna_averages')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_helparaverages(self):

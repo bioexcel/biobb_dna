@@ -144,11 +144,23 @@
                     "wf_prop": false,
                     "description": "sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file."
                 },
-                "canal_exec": {
+                "binary_path": {
                     "type": "string",
                     "default": "Canal",
                     "wf_prop": false,
                     "description": "Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
                 }
             }
         }

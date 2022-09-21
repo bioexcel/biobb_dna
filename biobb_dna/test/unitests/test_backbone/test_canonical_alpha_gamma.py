@@ -3,10 +3,10 @@ from biobb_dna.backbone.canonicalag import canonicalag
 
 
 class TestCanonicalAlphaGamma():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'canonicalag')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_canonicalag(self):

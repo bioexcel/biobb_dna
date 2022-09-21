@@ -3,10 +3,10 @@ from biobb_dna.backbone.bipopulations import bipopulations
 
 
 class TestBIPopulations():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'bipopulations')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_bipopulations(self):

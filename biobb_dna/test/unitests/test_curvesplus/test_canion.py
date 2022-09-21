@@ -3,10 +3,10 @@ from biobb_dna.curvesplus.biobb_canion import biobb_canion
 
 
 class TestCanal():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'biobb_canion')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_canion(self):

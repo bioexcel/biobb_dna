@@ -4,10 +4,10 @@ from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness
 
 
 class TestAvgStiffness():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'average_stiffness')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_averagestiffness(self):
@@ -25,10 +25,10 @@ class TestAvgStiffness():
 
 
 class TestBasePairStiffness():
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'basepair_stiffness')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_basepairstiffness(self):

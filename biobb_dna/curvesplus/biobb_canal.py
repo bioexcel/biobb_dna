@@ -35,7 +35,9 @@ class Canal(BiobbObject):
             * **histo** (*str*) - (False) if True then output histogram data.
             * **corr** (*str*) - (False) if True than output linear correlation coefficients between all variables.
             * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
-            * **canal_exec** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
+            * **binary_path** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
+            * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
+            * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -88,7 +90,7 @@ class Canal(BiobbObject):
         self.histo = ".t." if properties.get('histo', False) else ".f."
         self.corr = ".t." if properties.get('corr', False) else ".f."
         self.sequence = properties.get('sequence', None)
-        self.canal_exec = properties.get('canal_exec', 'Canal')
+        self.binary_path = properties.get('binary_path', 'Canal')
         self.properties = properties
 
         # Check the properties
@@ -141,7 +143,7 @@ class Canal(BiobbObject):
 
         # create intructions
         instructions = [
-            f"{self.canal_exec} <<! ",
+            f"{self.binary_path} <<! ",
             "&inp",
             "  lis=canal_output,"]
         if self.bases is not None:

@@ -167,11 +167,23 @@
                     "wf_prop": false,
                     "description": "If set to True, minicircles are analyzed."
                 },
-                "canion_exec": {
+                "binary_path": {
                     "type": "string",
                     "default": "Canion",
                     "wf_prop": false,
                     "description": "Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
                 }
             }
         }
