@@ -1,6 +1,7 @@
 [![](https://readthedocs.org/projects/biobb-dna/badge/?version=latest)](https://biobb-dna.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](https://anaconda.org/bioconda/biobb_dna)
 [![](https://img.shields.io/badge/docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_dna?tab=tags)
+[![](https://img.shields.io/badge/singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_dna:3.8.2--pyhdfd78af_1)
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # biobb_dna
@@ -53,6 +54,20 @@ Using DOCKER:
 
         docker run quay.io/biocontainers/biobb_dna:3.8.2--pyhdfd78af_1 <command>
 
+Using SINGULARITY:
+
+**MacOS users**: it's strongly recommended to avoid Singularity and use **Docker** as containerization system.
+
+* Installation:
+
+
+        singularity pull --name biobb_dna.sif https://depot.galaxyproject.org/singularity/biobb_dna:3.8.2--pyhdfd78af_1
+
+
+* Usage:
+
+
+        singularity exec biobb_dna.sif <command>
 
 The command list and specification can be found at the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html).
 
