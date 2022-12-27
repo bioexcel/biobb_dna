@@ -33,7 +33,7 @@ class Curves(BiobbObject):
             * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
             * **test** (*bool*) - (False) If True, provide addition output in .lis file on fitting and axis generation.
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
-            * **fit** (*bool*) - (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
+            * **fit** (*bool*) - (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
             * **axfrm** (*bool*) - (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
             * **binary_path** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -96,7 +96,7 @@ class Curves(BiobbObject):
         self.ions = properties.get('ions', '.f.')
         self.test = properties.get('test', '.f.')
         self.line = properties.get('line', '.f.')
-        self.fit = properties.get('fit', '.f.')
+        self.fit = properties.get('fit', '.t.')
         self.axfrm = properties.get('axfrm', '.f.')
         self.properties = properties
 
