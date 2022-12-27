@@ -61,7 +61,10 @@ class Puckering(BiobbObject):
                  output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
+        
+        # Call parent class constructor
         super().__init__(properties)
+        self.locals_var_dict = locals().copy()
 
         # Input/Output files
         self.io_dict = {
@@ -82,12 +85,17 @@ class Puckering(BiobbObject):
         self.seqpos = properties.get(
             "seqpos", None)
 
+        # Check the properties
+        self.check_properties(properties)
+        self.check_arguments()
+
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`Puckering <backbone.puckering.Puckering>` object."""
 
-        # Check the properties
-        fu.check_properties(self, self.properties)
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -179,9 +187,13 @@ class Puckering(BiobbObject):
         plt.close()
 
         # Remove temporary file(s)
-        if self.remove_tmp:
-            self.tmp_files.append(self.tmp_folder)
-            self.remove_tmp_files()
+        self.tmp_files.extend([
+            self.stage_io_dict.get("unique_dir"),
+            self.tmp_folder
+        ])
+        self.remove_tmp_files()
+
+        self.check_arguments(output_files_created=True, raise_exception=False)
 
         return 0
 
