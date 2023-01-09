@@ -67,7 +67,10 @@ class Curves(BiobbObject):
             output_cda_path, output_zip_path=None,
             input_top_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
+        
+        # Call parent class constructor
         super().__init__(properties)
+        self.locals_var_dict = locals().copy()
 
         # Input/Output files
         self.io_dict = {
@@ -99,18 +102,15 @@ class Curves(BiobbObject):
 
         # Check the properties
         self.check_properties(properties)
+        self.check_arguments()
 
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
 
         # Setup Biobb
-        if self.check_restart():
-            return 0
+        if self.check_restart(): return 0
         self.stage_files()
-
-        # Check the properties
-        fu.check_properties(self, self.properties)
 
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
@@ -217,9 +217,13 @@ class Curves(BiobbObject):
             self.io_dict["out"]["output_lis_path"])
 
         # Remove temporary file(s)
-        if self.remove_tmp:
-            self.tmp_files.append(self.tmp_folder)
-            self.remove_tmp_files()
+        self.tmp_files.extend([
+            self.stage_io_dict.get("unique_dir"),
+            self.tmp_folder
+        ])
+        self.remove_tmp_files()
+
+        self.check_arguments(output_files_created=True, raise_exception=False)
 
         return self.return_code
 
