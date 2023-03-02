@@ -167,7 +167,7 @@
                 },
                 "fit": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "wf_prop": false,
                     "description": "if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)."
                 },

@@ -1213,7 +1213,7 @@ Config parameters for this building block:
 * **ions** (*boolean*): (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out..
 * **test** (*boolean*): (False) If True, provide addition output in .lis file on fitting and axis generation..
 * **line** (*boolean*): (False) if True, find the best linear helical axis..
-* **fit** (*boolean*): (False) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)..
+* **fit** (*boolean*): (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)..
 * **axfrm** (*boolean*): (False) if True, generates closely spaced helical axis frames as input for Canal and Canion..
 * **binary_path** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
