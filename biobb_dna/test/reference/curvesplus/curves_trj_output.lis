@@ -1,6 +1,6 @@
 
      **************************************               **************
-     **** CURVES+ Version 3.0nc 09/2016 ***               *  27 Dec 22 *
+     **** CURVES+ Version 3.0nc 09/2016 ***               *   3 Mar 23 *
      **************************************               **************
 
 
@@ -14,7 +14,7 @@
   isym  :     1  ITST  :     0  ITND  :     0  ITDEL :     1  itbkt :     0
   naxlim:     0
 
-  circ  :     F  LINE  :     F  zaxe  :     F  FIT   :     F  TEST  :     F
+  circ  :     F  LINE  :     F  zaxe  :     F  FIT   :     T  TEST  :     F
   IONS  :     F  refo  :     F  AXFRM :     F  frames:     F
 
 
