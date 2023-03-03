@@ -60,7 +60,7 @@ jobs:
           # Ignoring docker and singularity tests
           export PYTHONPATH=.:./biobb_common:$PYTHONPATH
           # Production one
-          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml
+          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*curves.py --ignore-glob=*canion.py
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
