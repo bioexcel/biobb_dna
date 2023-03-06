@@ -62,8 +62,10 @@ jobs:
           # copying .curvesplus data
           mkdir -p /home/user/micromamba/envs/test_environment/.curvesplus
           cp biobb_dna/curvesplus/.curvesplus/* /home/user/micromamba/envs/test_environment/.curvesplus
+          # Copying .cdi file for canion
+          wget https://mmb.irbbarcelona.org/biobb-api/rest/v1/sample/biobb_dna/biobb_canion/input_cdi_path -O biobb_dna/test/data/curvesplus/THGA_K.cdi
           # Production one
-          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*canion.py
+          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
