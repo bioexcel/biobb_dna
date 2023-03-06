@@ -11,7 +11,7 @@ def read_series(input_serfile, usecols=None):
     """Read .ser file"""
     extra_kwargs = dict(
         header=None,
-        sep='\s+',
+        sep='\\s+',
         index_col=0)
     ser_data = pd.read_csv(input_serfile, **extra_kwargs)
     if usecols is not None:
