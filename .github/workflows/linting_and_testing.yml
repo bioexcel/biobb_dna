@@ -59,8 +59,11 @@ jobs:
         run: |
           # Ignoring docker and singularity tests
           export PYTHONPATH=.:./biobb_common:$PYTHONPATH
+          # copying .curvesplus data
+          mkdir -p /home/user/micromamba/envs/test_environment/.curvesplus
+          cp biobb_dna/curvesplus/.curvesplus/* /home/user/micromamba/envs/test_environment/.curvesplus
           # Production one
-          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*curves.py --ignore-glob=*canion.py
+          pytest biobb_dna/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*canion.py
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
