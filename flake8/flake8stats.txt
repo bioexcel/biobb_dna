@@ -1,0 +1,6 @@
+9     E302 expected 2 blank lines, found 1
+17    E701 multiple statements on one line (colon)
+27    W291 trailing whitespace
+2     W292 no newline at end of file
+18    W293 blank line contains whitespace
+2     W504 line break after binary operator

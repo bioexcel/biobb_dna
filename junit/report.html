@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>report.html</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    let visibleString = getQueryParameter('visible') || 'all';
+    visibleString = visibleString.toLowerCase();
+    const checkedItems = visibleString.split(',');
+
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++) {
+        filterItems[i].hidden = false;
+
+        if (visibleString != 'all') {
+            filterItems[i].checked = checkedItems.includes(filterItems[i].getAttribute('data-test-result'));
+            filterTable(filterItems[i]);
+        }
+    }
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>report.html</h1>
+    <p>Report generated on 11-Apr-2023 at 13:35:57 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>CI</td>
+        <td>true</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "1.0.0", "pytest": "7.3.0"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Linux-5.4.0-139-generic-x86_64-with-glibc2.31</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"cov": "4.0.0", "html": "3.2.0", "metadata": "2.0.4"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.16</td></tr></table>
+    <h2>Summary</h2>
+    <p>17 tests ran in 23.60 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">17 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_backbone/test_bipopulations.py::TestBIPopulations::test_bipopulations</td>
+          <td class="col-duration">0.70</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:39,091 [MainThread  ] [INFO ]  Executing biobb_dna.backbone.bipopulations Version: 3.9.0
+2023-04-11 13:35:39,093 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_epsilC.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+2023-04-11 13:35:39,093 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_epsilW.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+2023-04-11 13:35:39,094 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_zetaC.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+2023-04-11 13:35:39,095 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_zetaW.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+2023-04-11 13:35:39,095 [MainThread  ] [INFO ]  Creating backbone_9f261e68-4d4b-4232-9dfd-72a12e36caaf temporary folder
+2023-04-11 13:35:39,747 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5&#x27;, &#x27;backbone_9f261e68-4d4b-4232-9dfd-72a12e36caaf&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/bipopulations/bipop.csv
+Checking if empty file: /tmp/biobb/unitests_27/bipopulations/bipop.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Executing biobb_dna.backbone.bipopulations Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_epsilC.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_epsilW.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_zetaC.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_zetaW.ser to /tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Creating backbone_9f261e68-4d4b-4232-9dfd-72a12e36caaf temporary folder
+INFO     /tmp/biobb/unitests_27/bipopulations/bipopulations_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/bipopulations/6c78458d-1ccd-4595-b907-e405fb481da5&#x27;, &#x27;backbone_9f261e68-4d4b-4232-9dfd-72a12e36caaf&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_backbone/test_canonical_alpha_gamma.py::TestCanonicalAlphaGamma::test_canonicalag</td>
+          <td class="col-duration">0.55</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:39,814 [MainThread  ] [INFO ]  Executing biobb_dna.backbone.canonicalag Version: 3.9.0
+2023-04-11 13:35:39,815 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_alphaC.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+2023-04-11 13:35:39,816 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_alphaW.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+2023-04-11 13:35:39,817 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_gammaC.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+2023-04-11 13:35:39,817 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_gammaW.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+2023-04-11 13:35:39,818 [MainThread  ] [INFO ]  Creating backbone_b6fd7c72-002b-45e6-9218-fafe101370b5 temporary folder
+2023-04-11 13:35:40,330 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd&#x27;, &#x27;backbone_b6fd7c72-002b-45e6-9218-fafe101370b5&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/canonicalag/canonag.csv
+Checking if empty file: /tmp/biobb/unitests_27/canonicalag/canonag.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Executing biobb_dna.backbone.canonicalag Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_alphaC.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_alphaW.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_gammaC.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_gammaW.ser to /tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Creating backbone_b6fd7c72-002b-45e6-9218-fafe101370b5 temporary folder
+INFO     /tmp/biobb/unitests_27/canonicalag/canonicalag_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/canonicalag/52bc12f8-448d-4bec-9c8c-e8d8607e9fbd&#x27;, &#x27;backbone_b6fd7c72-002b-45e6-9218-fafe101370b5&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_backbone/test_puckering.py::TestPuckering::test_puckering</td>
+          <td class="col-duration">0.57</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:40,372 [MainThread  ] [INFO ]  Executing biobb_dna.backbone.puckering Version: 3.9.0
+2023-04-11 13:35:40,373 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_phaseC.ser to /tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728
+2023-04-11 13:35:40,374 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_phaseW.ser to /tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728
+2023-04-11 13:35:40,374 [MainThread  ] [INFO ]  Creating backbone_61be0df7-cd85-4215-9aa6-d654e06f8f7f temporary folder
+2023-04-11 13:35:40,911 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728&#x27;, &#x27;backbone_61be0df7-cd85-4215-9aa6-d654e06f8f7f&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/puckering/puckering.csv
+Checking if empty file: /tmp/biobb/unitests_27/puckering/puckering.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/puckering/puckering_log.out:file_utils.py:346 Executing biobb_dna.backbone.puckering Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/puckering/puckering_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_phaseC.ser to /tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728
+INFO     /tmp/biobb/unitests_27/puckering/puckering_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/backbone/canal_output_phaseW.ser to /tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728
+INFO     /tmp/biobb/unitests_27/puckering/puckering_log.out:file_utils.py:346 Creating backbone_61be0df7-cd85-4215-9aa6-d654e06f8f7f temporary folder
+INFO     /tmp/biobb/unitests_27/puckering/puckering_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/puckering/13356021-09c5-42a2-90a3-6a4b627a1728&#x27;, &#x27;backbone_61be0df7-cd85-4215-9aa6-d654e06f8f7f&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestInterHelparCorrelation::test_helparcorrelation</td>
+          <td class="col-duration">0.26</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:40,953 [MainThread  ] [INFO ]  Executing biobb_dna.interbp_correlations.interhpcorr Version: 3.9.0
+2023-04-11 13:35:40,954 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_shift_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,954 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_slide_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,954 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_rise_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,955 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_tilt_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,955 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_roll_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,955 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_twist_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+2023-04-11 13:35:40,955 [MainThread  ] [INFO ]  Creating hpcorrelation_901af1a7-f453-4d2f-b179-f236b45558bf temporary folder
+2023-04-11 13:35:41,180 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711&#x27;, &#x27;hpcorrelation_901af1a7-f453-4d2f-b179-f236b45558bf&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/interhpcorr/inter_hpcorr.csv
+Checking if empty file: /tmp/biobb/unitests_27/interhpcorr/inter_hpcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Executing biobb_dna.interbp_correlations.interhpcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_shift_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_slide_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_rise_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_tilt_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_roll_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_twist_AA.csv to /tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Creating hpcorrelation_901af1a7-f453-4d2f-b179-f236b45558bf temporary folder
+INFO     /tmp/biobb/unitests_27/interhpcorr/log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/interhpcorr/f1504f58-287c-42d6-a165-f96755ec2711&#x27;, &#x27;hpcorrelation_901af1a7-f453-4d2f-b179-f236b45558bf&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestInterSequenceCorrelation::test_sequencecorrelation</td>
+          <td class="col-duration">0.30</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:41,222 [MainThread  ] [INFO ]  Executing biobb_dna.interbp_correlations.interseqcorr Version: 3.9.0
+2023-04-11 13:35:41,223 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_roll.ser to /tmp/biobb/unitests_27/interseqcorr/d95bd360-cc41-45ce-ad2e-ca57eee6162f
+2023-04-11 13:35:41,224 [MainThread  ] [INFO ]  Creating bpcorrelation_bc0b3334-ce59-4aa7-bb72-b34068d84ada temporary folder
+2023-04-11 13:35:41,491 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/interseqcorr/d95bd360-cc41-45ce-ad2e-ca57eee6162f&#x27;, &#x27;bpcorrelation_bc0b3334-ce59-4aa7-bb72-b34068d84ada&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/interseqcorr/inter_seqcorr.csv
+Checking if empty file: /tmp/biobb/unitests_27/interseqcorr/inter_seqcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/interseqcorr/interseqcorr_log.out:file_utils.py:346 Executing biobb_dna.interbp_correlations.interseqcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/interseqcorr/interseqcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_roll.ser to /tmp/biobb/unitests_27/interseqcorr/d95bd360-cc41-45ce-ad2e-ca57eee6162f
+INFO     /tmp/biobb/unitests_27/interseqcorr/interseqcorr_log.out:file_utils.py:346 Creating bpcorrelation_bc0b3334-ce59-4aa7-bb72-b34068d84ada temporary folder
+INFO     /tmp/biobb/unitests_27/interseqcorr/interseqcorr_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/interseqcorr/d95bd360-cc41-45ce-ad2e-ca57eee6162f&#x27;, &#x27;bpcorrelation_bc0b3334-ce59-4aa7-bb72-b34068d84ada&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestInterBasepairCorrelation::test_basepaircorrelation</td>
+          <td class="col-duration">0.77</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:41,533 [MainThread  ] [INFO ]  Executing biobb_dna.interbp_correlations.interbpcorr Version: 3.9.0
+2023-04-11 13:35:41,534 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_shift.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,534 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_slide.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,535 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_rise.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,536 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_tilt.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,536 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_roll.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,537 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_twist.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+2023-04-11 13:35:41,537 [MainThread  ] [INFO ]  Creating bpcorrelation_029178a2-e79a-4778-8869-7d0dcaf9530a temporary folder
+2023-04-11 13:35:42,265 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39&#x27;, &#x27;bpcorrelation_029178a2-e79a-4778-8869-7d0dcaf9530a&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/interbpcorr/inter_bpcorr.csv
+Checking if empty file: /tmp/biobb/unitests_27/interbpcorr/inter_bpcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Executing biobb_dna.interbp_correlations.interbpcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_shift.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_slide.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_rise.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_tilt.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_roll.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_twist.ser to /tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Creating bpcorrelation_029178a2-e79a-4778-8869-7d0dcaf9530a temporary folder
+INFO     /tmp/biobb/unitests_27/interbpcorr/interbpcorr_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/interbpcorr/07f3fa64-c226-44fb-b79f-fcdc185fbf39&#x27;, &#x27;bpcorrelation_029178a2-e79a-4778-8869-7d0dcaf9530a&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestIntraHelparCorrelation::test_helparcorrelation</td>
+          <td class="col-duration">0.26</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:42,307 [MainThread  ] [INFO ]  Executing biobb_dna.intrabp_correlations.intrahpcorr Version: 3.9.0
+2023-04-11 13:35:42,308 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_shear_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,308 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_stretch_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,308 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_stagger_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,309 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_buckle_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,309 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_propel_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,309 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_opening_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+2023-04-11 13:35:42,309 [MainThread  ] [INFO ]  Creating hpcorrelation_cbc9bad3-2221-4cad-8cf0-1dbf65b8761f temporary folder
+2023-04-11 13:35:42,527 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de&#x27;, &#x27;hpcorrelation_cbc9bad3-2221-4cad-8cf0-1dbf65b8761f&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/intrahpcorr/intra_hpcorr.csv
+Checking if empty file: /tmp/biobb/unitests_27/intrahpcorr/intra_hpcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Executing biobb_dna.intrabp_correlations.intrahpcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_shear_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_stretch_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_stagger_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_buckle_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_propel_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/series_opening_A.csv to /tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Creating hpcorrelation_cbc9bad3-2221-4cad-8cf0-1dbf65b8761f temporary folder
+INFO     /tmp/biobb/unitests_27/intrahpcorr/log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/intrahpcorr/118bdc7d-b71b-4381-8888-aac125cc84de&#x27;, &#x27;hpcorrelation_cbc9bad3-2221-4cad-8cf0-1dbf65b8761f&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_27
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestIntraSequenceCorrelation::test_sequencecorrelation</td>
+          <td class="col-duration">0.31</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:42,571 [MainThread  ] [INFO ]  Executing biobb_dna.intrabp_correlations.intraseqcorr Version: 3.9.0
+2023-04-11 13:35:42,572 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_buckle.ser to /tmp/biobb/unitests_27/intraseqcorr/24388e0c-084e-4f6a-b9cd-3327dac10f7b
+2023-04-11 13:35:42,572 [MainThread  ] [INFO ]  Creating bpcorrelation_eb63f692-c24d-434c-952d-fdb3392dd697 temporary folder
+2023-04-11 13:35:42,846 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_27/intraseqcorr/24388e0c-084e-4f6a-b9cd-3327dac10f7b&#x27;, &#x27;bpcorrelation_eb63f692-c24d-434c-952d-fdb3392dd697&#x27;]
+Checking if empty file: /tmp/biobb/unitests_27/intraseqcorr/intra_seqcorr.csv
+Checking if empty file: /tmp/biobb/unitests_27/intraseqcorr/intra_seqcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_27/intraseqcorr/intraseqcorr_log.out:file_utils.py:346 Executing biobb_dna.intrabp_correlations.intraseqcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_27/intraseqcorr/intraseqcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_buckle.ser to /tmp/biobb/unitests_27/intraseqcorr/24388e0c-084e-4f6a-b9cd-3327dac10f7b
+INFO     /tmp/biobb/unitests_27/intraseqcorr/intraseqcorr_log.out:file_utils.py:346 Creating bpcorrelation_eb63f692-c24d-434c-952d-fdb3392dd697 temporary folder
+INFO     /tmp/biobb/unitests_27/intraseqcorr/intraseqcorr_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_27/intraseqcorr/24388e0c-084e-4f6a-b9cd-3327dac10f7b&#x27;, &#x27;bpcorrelation_eb63f692-c24d-434c-952d-fdb3392dd697&#x27;]<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_correlation/test_correlation.py::TestIntraBasepairCorrelation::test_basepaircorrelation</td>
+          <td class="col-duration">0.91</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:42,891 [MainThread  ] [INFO ]  Executing biobb_dna.intrabp_correlations.intrabpcorr Version: 3.9.0
+2023-04-11 13:35:42,892 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_shear.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,893 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_stretch.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,893 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_stagger.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,894 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_buckle.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,895 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_propel.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,895 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_opening.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+2023-04-11 13:35:42,896 [MainThread  ] [INFO ]  Creating bpcorrelation_8a1393d6-5619-45a4-b690-11024a7aa2fa temporary folder
+2023-04-11 13:35:43,763 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990&#x27;, &#x27;bpcorrelation_8a1393d6-5619-45a4-b690-11024a7aa2fa&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/intrabpcorr/intra_bpcorr.csv
+Checking if empty file: /tmp/biobb/unitests_28/intrabpcorr/intra_bpcorr.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Executing biobb_dna.intrabp_correlations.intrabpcorr Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_shear.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_stretch.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_stagger.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_buckle.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_propel.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/correlation/canal_output_opening.ser to /tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Creating bpcorrelation_8a1393d6-5619-45a4-b690-11024a7aa2fa temporary folder
+INFO     /tmp/biobb/unitests_28/intrabpcorr/intrabpcorr_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/intrabpcorr/8e1cbb56-3ea9-4e1a-bca9-cec654070990&#x27;, &#x27;bpcorrelation_8a1393d6-5619-45a4-b690-11024a7aa2fa&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_curvesplus/test_canal.py::TestCanal::test_canal</td>
+          <td class="col-duration">3.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:43,807 [MainThread  ] [INFO ]  Executing biobb_dna.curvesplus.biobb_canal Version: 3.9.0
+2023-04-11 13:35:43,817 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/curves_output.cda to /tmp/biobb/unitests_28/biobb_canal/0b7968cc-65bb-4bbd-9b1f-537ee0f20c3c
+2023-04-11 13:35:43,817 [MainThread  ] [INFO ]  Creating canal_f7dae28b-5a4e-4787-91a9-35397721864c temporary folder
+2023-04-11 13:35:43,826 [MainThread  ] [INFO ]  Creating command line with instructions and required arguments
+2023-04-11 13:35:43,826 [MainThread  ] [INFO ]  Canal &lt;&lt;! 
+&amp;inp
+  lis=canal_output,
+  cormin=0.6,
+  lev1=0,lev2=0,
+  itst=0,itnd=0,itdel=1,
+  histo=.f.,
+  series=.t.,
+  corr=.f.,
+&amp;end
+curves_output.cda CGCGAATTCGCG
+!
+
+2023-04-11 13:35:46,802 [MainThread  ] [INFO ]  Exit code 0
+
+2023-04-11 13:35:46,866 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/biobb_canal/0b7968cc-65bb-4bbd-9b1f-537ee0f20c3c&#x27;, &#x27;canal_f7dae28b-5a4e-4787-91a9-35397721864c&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/biobb_canal/canal_output.zip
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:file_utils.py:346 Executing biobb_dna.curvesplus.biobb_canal Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/curves_output.cda to /tmp/biobb/unitests_28/biobb_canal/0b7968cc-65bb-4bbd-9b1f-537ee0f20c3c
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:file_utils.py:346 Creating canal_f7dae28b-5a4e-4787-91a9-35397721864c temporary folder
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:file_utils.py:346 Creating command line with instructions and required arguments
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:cmd_wrapper.py:32 Canal &lt;&lt;! 
+&amp;inp
+  lis=canal_output,
+  cormin=0.6,
+  lev1=0,lev2=0,
+  itst=0,itnd=0,itdel=1,
+  histo=.f.,
+  series=.t.,
+  corr=.f.,
+&amp;end
+curves_output.cda CGCGAATTCGCG
+!
+
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:cmd_wrapper.py:49 Exit code 0
+
+INFO     /tmp/biobb/unitests_28/biobb_canal/biobb_canal_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/biobb_canal/0b7968cc-65bb-4bbd-9b1f-537ee0f20c3c&#x27;, &#x27;canal_f7dae28b-5a4e-4787-91a9-35397721864c&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_curvesplus/test_canion.py::TestCanal::test_canion</td>
+          <td class="col-duration">0.83</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:46,914 [MainThread  ] [INFO ]  Executing biobb_dna.curvesplus.biobb_canion Version: 3.9.0
+2023-04-11 13:35:47,249 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA_K.cdi to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+2023-04-11 13:35:47,250 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA.afr to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+2023-04-11 13:35:47,250 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA_avg.pdb to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+2023-04-11 13:35:47,251 [MainThread  ] [INFO ]  Creating canion_f5fcc0aa-03e2-4952-9e82-15d14483a1f1 temporary folder
+2023-04-11 13:35:47,598 [MainThread  ] [INFO ]  Creating command line with instructions and required arguments
+2023-04-11 13:35:47,598 [MainThread  ] [INFO ]  Canion &lt;&lt;! 
+&amp;inp
+  lis=canion_output,
+  dat=THGA_K,
+  axfrm=THGA,
+  solute=THGA_avg,
+  type=K+,
+  dlow=5.8,
+  dhig=7.2,
+  rlow=0,
+  rhig=18,
+  alow=0,
+  ahig=360,
+&amp;end
+!
+
+2023-04-11 13:35:47,617 [MainThread  ] [INFO ]  Exit code 0
+
+2023-04-11 13:35:47,705 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a&#x27;, &#x27;canion_f5fcc0aa-03e2-4952-9e82-15d14483a1f1&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/biobb_canion/canion_output.zip
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Executing biobb_dna.curvesplus.biobb_canion Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA_K.cdi to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA.afr to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/THGA_avg.pdb to /tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Creating canion_f5fcc0aa-03e2-4952-9e82-15d14483a1f1 temporary folder
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Creating command line with instructions and required arguments
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:cmd_wrapper.py:32 Canion &lt;&lt;! 
+&amp;inp
+  lis=canion_output,
+  dat=THGA_K,
+  axfrm=THGA,
+  solute=THGA_avg,
+  type=K+,
+  dlow=5.8,
+  dhig=7.2,
+  rlow=0,
+  rhig=18,
+  alow=0,
+  ahig=360,
+&amp;end
+!
+
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:cmd_wrapper.py:49 Exit code 0
+
+INFO     /tmp/biobb/unitests_28/biobb_canion/biobb_canion_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/biobb_canion/355e8bcc-687d-4305-83c3-1adc017c6c6a&#x27;, &#x27;canion_f5fcc0aa-03e2-4952-9e82-15d14483a1f1&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_curvesplus/test_curves.py::TestCurves::test_curves</td>
+          <td class="col-duration">6.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:47,751 [MainThread  ] [INFO ]  Executing biobb_dna.curvesplus.biobb_curves Version: 3.9.0
+2023-04-11 13:35:47,815 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/structure.stripped.trj to /tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f
+2023-04-11 13:35:47,816 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/structure.stripped.top to /tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f
+2023-04-11 13:35:47,816 [MainThread  ] [INFO ]  Creating curves_6898b191-9a80-4291-91b8-f62e69e05096 temporary folder
+2023-04-11 13:35:47,881 [MainThread  ] [INFO ]  Appending provided topology to command
+2023-04-11 13:35:47,881 [MainThread  ] [INFO ]  Creating command line with instructions and required arguments
+2023-04-11 13:35:47,881 [MainThread  ] [INFO ]  Cur+ &lt;&lt;! 
+&amp;inp
+  file=structure.stripped.trj,
+  ftop=structure.stripped.top,
+  lis=&#x27;curves_output&#x27;,
+  lib=/home/user/micromamba/envs/test_environment/.curvesplus/standard,
+  ions=.f.,
+  test=.f.,
+  line=.f.,
+  fit=.t.,
+  axfrm=.f.,
+  itst=0,itnd=0,itdel=1,
+&amp;end
+2 1 -1 0 0
+1:12
+24:13
+!
+
+2023-04-11 13:35:54,322 [MainThread  ] [INFO ]  Exit code 0
+
+2023-04-11 13:35:54,342 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f&#x27;, &#x27;curves_6898b191-9a80-4291-91b8-f62e69e05096&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/biobb_curves/curves_output.cda
+Checking if empty file: /tmp/biobb/unitests_28/biobb_curves/curves_output.lis
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Executing biobb_dna.curvesplus.biobb_curves Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/structure.stripped.trj to /tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/curvesplus/structure.stripped.top to /tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Creating curves_6898b191-9a80-4291-91b8-f62e69e05096 temporary folder
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Appending provided topology to command
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Creating command line with instructions and required arguments
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:cmd_wrapper.py:32 Cur+ &lt;&lt;! 
+&amp;inp
+  file=structure.stripped.trj,
+  ftop=structure.stripped.top,
+  lis=&#x27;curves_output&#x27;,
+  lib=/home/user/micromamba/envs/test_environment/.curvesplus/standard,
+  ions=.f.,
+  test=.f.,
+  line=.f.,
+  fit=.t.,
+  axfrm=.f.,
+  itst=0,itnd=0,itdel=1,
+&amp;end
+2 1 -1 0 0
+1:12
+24:13
+!
+
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:cmd_wrapper.py:49 Exit code 0
+
+INFO     /tmp/biobb/unitests_28/biobb_curves/biobb_curves_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/biobb_curves/42918ed9-37ca-4a29-bda8-b3294459984f&#x27;, &#x27;curves_6898b191-9a80-4291-91b8-f62e69e05096&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_dna/test_averages.py::TestAverages::test_helparaverages</td>
+          <td class="col-duration">0.28</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:54,389 [MainThread  ] [INFO ]  Executing biobb_dna.dna.dna_averages Version: 3.9.0
+2023-04-11 13:35:54,390 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/canal_output_shift.ser to /tmp/biobb/unitests_28/dna_averages/61e11ae7-87fc-43e9-9093-8c8a4f5a42a3
+2023-04-11 13:35:54,390 [MainThread  ] [INFO ]  Creating averages_41cb724d-abb4-4b53-a89a-6d8bd3e20e07 temporary folder
+2023-04-11 13:35:54,630 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/dna_averages/61e11ae7-87fc-43e9-9093-8c8a4f5a42a3&#x27;, &#x27;averages_41cb724d-abb4-4b53-a89a-6d8bd3e20e07&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/dna_averages/avg_out.csv
+Checking if empty file: /tmp/biobb/unitests_28/dna_averages/avg_out.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/dna_averages/dna_averages_log.out:file_utils.py:346 Executing biobb_dna.dna.dna_averages Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/dna_averages/dna_averages_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/canal_output_shift.ser to /tmp/biobb/unitests_28/dna_averages/61e11ae7-87fc-43e9-9093-8c8a4f5a42a3
+INFO     /tmp/biobb/unitests_28/dna_averages/dna_averages_log.out:file_utils.py:346 Creating averages_41cb724d-abb4-4b53-a89a-6d8bd3e20e07 temporary folder
+INFO     /tmp/biobb/unitests_28/dna_averages/dna_averages_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/dna_averages/61e11ae7-87fc-43e9-9093-8c8a4f5a42a3&#x27;, &#x27;averages_41cb724d-abb4-4b53-a89a-6d8bd3e20e07&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_dna/test_bimodality.py::TestBimodality::test_helparbimodality</td>
+          <td class="col-duration">0.54</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:54,673 [MainThread  ] [INFO ]  Executing biobb_dna.dna.dna_bimodality Version: 3.9.0
+2023-04-11 13:35:54,673 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/series_shift_AT.csv to /tmp/biobb/unitests_28/dna_bimodality/dc93a86e-7a0b-4392-9f08-8a99f95d61b5
+2023-04-11 13:35:54,674 [MainThread  ] [INFO ]  Creating bimodality_49b95aef-fbe2-4cdc-9225-f0557176a990 temporary folder
+2023-04-11 13:35:55,171 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/dna_bimodality/dc93a86e-7a0b-4392-9f08-8a99f95d61b5&#x27;, &#x27;bimodality_49b95aef-fbe2-4cdc-9225-f0557176a990&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/dna_bimodality/bimod_out.csv
+Checking if empty file: /tmp/biobb/unitests_28/dna_bimodality/bimod_out.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/dna_bimodality/dna_bimodality_log.out:file_utils.py:346 Executing biobb_dna.dna.dna_bimodality Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/dna_bimodality/dna_bimodality_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/series_shift_AT.csv to /tmp/biobb/unitests_28/dna_bimodality/dc93a86e-7a0b-4392-9f08-8a99f95d61b5
+INFO     /tmp/biobb/unitests_28/dna_bimodality/dna_bimodality_log.out:file_utils.py:346 Creating bimodality_49b95aef-fbe2-4cdc-9225-f0557176a990 temporary folder
+INFO     /tmp/biobb/unitests_28/dna_bimodality/dna_bimodality_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/dna_bimodality/dc93a86e-7a0b-4392-9f08-8a99f95d61b5&#x27;, &#x27;bimodality_49b95aef-fbe2-4cdc-9225-f0557176a990&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_dna/test_timeseries.py::TestTimeSeries::test_helpartimeseries</td>
+          <td class="col-duration">1.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:55,216 [MainThread  ] [INFO ]  Executing biobb_dna.dna.dna_timeseries Version: 3.9.0
+2023-04-11 13:35:55,217 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/canal_output_shift.ser to /tmp/biobb/unitests_28/dna_timeseries/9ed3b68d-8630-4459-91b5-b370b21fc8be
+2023-04-11 13:35:55,217 [MainThread  ] [INFO ]  Creating timeseries_72c90d6d-5580-4c9c-8992-dcf5732497aa temporary folder
+2023-04-11 13:35:56,202 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/dna_timeseries/9ed3b68d-8630-4459-91b5-b370b21fc8be&#x27;, &#x27;timeseries_72c90d6d-5580-4c9c-8992-dcf5732497aa&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/dna_timeseries/timeseries_output.zip
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/dna_timeseries/dna_timeseries_log.out:file_utils.py:346 Executing biobb_dna.dna.dna_timeseries Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/dna_timeseries/dna_timeseries_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/dna/canal_output_shift.ser to /tmp/biobb/unitests_28/dna_timeseries/9ed3b68d-8630-4459-91b5-b370b21fc8be
+INFO     /tmp/biobb/unitests_28/dna_timeseries/dna_timeseries_log.out:file_utils.py:346 Creating timeseries_72c90d6d-5580-4c9c-8992-dcf5732497aa temporary folder
+INFO     /tmp/biobb/unitests_28/dna_timeseries/dna_timeseries_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/dna_timeseries/9ed3b68d-8630-4459-91b5-b370b21fc8be&#x27;, &#x27;timeseries_72c90d6d-5580-4c9c-8992-dcf5732497aa&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_stiffness/test_stiffness.py::TestAvgStiffness::test_averagestiffness</td>
+          <td class="col-duration">0.27</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:56,245 [MainThread  ] [INFO ]  Executing biobb_dna.stiffness.average_stiffness Version: 3.9.0
+2023-04-11 13:35:56,245 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/canal_output_roll.ser to /tmp/biobb/unitests_28/average_stiffness/558c8f21-b6ea-4595-ba88-fdfc4fc61615
+2023-04-11 13:35:56,246 [MainThread  ] [INFO ]  Creating avgstiffness_2ed4e75e-7a9c-4e6e-827f-4c4f657f0597 temporary folder
+2023-04-11 13:35:56,481 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_28/average_stiffness/558c8f21-b6ea-4595-ba88-fdfc4fc61615&#x27;, &#x27;avgstiffness_2ed4e75e-7a9c-4e6e-827f-4c4f657f0597&#x27;]
+Checking if empty file: /tmp/biobb/unitests_28/average_stiffness/avgstiff.csv
+Checking if empty file: /tmp/biobb/unitests_28/average_stiffness/avgstiff.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/average_stiffness/average_stiffness_log.out:file_utils.py:346 Executing biobb_dna.stiffness.average_stiffness Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/average_stiffness/average_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/canal_output_roll.ser to /tmp/biobb/unitests_28/average_stiffness/558c8f21-b6ea-4595-ba88-fdfc4fc61615
+INFO     /tmp/biobb/unitests_28/average_stiffness/average_stiffness_log.out:file_utils.py:346 Creating avgstiffness_2ed4e75e-7a9c-4e6e-827f-4c4f657f0597 temporary folder
+INFO     /tmp/biobb/unitests_28/average_stiffness/average_stiffness_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_28/average_stiffness/558c8f21-b6ea-4595-ba88-fdfc4fc61615&#x27;, &#x27;avgstiffness_2ed4e75e-7a9c-4e6e-827f-4c4f657f0597&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">biobb_dna/test/unitests/test_stiffness/test_stiffness.py::TestBasePairStiffness::test_basepairstiffness</td>
+          <td class="col-duration">0.24</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-11 13:35:56,523 [MainThread  ] [INFO ]  Executing biobb_dna.stiffness.basepair_stiffness Version: 3.9.0
+2023-04-11 13:35:56,523 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_shift_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,523 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_slide_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,524 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_rise_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,524 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_tilt_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,524 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_roll_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,525 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_twist_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+2023-04-11 13:35:56,525 [MainThread  ] [INFO ]  Creating bp_stiffness_2646f5f1-c5d0-4e57-9efd-ab7afab0163e temporary folder
+Checking if empty file: /tmp/biobb/unitests_28/basepair_stiffness/bpstiff.csv
+Checking if empty file: /tmp/biobb/unitests_28/basepair_stiffness/bpstiff.jpg
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Executing biobb_dna.stiffness.basepair_stiffness Version: 3.9.0
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_shift_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_slide_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_rise_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_tilt_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_roll_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_dna/biobb_dna/biobb_dna/test/data/stiffness/series_twist_AA.csv to /tmp/biobb/unitests_28/basepair_stiffness/71d401f2-aa36-4f5b-9fb6-3eb6c99e56ac
+INFO     /tmp/biobb/unitests_28/basepair_stiffness/basepair_stiffness_log.out:file_utils.py:346 Creating bp_stiffness_2646f5f1-c5d0-4e57-9efd-ab7afab0163e temporary folder<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Removing: /tmp/biobb/unitests_28
+<br/></div></td></tr></tbody></table></body></html>
