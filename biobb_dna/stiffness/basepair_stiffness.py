@@ -20,7 +20,7 @@ class BPStiffness(BiobbObject):
     | biobb_dna BPStiffness
     | Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
 
-    Args:        
+    Args:
         input_filename_shift (str): Path to csv file with data for helical parameter 'shift'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_shift_AA.csv>`_. Accepted formats: csv (edam:format_3752)
         input_filename_slide (str): Path to csv file with data for helical parameter 'slide'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_slide_AA.csv>`_. Accepted formats: csv (edam:format_3752)
         input_filename_rise (str): Path to csv file with data for helical parameter 'rise'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_rise_AA.csv>`_. Accepted formats: csv (edam:format_3752)
@@ -40,7 +40,7 @@ class BPStiffness(BiobbObject):
 
             from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness
 
-            prop = { 
+            prop = {
                 'KT': 0.592186827,
                 'scaling': [1, 1, 1, 10.6, 10.6, 10.6]
             }
@@ -69,7 +69,7 @@ class BPStiffness(BiobbObject):
                  input_filename_roll, input_filename_twist,
                  output_csv_path, output_jpg_path, properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -105,7 +105,8 @@ class BPStiffness(BiobbObject):
         """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Creating temporary folder
