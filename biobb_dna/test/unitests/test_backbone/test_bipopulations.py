@@ -2,6 +2,7 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_dna.backbone.bipopulations import bipopulations
 import platform
 
+
 class TestBIPopulations():
     def setup_class(self):
         fx.test_setup(self, 'bipopulations')

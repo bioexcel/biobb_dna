@@ -3,6 +3,7 @@ from biobb_dna.stiffness.average_stiffness import average_stiffness
 from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness
 import platform
 
+
 class TestAvgStiffness():
     def setup_class(self):
         fx.test_setup(self, 'average_stiffness')

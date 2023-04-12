@@ -16,17 +16,17 @@ from biobb_common.tools.file_utils import launchlogger
 class Canal(BiobbObject):
     """
     | biobb_dna Canal
-    | Wrapper for the Canal executable that is part of the Curves+ software suite. 
+    | Wrapper for the Canal executable that is part of the Curves+ software suite.
 
-    Args:        
+    Args:
         input_cda_file (str): Input cda file, from Cur+ output. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/curves_output.cda>`_. Accepted formats: cda (edam:format_2330).
         input_lis_file (str) (Optional): Input lis file, from Cur+ output. File type: input. Accepted formats: lis (edam:format_2330).
         output_zip_path (str): zip filename for output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dic):
-            * **bases** (*str*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence). 
+            * **bases** (*str*) - (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence).
             * **itst** (*int*) - (0) Iteration start index.
             * **itnd** (*int*) - (0) Iteration end index.
-            * **itdel** (*int*) - (1) Iteration delimiter. 
+            * **itdel** (*int*) - (1) Iteration delimiter.
             * **lev1** (*int*) - (0) Lower base level limit (i.e. base pairs) used for analysis.
             * **lev2** (*int*) - (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels).
             * **nastr** (*str*) - ('NA') character string used to indicate missing data in .ser files.
@@ -42,7 +42,7 @@ class Canal(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_dna.curvesplus.biobb_canal import biobb_canal
-            prop = { 
+            prop = {
                 'series': '.t.',
                 'histo': '.t.',
                 'sequence': 'CGCGAATTCGCG'
@@ -64,7 +64,7 @@ class Canal(BiobbObject):
     def __init__(self, input_cda_file, input_lis_file=None,
                  output_zip_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -105,7 +105,8 @@ class Canal(BiobbObject):
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         if self.sequence is None:
@@ -196,7 +197,7 @@ class Canal(BiobbObject):
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
-        
+
         return self.return_code
 
 

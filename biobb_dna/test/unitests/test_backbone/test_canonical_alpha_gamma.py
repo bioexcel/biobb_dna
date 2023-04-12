@@ -2,6 +2,7 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_dna.backbone.canonicalag import canonicalag
 import platform
 
+
 class TestCanonicalAlphaGamma():
     def setup_class(self):
         fx.test_setup(self, 'canonicalag')

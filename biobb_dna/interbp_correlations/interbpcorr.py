@@ -69,7 +69,7 @@ class InterBasePairCorrelation(BiobbObject):
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -103,7 +103,8 @@ class InterBasePairCorrelation(BiobbObject):
         """Execute the :class:`HelParCorrelation <correlations.interbpcorr.InterBasePairCorrelation>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence
@@ -173,8 +174,7 @@ class InterBasePairCorrelation(BiobbObject):
             ser2_shifted = ser2.shift(axis=1)
             ser2_shifted[labels[0]] = ser2[labels[-1]]
             if (
-                    ser1.name in constants.hp_angular and
-                    ser2.name in constants.hp_angular):
+                    ser1.name in constants.hp_angular and ser2.name in constants.hp_angular):
                 method = self.circular
             elif (
                 (

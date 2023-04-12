@@ -15,21 +15,21 @@ from biobb_common.tools.file_utils import launchlogger
 class Curves(BiobbObject):
     """
     | biobb_dna Curves
-    | Wrapper for the Cur+ executable  that is part of the Curves+ software suite. 
+    | Wrapper for the Cur+ executable  that is part of the Curves+ software suite.
 
-    Args:        
+    Args:
         input_struc_path (str): Trajectory or PDB input file. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
         input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top>`_. Accepted formats: top (edam:format_3881).
         output_cda_path (str): Filename for Curves+ output .cda file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda>`_. Accepted formats: cda (edam:format_2330).
         output_lis_path (str): Filename for Curves+ output .lis file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis>`_. Accepted formats: lis (edam:format_2330).
         output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. Accepted formats: zip (edam:format_3987).
         properties (dict):
-            * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end". 
+            * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end".
             * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
             * **stdlib_path** (*str*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
             * **itst** (*int*) - (0) Iteration start index.
             * **itnd** (*int*) - (0) Iteration end index.
-            * **itdel** (*int*) - (1) Iteration delimiter. 
+            * **itdel** (*int*) - (1) Iteration delimiter.
             * **ions** (*bool*) - (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
             * **test** (*bool*) - (False) If True, provide addition output in .lis file on fitting and axis generation.
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
@@ -42,9 +42,9 @@ class Curves(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_dna.curvesplus.biobb_curves import biobb_curves
-            prop = { 
+            prop = {
                 's1range': '1:12',
-                's2range': '24:13', 
+                's2range': '24:13',
             }
             biobb_curves(
                 input_struc_path='/path/to/structure/file.trj',
@@ -67,7 +67,7 @@ class Curves(BiobbObject):
             output_cda_path, output_zip_path=None,
             input_top_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -109,7 +109,8 @@ class Curves(BiobbObject):
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         if self.s1range is None:

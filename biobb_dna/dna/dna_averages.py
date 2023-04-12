@@ -20,7 +20,7 @@ class HelParAverages(BiobbObject):
     | biobb_dna HelParAverages
     | Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.
 
-    Args:        
+    Args:
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/canal_output_shift.ser>`_. Accepted formats: ser (edam:format_2330).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/shift_avg.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/shift_avg.jpg>`_. Accepted formats: jpg (edam:format_3579).
@@ -36,7 +36,7 @@ class HelParAverages(BiobbObject):
 
             from biobb_dna.dna.dna_averages import dna_averages
 
-            prop = { 
+            prop = {
                 'helpar_name': 'twist',
                 'seqpos': [1,2],
                 'sequence': 'GCAT'
@@ -60,7 +60,7 @@ class HelParAverages(BiobbObject):
     def __init__(self, input_ser_path, output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -95,7 +95,8 @@ class HelParAverages(BiobbObject):
         """Execute the :class:`HelParAverages <dna.averages.HelParAverages>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

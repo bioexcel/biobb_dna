@@ -2,6 +2,7 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_dna.curvesplus.biobb_curves import biobb_curves
 import platform
 
+
 class TestCurves():
     def setup_class(self):
         fx.test_setup(self, 'biobb_curves')

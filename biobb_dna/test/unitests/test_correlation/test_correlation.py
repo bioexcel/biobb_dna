@@ -7,6 +7,7 @@ from biobb_dna.intrabp_correlations.intraseqcorr import intraseqcorr
 from biobb_dna.intrabp_correlations.intrabpcorr import intrabpcorr
 import platform
 
+
 class TestInterHelparCorrelation():
     def setup_class(self):
         fx.test_setup(self, 'interhpcorr')

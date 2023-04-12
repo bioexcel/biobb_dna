@@ -15,15 +15,15 @@ from biobb_common.tools.file_utils import launchlogger
 class Canion(BiobbObject):
     """
     | biobb_dna Canion
-    | Wrapper for the Canion executable  that is part of the Curves+ software suite. 
+    | Wrapper for the Canion executable  that is part of the Curves+ software suite.
 
-    Args:        
+    Args:
         input_cdi_path (str): Trajectory input file. File type: input. `Sample file <https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi>`_. Accepted formats: cdi (edam:format_2330).
         input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr>`_. Accepted formats: afr (edam:format_2330).
         input_avg_struc_path (str): Average DNA conformation. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_zip_path (str) (Optional): Filename for .zip files containing Canion output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
-            * **bases** (*str*) - (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence). 
+            * **bases** (*str*) - (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence).
             * **type** (*str*) - ('*') Ions (or atoms) to be analyzed. Options are 'Na+', 'K', 'K+', 'Cl', 'Cl-', 'CL', 'P', 'C1*', 'NH1', 'NH2', 'NZ', '1' for all cations, '-1' for all anions, '0' for neutral species or '*' for all available data.
             * **dlow** (*float*) - (0) Select starting segment of the oglimer to analyze. If both dhig and dlow are 0, entire oglimer is analyzed.
             * **dhig** (*float*) - (0) Select ending segment of the oglimer to analyze, being the maximum value the total number of base pairs in the oligomer. If both dhig and dlow are 0, entire oglimer is analyzed.
@@ -43,7 +43,7 @@ class Canion(BiobbObject):
         This is a use example of how to use the building block from Python::
 
             from biobb_dna.curvesplus.biobb_canion import biobb_canion
-            prop = { 
+            prop = {
                 'type': 'K+',
                 'bases': 'G'
             }
@@ -67,7 +67,7 @@ class Canion(BiobbObject):
             self, input_cdi_path, input_afr_path, input_avg_struc_path,
             output_zip_path=None, properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -110,7 +110,8 @@ class Canion(BiobbObject):
         """Execute the :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         ion_type_options = [

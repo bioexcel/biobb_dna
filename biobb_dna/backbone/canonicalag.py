@@ -66,7 +66,7 @@ class CanonicalAG(BiobbObject):
                  output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -101,7 +101,8 @@ class CanonicalAG(BiobbObject):
         """Execute the :class:`CanonicalAG <backbone.canonicalag.CanonicalAG>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

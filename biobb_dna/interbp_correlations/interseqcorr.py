@@ -36,7 +36,7 @@ class InterSequenceCorrelation(BiobbObject):
 
             from biobb_dna.interbp_correlations.interseqcorr import interseqcorr
 
-            prop = { 
+            prop = {
                 "helpar_name": "helpar",
                 "sequence": "CGTAATCG"
             }
@@ -59,7 +59,7 @@ class InterSequenceCorrelation(BiobbObject):
             self, input_ser_path, output_csv_path,
             output_jpg_path, properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -89,7 +89,8 @@ class InterSequenceCorrelation(BiobbObject):
         """Execute the :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

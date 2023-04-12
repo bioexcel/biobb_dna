@@ -25,8 +25,8 @@ class HelParBimodality(BiobbObject):
     | biobb_dna HelParBimodality
     | Determine binormality/bimodality from a helical parameter series dataset.
 
-    Args:        
-        input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv>`_. Accepted formats: csv (edam:format_3752) 
+    Args:
+        input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv>`_. Accepted formats: csv (edam:format_3752).
         input_zip_file (str) (Optional): .zip file containing the `input_csv_file` .csv file. File type: input. Accepted formats: zip (edam:format_3987).
         output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg>`_. Accepted formats: jpg (edam:format_3579).
@@ -43,7 +43,7 @@ class HelParBimodality(BiobbObject):
 
             from biobb_dna.dna.dna_bimodality import dna_bimodality
 
-            prop = { 
+            prop = {
                 'max_iter': 500,
             }
             dna_bimodality(
@@ -66,7 +66,7 @@ class HelParBimodality(BiobbObject):
                  output_jpg_path, input_zip_file=None,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -102,7 +102,8 @@ class HelParBimodality(BiobbObject):
         """Execute the :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # get helical parameter from filename if not specified

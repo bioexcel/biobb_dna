@@ -61,7 +61,7 @@ class Puckering(BiobbObject):
                  output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -94,7 +94,8 @@ class Puckering(BiobbObject):
         """Execute the :class:`Puckering <backbone.puckering.Puckering>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

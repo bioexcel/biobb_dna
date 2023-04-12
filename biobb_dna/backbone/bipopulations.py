@@ -64,7 +64,7 @@ class BIPopulations(BiobbObject):
                  output_csv_path, output_jpg_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -96,7 +96,8 @@ class BIPopulations(BiobbObject):
         """Execute the :class:`BIPopulations <backbone.bipopulations.BIPopulations>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

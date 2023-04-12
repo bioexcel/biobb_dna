@@ -38,7 +38,7 @@ class InterHelParCorrelation(BiobbObject):
 
             from biobb_dna.interbp_correlations.interhpcorr import interhpcorr
 
-            prop = { 
+            prop = {
                 'basepair': 'AA',
             }
             interhpcorr(
@@ -68,7 +68,7 @@ class InterHelParCorrelation(BiobbObject):
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -101,7 +101,8 @@ class InterHelParCorrelation(BiobbObject):
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Creating temporary folder

@@ -60,7 +60,7 @@ class HelParTimeSeries(BiobbObject):
     def __init__(self, input_ser_path, output_zip_path,
                  properties=None, **kwargs) -> None:
         properties = properties or {}
-        
+
         # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
@@ -119,7 +119,8 @@ class HelParTimeSeries(BiobbObject):
         """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # check sequence

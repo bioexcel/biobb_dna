@@ -2,6 +2,7 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_dna.dna.dna_bimodality import dna_bimodality
 import platform
 
+
 class TestBimodality():
     def setup_class(self):
         fx.test_setup(self, 'dna_bimodality')
