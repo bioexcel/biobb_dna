@@ -1,3 +1,0 @@
-2     E701 multiple statements on one line (colon)
-4     W291 trailing whitespace
-2     W293 blank line contains whitespace
