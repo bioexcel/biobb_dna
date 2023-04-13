@@ -29,7 +29,9 @@
             "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj",
             "enum": [
                 ".*\\.trj$",
-                ".*\\.pdb$"
+                ".*\\.pdb$",
+                ".*\\.netcdf$",
+                ".*\\.nc$"
             ],
             "file_formats": [
                 {
@@ -41,6 +43,16 @@
                     "extension": ".*\\.pdb$",
                     "description": "Trajectory or PDB input file",
                     "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.netcdf$",
+                    "description": "Trajectory or PDB input file",
+                    "edam": "format_3650"
+                },
+                {
+                    "extension": ".*\\.nc$",
+                    "description": "Trajectory or PDB input file",
+                    "edam": "format_3650"
                 }
             ]
         },

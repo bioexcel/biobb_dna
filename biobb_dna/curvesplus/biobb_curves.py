@@ -18,7 +18,7 @@ class Curves(BiobbObject):
     | Wrapper for the Cur+ executable  that is part of the Curves+ software suite.
 
     Args:
-        input_struc_path (str): Trajectory or PDB input file. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476).
+        input_struc_path (str): Trajectory or PDB input file. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476), netcdf (edam:format_3650), nc (edam:format_3650).
         input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top>`_. Accepted formats: top (edam:format_3881).
         output_cda_path (str): Filename for Curves+ output .cda file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda>`_. Accepted formats: cda (edam:format_2330).
         output_lis_path (str): Filename for Curves+ output .lis file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis>`_. Accepted formats: lis (edam:format_2330).
