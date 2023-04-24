@@ -19,6 +19,4 @@ class TestTimeSeries():
         assert fx.not_empty(self.paths['output_zip_path'])
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
-            assert fx.equal(
-                self.paths['output_zip_path'],
-                self.paths['ref_output_zip_path'])
+            assert fx.equal(self.paths['output_zip_path'], self.paths['ref_output_zip_path'])

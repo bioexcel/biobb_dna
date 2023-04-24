@@ -17,6 +17,4 @@ class TestBimodality():
         assert fx.not_empty(self.paths['output_jpg_path'])
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
-            assert fx.equal(
-                self.paths['output_csv_path'],
-                self.paths['ref_csv_output'])
+            assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])

@@ -17,9 +17,5 @@ class TestCurves():
         assert fx.not_empty(self.paths['output_lis_path'])
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
-            assert fx.equal(
-                self.paths['output_cda_path'],
-                self.paths['ref_cda_output'])
-            assert fx.equal(
-                self.paths['output_lis_path'],
-                self.paths['ref_lis_output'])
+            assert fx.equal(self.paths['output_cda_path'], self.paths['ref_cda_output'])
+            assert fx.equal(self.paths['output_lis_path'], self.paths['ref_lis_output'])
