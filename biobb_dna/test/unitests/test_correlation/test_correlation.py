@@ -5,6 +5,7 @@ from biobb_dna.interbp_correlations.interbpcorr import interbpcorr
 from biobb_dna.intrabp_correlations.intrahpcorr import intrahpcorr
 from biobb_dna.intrabp_correlations.intraseqcorr import intraseqcorr
 from biobb_dna.intrabp_correlations.intrabpcorr import intrabpcorr
+from biobb_dna.test.unitests.common import compare_images
 import platform
 
 
@@ -22,7 +23,7 @@ class TestInterHelparCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestInterSequenceCorrelation():
@@ -41,7 +42,7 @@ class TestInterSequenceCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestInterBasepairCorrelation():
@@ -60,7 +61,7 @@ class TestInterBasepairCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestIntraHelparCorrelation():
@@ -77,7 +78,7 @@ class TestIntraHelparCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestIntraSequenceCorrelation():
@@ -96,7 +97,7 @@ class TestIntraSequenceCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestIntraBasepairCorrelation():
@@ -115,4 +116,4 @@ class TestIntraBasepairCorrelation():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])

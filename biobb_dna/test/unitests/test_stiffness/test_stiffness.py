@@ -1,6 +1,7 @@
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.stiffness.average_stiffness import average_stiffness
 from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness
+from biobb_dna.test.unitests.common import compare_images
 import platform
 
 
@@ -19,7 +20,7 @@ class TestAvgStiffness():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
 
 
 class TestBasePairStiffness():
@@ -37,4 +38,4 @@ class TestBasePairStiffness():
         assert fx.exe_success(returncode)
         if platform.system() == 'Darwin':
             assert fx.equal(self.paths['output_csv_path'], self.paths['ref_csv_output'])
-        assert fx.compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        assert compare_images(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
