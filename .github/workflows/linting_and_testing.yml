@@ -45,7 +45,6 @@ jobs:
             pytest-cov
             pytest-html
             flake8
-            pillow
             pip
       
       - name: Install genbadge from pip
