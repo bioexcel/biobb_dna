@@ -46,6 +46,7 @@ jobs:
             pytest-html
             flake8
             pillow
+            imagehash
             pip
       
       - name: Install genbadge from pip
