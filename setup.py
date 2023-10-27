@@ -14,7 +14,7 @@ setuptools.setup(
     keywords="Bioinformatics Workflows BioExcel Compatibility",
     url="https://github.com/bioexcel/biobb_dna",
     project_urls={
-        "Documentation": "http://biobb_dna.readthedocs.io/en/latest/",
+        "Documentation": "http://biobb-dna.readthedocs.io/en/latest/",
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
