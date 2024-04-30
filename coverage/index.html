@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage report</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="coverage_html.js" defer></script>
+    <script src="coverage_html.js" defer></script>
 </head>
 <body class="indexfile">
 <header>
@@ -16,13 +16,13 @@
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
                 <div class="keyhelp">
                     <p>
-                        <kbd>n</kbd>
+                        <kbd>f</kbd>
                         <kbd>s</kbd>
                         <kbd>m</kbd>
                         <kbd>x</kbd>
@@ -41,11 +41,20 @@
             </div>
         </aside>
         <form id="filter_container">
-            <input id="filter" type="text" value="" placeholder="filter..." />
+            <input id="filter" type="text" value="" placeholder="filter...">
+            <div>
+                <input id="hide100" type="checkbox" >
+                <label for="hide100">hide covered</label>
+            </div>
         </form>
+        <h2>
+                <a class="button current">Files</a>
+                <a class="button" href="function_index.html">Functions</a>
+                <a class="button" href="class_index.html">Classes</a>
+        </h2>
         <p class="text">
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.4">coverage.py v7.4.4</a>,
-            created at 2024-04-05 12:16 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.0">coverage.py v7.5.0</a>,
+            created at 2024-04-30 15:08 +0000
         </p>
     </div>
 </header>
@@ -53,289 +62,289 @@
     <table class="index" data-sortable>
         <thead>
             <tr class="tablehead" title="Click to sort">
-                <th class="name left" aria-sort="none" data-shortcut="n">Module</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
-                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
+                <th class="name left" aria-sort="none" data-shortcut="f">File<span class="arrows"></span></th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements<span class="arrows"></span></th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing<span class="arrows"></span></th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded<span class="arrows"></span></th>
+                <th class="right" aria-sort="none" data-shortcut="c">coverage<span class="arrows"></span></th>
             </tr>
         </thead>
         <tbody>
-            <tr class="file">
-                <td class="name left"><a href="d_76997f7c8cf1ed45___init___py.html">biobb_dna/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_76997f7c8cf1ed45___init___py.html">biobb_dna/__init__.py</a></td>
                 <td>3</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="3 3">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_159731231e5c9c9d___init___py.html">biobb_dna/backbone/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_159731231e5c9c9d___init___py.html">biobb_dna/backbone/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_159731231e5c9c9d_bipopulations_py.html">biobb_dna/backbone/bipopulations.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_159731231e5c9c9d_bipopulations_py.html">biobb_dna/backbone/bipopulations.py</a></td>
                 <td>105</td>
                 <td>22</td>
                 <td>0</td>
                 <td class="right" data-ratio="83 105">79%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_159731231e5c9c9d_canonicalag_py.html">biobb_dna/backbone/canonicalag.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_159731231e5c9c9d_canonicalag_py.html">biobb_dna/backbone/canonicalag.py</a></td>
                 <td>115</td>
                 <td>22</td>
                 <td>0</td>
                 <td class="right" data-ratio="93 115">81%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_159731231e5c9c9d_puckering_py.html">biobb_dna/backbone/puckering.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_159731231e5c9c9d_puckering_py.html">biobb_dna/backbone/puckering.py</a></td>
                 <td>108</td>
                 <td>20</td>
                 <td>0</td>
                 <td class="right" data-ratio="88 108">81%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_74fa14c6d0e940a4___init___py.html">biobb_dna/curvesplus/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_74fa14c6d0e940a4___init___py.html">biobb_dna/curvesplus/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_74fa14c6d0e940a4_biobb_canal_py.html">biobb_dna/curvesplus/biobb_canal.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_74fa14c6d0e940a4_biobb_canal_py.html">biobb_dna/curvesplus/biobb_canal.py</a></td>
                 <td>88</td>
                 <td>24</td>
                 <td>0</td>
                 <td class="right" data-ratio="64 88">73%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_74fa14c6d0e940a4_biobb_canion_py.html">biobb_dna/curvesplus/biobb_canion.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_74fa14c6d0e940a4_biobb_canion_py.html">biobb_dna/curvesplus/biobb_canion.py</a></td>
                 <td>85</td>
                 <td>16</td>
                 <td>0</td>
                 <td class="right" data-ratio="69 85">81%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_74fa14c6d0e940a4_biobb_curves_py.html">biobb_dna/curvesplus/biobb_curves.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_74fa14c6d0e940a4_biobb_curves_py.html">biobb_dna/curvesplus/biobb_curves.py</a></td>
                 <td>99</td>
                 <td>23</td>
                 <td>0</td>
                 <td class="right" data-ratio="76 99">77%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3afbcd666ed82c91___init___py.html">biobb_dna/dna/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_3afbcd666ed82c91___init___py.html">biobb_dna/dna/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3afbcd666ed82c91_dna_averages_py.html">biobb_dna/dna/dna_averages.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_3afbcd666ed82c91_dna_averages_py.html">biobb_dna/dna/dna_averages.py</a></td>
                 <td>97</td>
                 <td>25</td>
                 <td>0</td>
                 <td class="right" data-ratio="72 97">74%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3afbcd666ed82c91_dna_bimodality_py.html">biobb_dna/dna/dna_bimodality.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_3afbcd666ed82c91_dna_bimodality_py.html">biobb_dna/dna/dna_bimodality.py</a></td>
                 <td>158</td>
                 <td>49</td>
                 <td>0</td>
                 <td class="right" data-ratio="109 158">69%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3afbcd666ed82c91_dna_timeseries_py.html">biobb_dna/dna/dna_timeseries.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_3afbcd666ed82c91_dna_timeseries_py.html">biobb_dna/dna/dna_timeseries.py</a></td>
                 <td>110</td>
                 <td>22</td>
                 <td>0</td>
                 <td class="right" data-ratio="88 110">80%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8a2a7f872cf1434f___init___py.html">biobb_dna/interbp_correlations/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8a2a7f872cf1434f___init___py.html">biobb_dna/interbp_correlations/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8a2a7f872cf1434f_interbpcorr_py.html">biobb_dna/interbp_correlations/interbpcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8a2a7f872cf1434f_interbpcorr_py.html">biobb_dna/interbp_correlations/interbpcorr.py</a></td>
                 <td>144</td>
                 <td>22</td>
                 <td>0</td>
                 <td class="right" data-ratio="122 144">85%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8a2a7f872cf1434f_interhpcorr_py.html">biobb_dna/interbp_correlations/interhpcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8a2a7f872cf1434f_interhpcorr_py.html">biobb_dna/interbp_correlations/interhpcorr.py</a></td>
                 <td>135</td>
                 <td>25</td>
                 <td>0</td>
                 <td class="right" data-ratio="110 135">81%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8a2a7f872cf1434f_interseqcorr_py.html">biobb_dna/interbp_correlations/interseqcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8a2a7f872cf1434f_interseqcorr_py.html">biobb_dna/interbp_correlations/interseqcorr.py</a></td>
                 <td>96</td>
                 <td>27</td>
                 <td>0</td>
                 <td class="right" data-ratio="69 96">72%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_64e03be4370b7ecc___init___py.html">biobb_dna/intrabp_correlations/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_64e03be4370b7ecc___init___py.html">biobb_dna/intrabp_correlations/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_64e03be4370b7ecc_intrabpcorr_py.html">biobb_dna/intrabp_correlations/intrabpcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_64e03be4370b7ecc_intrabpcorr_py.html">biobb_dna/intrabp_correlations/intrabpcorr.py</a></td>
                 <td>144</td>
                 <td>22</td>
                 <td>0</td>
                 <td class="right" data-ratio="122 144">85%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_64e03be4370b7ecc_intrahpcorr_py.html">biobb_dna/intrabp_correlations/intrahpcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_64e03be4370b7ecc_intrahpcorr_py.html">biobb_dna/intrabp_correlations/intrahpcorr.py</a></td>
                 <td>135</td>
                 <td>25</td>
                 <td>0</td>
                 <td class="right" data-ratio="110 135">81%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_64e03be4370b7ecc_intraseqcorr_py.html">biobb_dna/intrabp_correlations/intraseqcorr.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_64e03be4370b7ecc_intraseqcorr_py.html">biobb_dna/intrabp_correlations/intraseqcorr.py</a></td>
                 <td>96</td>
                 <td>27</td>
                 <td>0</td>
                 <td class="right" data-ratio="69 96">72%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_9de9475b0a6fab52___init___py.html">biobb_dna/stiffness/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_9de9475b0a6fab52___init___py.html">biobb_dna/stiffness/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_9de9475b0a6fab52_average_stiffness_py.html">biobb_dna/stiffness/average_stiffness.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_9de9475b0a6fab52_average_stiffness_py.html">biobb_dna/stiffness/average_stiffness.py</a></td>
                 <td>94</td>
                 <td>24</td>
                 <td>0</td>
                 <td class="right" data-ratio="70 94">74%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_9de9475b0a6fab52_basepair_stiffness_py.html">biobb_dna/stiffness/basepair_stiffness.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_9de9475b0a6fab52_basepair_stiffness_py.html">biobb_dna/stiffness/basepair_stiffness.py</a></td>
                 <td>83</td>
                 <td>17</td>
                 <td>0</td>
                 <td class="right" data-ratio="66 83">80%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_957b841f7413f0a1___init___py.html">biobb_dna/test/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_957b841f7413f0a1___init___py.html">biobb_dna/test/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_020f76a90aa51c7b_test_bipopulations_py.html">biobb_dna/test/unitests/test_backbone/test_bipopulations.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_020f76a90aa51c7b_test_bipopulations_py.html">biobb_dna/test/unitests/test_backbone/test_bipopulations.py</a></td>
                 <td>16</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 16">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_020f76a90aa51c7b_test_canonical_alpha_gamma_py.html">biobb_dna/test/unitests/test_backbone/test_canonical_alpha_gamma.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_020f76a90aa51c7b_test_canonical_alpha_gamma_py.html">biobb_dna/test/unitests/test_backbone/test_canonical_alpha_gamma.py</a></td>
                 <td>16</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 16">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_020f76a90aa51c7b_test_puckering_py.html">biobb_dna/test/unitests/test_backbone/test_puckering.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_020f76a90aa51c7b_test_puckering_py.html">biobb_dna/test/unitests/test_backbone/test_puckering.py</a></td>
                 <td>16</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 16">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_97f47455ed834d2d_test_correlation_py.html">biobb_dna/test/unitests/test_correlation/test_correlation.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_97f47455ed834d2d_test_correlation_py.html">biobb_dna/test/unitests/test_correlation/test_correlation.py</a></td>
                 <td>84</td>
                 <td>6</td>
                 <td>0</td>
                 <td class="right" data-ratio="78 84">93%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8030ef0ea5bfd6aa_test_canal_py.html">biobb_dna/test/unitests/test_curvesplus/test_canal.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8030ef0ea5bfd6aa_test_canal_py.html">biobb_dna/test/unitests/test_curvesplus/test_canal.py</a></td>
                 <td>14</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="13 14">93%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8030ef0ea5bfd6aa_test_canion_py.html">biobb_dna/test/unitests/test_curvesplus/test_canion.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8030ef0ea5bfd6aa_test_canion_py.html">biobb_dna/test/unitests/test_curvesplus/test_canion.py</a></td>
                 <td>14</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="13 14">93%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_8030ef0ea5bfd6aa_test_curves_py.html">biobb_dna/test/unitests/test_curvesplus/test_curves.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_8030ef0ea5bfd6aa_test_curves_py.html">biobb_dna/test/unitests/test_curvesplus/test_curves.py</a></td>
                 <td>16</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 16">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_100f5897bddc1993_test_averages_py.html">biobb_dna/test/unitests/test_dna/test_averages.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_100f5897bddc1993_test_averages_py.html">biobb_dna/test/unitests/test_dna/test_averages.py</a></td>
                 <td>19</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="18 19">95%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_100f5897bddc1993_test_bimodality_py.html">biobb_dna/test/unitests/test_dna/test_bimodality.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_100f5897bddc1993_test_bimodality_py.html">biobb_dna/test/unitests/test_dna/test_bimodality.py</a></td>
                 <td>16</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="15 16">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_100f5897bddc1993_test_timeseries_py.html">biobb_dna/test/unitests/test_dna/test_timeseries.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_100f5897bddc1993_test_timeseries_py.html">biobb_dna/test/unitests/test_dna/test_timeseries.py</a></td>
                 <td>17</td>
                 <td>1</td>
                 <td>0</td>
                 <td class="right" data-ratio="16 17">94%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_cda7f8e8576a7189_test_stiffness_py.html">biobb_dna/test/unitests/test_stiffness/test_stiffness.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_cda7f8e8576a7189_test_stiffness_py.html">biobb_dna/test/unitests/test_stiffness/test_stiffness.py</a></td>
                 <td>30</td>
                 <td>2</td>
                 <td>0</td>
                 <td class="right" data-ratio="28 30">93%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_833b0317e3c43dca___init___py.html">biobb_dna/utils/__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_833b0317e3c43dca___init___py.html">biobb_dna/utils/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_833b0317e3c43dca_constants_py.html">biobb_dna/utils/constants.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_833b0317e3c43dca_constants_py.html">biobb_dna/utils/constants.py</a></td>
                 <td>6</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="6 6">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_833b0317e3c43dca_loader_py.html">biobb_dna/utils/loader.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_833b0317e3c43dca_loader_py.html">biobb_dna/utils/loader.py</a></td>
                 <td>27</td>
                 <td>10</td>
                 <td>0</td>
                 <td class="right" data-ratio="17 27">63%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_833b0317e3c43dca_transform_py.html">biobb_dna/utils/transform.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_833b0317e3c43dca_transform_py.html">biobb_dna/utils/transform.py</a></td>
                 <td>6</td>
                 <td>1</td>
                 <td>0</td>
@@ -359,16 +368,16 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.4">coverage.py v7.4.4</a>,
-            created at 2024-04-05 12:16 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.0">coverage.py v7.5.0</a>,
+            created at 2024-04-30 15:08 +0000
         </p>
     </div>
     <aside class="hidden">
-        <a id="prevFileLink" class="nav" href="d_833b0317e3c43dca_transform_py.html"/>
-        <a id="nextFileLink" class="nav" href="d_76997f7c8cf1ed45___init___py.html"/>
-        <button type="button" class="button_prev_file" data-shortcut="["/>
-        <button type="button" class="button_next_file" data-shortcut="]"/>
-        <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+        <a id="prevFileLink" class="nav" href="z_833b0317e3c43dca_transform_py.html"></a>
+        <a id="nextFileLink" class="nav" href="z_76997f7c8cf1ed45___init___py.html"></a>
+        <button type="button" class="button_prev_file" data-shortcut="["></button>
+        <button type="button" class="button_next_file" data-shortcut="]"></button>
+        <button type="button" class="button_show_hide_help" data-shortcut="?"></button>
     </aside>
 </footer>
 </body>
