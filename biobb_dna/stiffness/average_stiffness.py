@@ -20,6 +20,7 @@ class AverageStiffness(BiobbObject):
     """
     | biobb_dna AverageStiffness
     | Calculate average stiffness constants for each base pair of a trajectory's series.
+    | Calculate the average stiffness constants for each base pair of a trajectory's series. The input is a .ser file with the helical parameter values for each base/basepair. The output is a .csv file with the average stiffness constants for each base pair and a .jpg file with a plot of the average stiffness constants for each base pair.
 
     Args:
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/canal_output_roll.ser>`_. Accepted formats: ser (edam:format_2330).
