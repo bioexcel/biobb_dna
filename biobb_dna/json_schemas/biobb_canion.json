@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/biobb_canion",
     "name": "biobb_dna Canion",
     "title": "Wrapper for the Canion executable  that is part of the Curves+ software suite.",
-    "description": null,
+    "description": "Analyzes the trajectory of ions around a DNA molecule.",
     "type": "object",
     "info": {
         "wrapped_software": {

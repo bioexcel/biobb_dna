@@ -18,6 +18,7 @@ class IntraHelParCorrelation(BiobbObject):
     """
     | biobb_dna IntraHelParCorrelation
     | Calculate correlation between helical parameters for a single intra-base pair.
+    | Calculate correlation between helical parameters for a single intra-base pair.
 
     Args:
         input_filename_shear (str): Path to .csv file with data for helical parameter 'shear'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/series_shear_A.csv>`_. Accepted formats: csv (edam:format_3752).

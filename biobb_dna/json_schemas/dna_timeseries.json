@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_timeseries",
     "name": "biobb_dna HelParTimeSeries",
     "title": "Created time series and histogram plots for each base pair from a helical parameter series file.",
-    "description": null,
+    "description": "The helical parameter series file is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair.",
     "type": "object",
     "info": {
         "wrapped_software": {

@@ -18,6 +18,7 @@ class InterHelParCorrelation(BiobbObject):
     """
     | biobb_dna InterHelParCorrelation
     | Calculate correlation between helical parameters for a single inter-base pair.
+    | Calculate correlation between helical parameters for a single inter-base pair.
 
     Args:
         input_filename_shift (str): Path to .csv file with data for helical parameter 'shift'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_shift_AA.csv>`_. Accepted formats: csv (edam:format_3752).

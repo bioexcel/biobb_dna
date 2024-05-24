@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/bipopulations",
     "name": "biobb_dna BIPopulations",
     "title": "Calculate BI/BII populations from epsilon and zeta parameters.",
-    "description": null,
+    "description": "Calculate BI/BII populations from epsilon and zeta parameters.",
     "type": "object",
     "info": {
         "wrapped_software": {

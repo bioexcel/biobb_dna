@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_averages",
     "name": "biobb_dna HelParAverages",
     "title": "Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.",
-    "description": null,
+    "description": "Calculate average values for each base pair and save them in a .csv file.",
     "type": "object",
     "info": {
         "wrapped_software": {

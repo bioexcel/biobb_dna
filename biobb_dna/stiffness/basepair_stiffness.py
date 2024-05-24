@@ -19,6 +19,7 @@ class BPStiffness(BiobbObject):
     """
     | biobb_dna BPStiffness
     | Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
+    | Calculate stiffness constants matrix between all six helical parameters for a single base pair step.
 
     Args:
         input_filename_shift (str): Path to csv file with data for helical parameter 'shift'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/stiffness/series_shift_AA.csv>`_. Accepted formats: csv (edam:format_3752)

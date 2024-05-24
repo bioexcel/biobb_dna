@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/puckering",
     "name": "biobb_dna Puckering",
     "title": "Calculate Puckering from phase parameters.",
-    "description": null,
+    "description": "Calculate North/East/West/South distribution of sugar puckering backbone torsions.",
     "type": "object",
     "info": {
         "wrapped_software": {

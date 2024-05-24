@@ -16,6 +16,7 @@ class Canion(BiobbObject):
     """
     | biobb_dna Canion
     | Wrapper for the Canion executable  that is part of the Curves+ software suite.
+    | Analyzes the trajectory of ions around a DNA molecule.
 
     Args:
         input_cdi_path (str): Trajectory input file. File type: input. `Sample file <https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi>`_. Accepted formats: cdi (edam:format_2330).

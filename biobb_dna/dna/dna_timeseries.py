@@ -20,6 +20,7 @@ class HelParTimeSeries(BiobbObject):
     """
     | biobb_dna HelParTimeSeries
     | Created time series and histogram plots for each base pair from a helical parameter series file.
+    | The helical parameter series file is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair.
 
     Args:
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/canal_output_shift.ser>`_. Accepted formats: ser (edam:format_2330).

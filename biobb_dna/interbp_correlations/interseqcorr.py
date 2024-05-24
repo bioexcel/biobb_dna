@@ -19,6 +19,7 @@ class InterSequenceCorrelation(BiobbObject):
     """
     | biobb_dna InterSequenceCorrelation
     | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
+    | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
 
     Args:
         input_ser_path (str): Path to .ser file with data for single helical parameter. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_roll.ser>`_. Accepted formats: ser (edam:format_2330).
