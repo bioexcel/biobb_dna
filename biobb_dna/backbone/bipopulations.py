@@ -19,6 +19,7 @@ class BIPopulations(BiobbObject):
     """
     | biobb_dna BIPopulations
     | Calculate BI/BII populations from epsilon and zeta parameters.
+    | Calculate BI/BII populations from epsilon and zeta parameters.
 
     Args:
         input_epsilC_path (str): Path to .ser file for helical parameter 'epsilC'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_epsilC.ser>`_. Accepted formats: ser (edam:format_2330).

@@ -19,6 +19,7 @@ class Puckering(BiobbObject):
     """
     | biobb_dna Puckering
     | Calculate Puckering from phase parameters.
+    | Calculate North/East/West/South distribution of sugar puckering backbone torsions.
 
     Args:
         input_phaseC_path (str): Path to .ser file for helical parameter 'phaseC'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_phaseC.ser>`_. Accepted formats: ser (edam:format_2330).

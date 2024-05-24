@@ -19,6 +19,7 @@ class CanonicalAG(BiobbObject):
     """
     | biobb_dna CanonicalAG
     | Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.
+    | Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.
 
     Args:
         input_alphaC_path (str): Path to .ser file for helical parameter 'alphaC'. File type: input. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/backbone/canal_output_alphaC.ser>`_. Accepted formats: ser (edam:format_2330).

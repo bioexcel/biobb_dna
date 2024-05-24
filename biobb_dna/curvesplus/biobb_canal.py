@@ -17,6 +17,7 @@ class Canal(BiobbObject):
     """
     | biobb_dna Canal
     | Wrapper for the Canal executable that is part of the Curves+ software suite.
+    | The Canal program is used to analyze the curvature of DNA structures.
 
     Args:
         input_cda_file (str): Input cda file, from Cur+ output. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/curves_output.cda>`_. Accepted formats: cda (edam:format_2330).

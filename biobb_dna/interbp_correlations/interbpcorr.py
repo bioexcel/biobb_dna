@@ -21,6 +21,7 @@ class InterBasePairCorrelation(BiobbObject):
     """
     | biobb_dna InterBasePairCorrelation
     | Calculate correlation between all base pairs of a single sequence and for a single helical parameter.
+    | Calculate correlation between neighboring base pairs and pairs of helical parameters.
 
     Args:
         input_filename_shift (str): Path to .ser file with data for helical parameter 'shift'. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/correlation/canal_output_shift.ser>`_. Accepted formats: ser (edam:format_2330).

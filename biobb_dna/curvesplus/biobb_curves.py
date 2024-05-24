@@ -16,6 +16,7 @@ class Curves(BiobbObject):
     """
     | biobb_dna Curves
     | Wrapper for the Cur+ executable  that is part of the Curves+ software suite.
+    | The Cur+ program is used to analyze the structure of nucleic acids and their complexes.
 
     Args:
         input_struc_path (str): Trajectory or PDB input file. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj>`_. Accepted formats: trj (edam:format_3910), pdb (edam:format_1476), netcdf (edam:format_3650), nc (edam:format_3650).

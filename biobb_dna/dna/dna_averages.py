@@ -19,6 +19,7 @@ class HelParAverages(BiobbObject):
     """
     | biobb_dna HelParAverages
     | Load .ser file for a given helical parameter and read each column corresponding to a base calculating average over each one.
+    | Calculate average values for each base pair and save them in a .csv file.
 
     Args:
         input_ser_path (str): Path to .ser file for helical parameter. File is expected to be a table, with the first column being an index and the rest the helical parameter values for each base/basepair. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/canal_output_shift.ser>`_. Accepted formats: ser (edam:format_2330).

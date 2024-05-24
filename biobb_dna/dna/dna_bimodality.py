@@ -24,6 +24,7 @@ class HelParBimodality(BiobbObject):
     """
     | biobb_dna HelParBimodality
     | Determine binormality/bimodality from a helical parameter series dataset.
+    | Determine binormality/bimodality from a helical parameter series dataset.
 
     Args:
         input_csv_file (str): Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip.  File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv>`_. Accepted formats: csv (edam:format_3752).
