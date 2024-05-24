@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/biobb_curves",
     "name": "biobb_dna Curves",
     "title": "Wrapper for the Cur+ executable  that is part of the Curves+ software suite.",
-    "description": null,
+    "description": "The Cur+ program is used to analyze the structure of nucleic acids and their complexes.",
     "type": "object",
     "info": {
         "wrapped_software": {

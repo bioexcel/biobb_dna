@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/basepair_stiffness",
     "name": "biobb_dna BPStiffness",
     "title": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
-    "description": null,
+    "description": "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
     "type": "object",
     "info": {
         "wrapped_software": {

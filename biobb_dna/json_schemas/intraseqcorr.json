@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intraseqcorr",
     "name": "biobb_dna IntraSequenceCorrelation",
     "title": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
-    "description": null,
+    "description": "Calculate correlation between all intra-base pairs of a single sequence and for a single helical parameter.",
     "type": "object",
     "info": {
         "wrapped_software": {

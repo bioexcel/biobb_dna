@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/canonicalag",
     "name": "biobb_dna CanonicalAG",
     "title": "Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.",
-    "description": null,
+    "description": "Calculate Canonical Alpha/Gamma populations from alpha and gamma parameters.",
     "type": "object",
     "info": {
         "wrapped_software": {

@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/average_stiffness",
     "name": "biobb_dna AverageStiffness",
     "title": "Calculate average stiffness constants for each base pair of a trajectory's series.",
-    "description": null,
+    "description": "Calculate the average stiffness constants for each base pair of a trajectory's series. The input is a .ser file with the helical parameter values for each base/basepair. The output is a .csv file with the average stiffness constants for each base pair and a .jpg file with a plot of the average stiffness constants for each base pair.",
     "type": "object",
     "info": {
         "wrapped_software": {

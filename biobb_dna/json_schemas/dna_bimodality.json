@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_bimodality",
     "name": "biobb_dna HelParBimodality",
     "title": "Determine binormality/bimodality from a helical parameter series dataset.",
-    "description": null,
+    "description": "Determine binormality/bimodality from a helical parameter series dataset.",
     "type": "object",
     "info": {
         "wrapped_software": {

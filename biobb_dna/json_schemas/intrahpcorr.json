@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/intrahpcorr",
     "name": "biobb_dna IntraHelParCorrelation",
     "title": "Calculate correlation between helical parameters for a single intra-base pair.",
-    "description": null,
+    "description": "Calculate correlation between helical parameters for a single intra-base pair.",
     "type": "object",
     "info": {
         "wrapped_software": {
