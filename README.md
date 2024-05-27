@@ -3,7 +3,7 @@
 [![](https://img.shields.io/conda/vn/bioconda/biobb_dna?label=Conda)](https://anaconda.org/bioconda/biobb_dna)
 [![](https://img.shields.io/conda/dn/bioconda/biobb_dna?label=Conda%20Downloads)](https://anaconda.org/bioconda/biobb_dna)
 [![](https://img.shields.io/badge/Docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_dna?tab=tags)
-[![](https://img.shields.io/badge/Singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_dna:4.1.0--pyhdfd78af_0)
+[![](https://img.shields.io/badge/Singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_dna:4.2.0--pyhdfd78af_0)
 
 [![](https://img.shields.io/badge/OS-Unix%20%7C%20MacOS-blue)](https://github.com/bioexcel/biobb_dna)
 [![](https://img.shields.io/pypi/pyversions/biobb-dna.svg?label=Python%20Versions)](https://pypi.org/project/biobb-dna/)
@@ -41,7 +41,7 @@ The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb-dna.readthedocs.io/en/latest/).
 
 ### Version
-v4.1.0 2023.3
+v4.2.0 2024.1
 
 ### Installation
 Using PIP:
@@ -51,7 +51,7 @@ Using PIP:
 * Installation:
 
 
-        pip install "biobb_dna>=4.1.0"
+        pip install "biobb_dna>=4.2.0"
 
 
 * Usage: [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html)
@@ -61,7 +61,7 @@ Using ANACONDA:
 * Installation:
 
 
-        conda install -c bioconda "biobb_dna>=4.1.0"
+        conda install -c bioconda "biobb_dna>=4.2.0"
 
 
 * Usage: With conda installation BioBBs can be used with the [Python API documentation](https://biobb-dna.readthedocs.io/en/latest/modules.html) and the [Command Line documentation](https://biobb-dna.readthedocs.io/en/latest/command_line.html)
@@ -71,13 +71,13 @@ Using DOCKER:
 * Installation:
 
 
-        docker pull quay.io/biocontainers/biobb_dna:4.1.0--pyhdfd78af_0
+        docker pull quay.io/biocontainers/biobb_dna:4.2.0--pyhdfd78af_0
 
 
 * Usage:
 
 
-        docker run quay.io/biocontainers/biobb_dna:4.1.0--pyhdfd78af_0 <command>
+        docker run quay.io/biocontainers/biobb_dna:4.2.0--pyhdfd78af_0 <command>
 
 Using SINGULARITY:
 
@@ -86,7 +86,7 @@ Using SINGULARITY:
 * Installation:
 
 
-        singularity pull --name biobb_dna.sif https://depot.galaxyproject.org/singularity/biobb_dna:4.1.0--pyhdfd78af_0
+        singularity pull --name biobb_dna.sif https://depot.galaxyproject.org/singularity/biobb_dna:4.2.0--pyhdfd78af_0
 
 
 * Usage:
