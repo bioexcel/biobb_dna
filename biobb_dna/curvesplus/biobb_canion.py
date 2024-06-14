@@ -4,7 +4,6 @@
 import os
 import zipfile
 import argparse
-import shutil
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -22,7 +21,7 @@ class Canion(BiobbObject):
         input_cdi_path (str): Trajectory input file. File type: input. `Sample file <https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi>`_. Accepted formats: cdi (edam:format_2330).
         input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr>`_. Accepted formats: afr (edam:format_2330).
         input_avg_struc_path (str): Average DNA conformation. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb>`_. Accepted formats: pdb (edam:format_1476).
-        output_zip_path (str) (Optional): Filename for .zip files containing Canion output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip>`_. Accepted formats: zip (edam:format_3987).
+        output_zip_path (str): Filename for .zip files containing Canion output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **bases** (*str*) - (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence).
             * **type** (*str*) - ('*') Ions (or atoms) to be analyzed. Options are 'Na+', 'K', 'K+', 'Cl', 'Cl-', 'CL', 'P', 'C1*', 'NH1', 'NH2', 'NZ', '1' for all cations, '-1' for all anions, '0' for neutral species or '*' for all available data.
@@ -136,22 +135,14 @@ class Canion(BiobbObject):
             raise ValueError(("Invalid value for property type! "
                               f"Option include: {ion_type_options}"))
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="canion_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # copy input files to temporary folder
-        shutil.copy(self.io_dict['in']['input_cdi_path'], self.tmp_folder)
-        shutil.copy(self.io_dict['in']['input_afr_path'], self.tmp_folder)
-        shutil.copy(
-            self.io_dict['in']['input_avg_struc_path'], self.tmp_folder)
-        input_cdi_file = Path(self.io_dict['in']['input_cdi_path']).name
-        input_afr_file = Path(self.io_dict['in']['input_afr_path']).name
-        input_avg_struc = Path(self.io_dict['in']['input_avg_struc_path']).name
+        # define temporary file names
+        input_cdi_file = Path(self.stage_io_dict['in']['input_cdi_path']).name
+        input_afr_file = Path(self.stage_io_dict['in']['input_afr_path']).name
+        input_avg_struc = Path(self.stage_io_dict['in']['input_avg_struc_path']).name
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.tmp_folder)
+        os.chdir(self.stage_io_dict.get("unique_dir"))
 
         # create intructions
         instructions = [
@@ -187,16 +178,19 @@ class Canion(BiobbObject):
 
         # create zipfile and write output inside
         zf = zipfile.ZipFile(
-            Path(self.io_dict["out"]["output_zip_path"]),
+            Path(self.stage_io_dict["out"]["output_zip_path"]),
             "w")
-        for curves_outfile in Path(self.tmp_folder).glob("canion_output*"):
-            zf.write(curves_outfile, arcname=curves_outfile.name)
+        for curves_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("canion_output*"):
+            if curves_outfile.suffix not in (".zip"):
+                zf.write(curves_outfile, arcname=curves_outfile.name)
         zf.close()
+
+        # Copy files to host
+        self.copy_to_host()
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

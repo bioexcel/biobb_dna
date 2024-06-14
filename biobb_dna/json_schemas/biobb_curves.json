@@ -108,7 +108,7 @@
             "type": "string",
             "description": "Filename for .zip files containing Curves+ output that is not .cda or .lis files",
             "filetype": "output",
-            "sample": null,
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.zip",
             "enum": [
                 ".*\\.zip$"
             ],

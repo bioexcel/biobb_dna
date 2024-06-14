@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils import constants
@@ -118,23 +117,19 @@ class IntraBasePairCorrelation(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="bpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
         # read input
         shear = read_series(
-            self.io_dict["in"]["input_filename_shear"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_shear"], usecols=self.seqpos)
         stretch = read_series(
-            self.io_dict["in"]["input_filename_stretch"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_stretch"], usecols=self.seqpos)
         stagger = read_series(
-            self.io_dict["in"]["input_filename_stagger"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_stagger"], usecols=self.seqpos)
         buckle = read_series(
-            self.io_dict["in"]["input_filename_buckle"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_buckle"], usecols=self.seqpos)
         propel = read_series(
-            self.io_dict["in"]["input_filename_propel"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_propel"], usecols=self.seqpos)
         opening = read_series(
-            self.io_dict["in"]["input_filename_opening"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_opening"], usecols=self.seqpos)
 
         if self.seqpos is None:
             # drop first and last columns
@@ -196,7 +191,7 @@ class IntraBasePairCorrelation(BiobbObject):
         result_df.index = corr_index
 
         # save csv data
-        result_df.to_csv(self.io_dict["out"]["output_csv_path"])
+        result_df.to_csv(self.stage_io_dict["out"]["output_csv_path"])
 
         # create heatmap
         cmap = plt.get_cmap("bwr").copy()
@@ -228,14 +223,16 @@ class IntraBasePairCorrelation(BiobbObject):
 
         fig.tight_layout()
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

@@ -613,10 +613,10 @@ Command:
 dna_bimodality -h
 ```
     usage: dna_bimodality [-h] [--config CONFIG] --input_csv_file INPUT_CSV_FILE [--input_zip_file INPUT_ZIP_FILE] --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-    
+
     Determine binormality/bimodality from a helical parameter dataset.
-    
-    optional arguments:
+
+    options:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
       --input_zip_file INPUT_ZIP_FILE
@@ -1199,7 +1199,7 @@ Config input / output arguments for this building block:
 * **input_top_path** (*string*): Topology file, needed along with .trj file (optional). File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top). Accepted formats: TOP
 * **output_cda_path** (*string*): Filename for Curves+ output .cda file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda). Accepted formats: CDA
 * **output_lis_path** (*string*): Filename for Curves+ output .lis file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis). Accepted formats: LIS
-* **output_zip_path** (*string*): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. [Sample file](None). Accepted formats: ZIP
+* **output_zip_path** (*string*): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.zip). Accepted formats: ZIP
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
 
@@ -1222,23 +1222,25 @@ Config parameters for this building block:
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.yml)
 ```python
 properties:
+  ions: true
   s1range: '1:12'
 
 ```
 #### Command line
 ```python
-biobb_curves --config config_biobb_curves.yml --input_struc_path structure.stripped.trj --input_top_path structure.stripped.top --output_cda_path curves_trj_output.cda --output_lis_path curves_trj_output.lis --output_zip_path output.zip
+biobb_curves --config config_biobb_curves.yml --input_struc_path structure.stripped.trj --input_top_path structure.stripped.top --output_cda_path curves_trj_output.cda --output_lis_path curves_trj_output.lis --output_zip_path curves_trj_output.zip
 ```
 ### JSON
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.json)
 ```python
 {
   "properties": {
-    "s1range": "1:12"
+    "s1range": "1:12",
+    "ions": true
   }
 }
 ```
 #### Command line
 ```python
-biobb_curves --config config_biobb_curves.json --input_struc_path structure.stripped.trj --input_top_path structure.stripped.top --output_cda_path curves_trj_output.cda --output_lis_path curves_trj_output.lis --output_zip_path output.zip
+biobb_curves --config config_biobb_curves.json --input_struc_path structure.stripped.trj --input_top_path structure.stripped.top --output_cda_path curves_trj_output.cda --output_lis_path curves_trj_output.lis --output_zip_path curves_trj_output.zip
 ```

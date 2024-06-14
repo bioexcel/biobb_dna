@@ -1,2 +1,3 @@
 properties:
+  ions: true
   s1range: '1:12'

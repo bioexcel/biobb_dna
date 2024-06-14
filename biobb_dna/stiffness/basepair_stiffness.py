@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -110,23 +109,19 @@ class BPStiffness(BiobbObject):
             return 0
         self.stage_files()
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="bp_stiffness_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
         # read input
         shift = load_data(
-            self.io_dict["in"]["input_filename_shift"])
+            self.stage_io_dict["in"]["input_filename_shift"])
         slide = load_data(
-            self.io_dict["in"]["input_filename_slide"])
+            self.stage_io_dict["in"]["input_filename_slide"])
         rise = load_data(
-            self.io_dict["in"]["input_filename_rise"])
+            self.stage_io_dict["in"]["input_filename_rise"])
         tilt = load_data(
-            self.io_dict["in"]["input_filename_tilt"])
+            self.stage_io_dict["in"]["input_filename_tilt"])
         roll = load_data(
-            self.io_dict["in"]["input_filename_roll"])
+            self.stage_io_dict["in"]["input_filename_roll"])
         twist = load_data(
-            self.io_dict["in"]["input_filename_twist"])
+            self.stage_io_dict["in"]["input_filename_twist"])
 
         # build matrix cols_arr from helpar input data files
         coordinates = ["shift", "slide", "rise", "tilt", "roll", "twist"]
@@ -146,7 +141,7 @@ class BPStiffness(BiobbObject):
         stiff_df.index.name = basepairname
 
         # save csv data
-        stiff_df.to_csv(Path(self.io_dict["out"]["output_csv_path"]))
+        stiff_df.to_csv(Path(self.stage_io_dict["out"]["output_csv_path"]))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -175,14 +170,16 @@ class BPStiffness(BiobbObject):
             f"Stiffness Constants for Base Pair Step \'{basepairname}\'")
         fig.tight_layout()
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -106,17 +105,13 @@ class InterHelParCorrelation(BiobbObject):
             return 0
         self.stage_files()
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="hpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
         # read input
-        shift = load_data(self.io_dict["in"]["input_filename_shift"])
-        slide = load_data(self.io_dict["in"]["input_filename_slide"])
-        rise = load_data(self.io_dict["in"]["input_filename_rise"])
-        tilt = load_data(self.io_dict["in"]["input_filename_tilt"])
-        roll = load_data(self.io_dict["in"]["input_filename_roll"])
-        twist = load_data(self.io_dict["in"]["input_filename_twist"])
+        shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])
+        slide = load_data(self.stage_io_dict["in"]["input_filename_slide"])
+        rise = load_data(self.stage_io_dict["in"]["input_filename_rise"])
+        tilt = load_data(self.stage_io_dict["in"]["input_filename_tilt"])
+        roll = load_data(self.stage_io_dict["in"]["input_filename_roll"])
+        twist = load_data(self.stage_io_dict["in"]["input_filename_twist"])
 
         # get basepair
         if self.basepair is None:
@@ -128,63 +123,82 @@ class InterHelParCorrelation(BiobbObject):
             np.eye(6, 6), index=coordinates, columns=coordinates)
 
         # shift
-        corr_matrix["shift"]["slide"] = shift.corrwith(slide, method="pearson")
-        corr_matrix["shift"]["rise"] = shift.corrwith(rise, method="pearson")
-        corr_matrix["shift"]["tilt"] = shift.corrwith(
-            tilt, method=self.circlineal)
-        corr_matrix["shift"]["roll"] = shift.corrwith(
-            roll, method=self.circlineal)
-        corr_matrix["shift"]["twist"] = shift.corrwith(
-            twist, method=self.circlineal)
+        # corr_matrix["shift"]["slide"] = shift.corrwith(slide, method="pearson")
+        corr_matrix.loc["slide", "shift"] = shift.corrwith(slide, method="pearson").values[0]
+        # corr_matrix["shift"]["rise"] = shift.corrwith(rise, method="pearson")
+        corr_matrix.loc["rise", "shift"] = shift.corrwith(rise, method="pearson").values[0]
+        # corr_matrix["shift"]["tilt"] = shift.corrwith(tilt, method=self.circlineal)
+        corr_matrix.loc["tilt", "shift"] = shift.corrwith(tilt, method=self.circlineal).values[0]
+        # corr_matrix["shift"]["roll"] = shift.corrwith(roll, method=self.circlineal)
+        corr_matrix.loc["roll", "shift"] = shift.corrwith(roll, method=self.circlineal).values[0]
+        # corr_matrix["shift"]["twist"] = shift.corrwith(twist, method=self.circlineal)
+        corr_matrix.loc["twist", "shift"] = shift.corrwith(twist, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["slide"]["shift"] = corr_matrix["shift"]["slide"]
-        corr_matrix["rise"]["shift"] = corr_matrix["shift"]["rise"]
-        corr_matrix["tilt"]["shift"] = corr_matrix["shift"]["tilt"]
-        corr_matrix["roll"]["shift"] = corr_matrix["shift"]["roll"]
-        corr_matrix["twist"]["shift"] = corr_matrix["shift"]["twist"]
+        # corr_matrix["slide"]["shift"] = corr_matrix["shift"]["slide"]
+        corr_matrix.loc["shift", "slide"] = corr_matrix.loc["slide", "shift"]
+        # corr_matrix["rise"]["shift"] = corr_matrix["shift"]["rise"]
+        corr_matrix.loc["shift", "rise"] = corr_matrix.loc["rise", "shift"]
+        # corr_matrix["tilt"]["shift"] = corr_matrix["shift"]["tilt"]
+        corr_matrix.loc["shift", "tilt"] = corr_matrix.loc["tilt", "shift"]
+        # corr_matrix["roll"]["shift"] = corr_matrix["shift"]["roll"]
+        corr_matrix.loc["shift", "roll"] = corr_matrix.loc["roll", "shift"]
+        # corr_matrix["twist"]["shift"] = corr_matrix["shift"]["twist"]
+        corr_matrix.loc["shift", "twist"] = corr_matrix.loc["twist", "shift"]
 
         # slide
-        corr_matrix["slide"]["rise"] = slide.corrwith(rise, method="pearson")
-        corr_matrix["slide"]["tilt"] = slide.corrwith(
-            tilt, method=self.circlineal)
-        corr_matrix["slide"]["roll"] = slide.corrwith(
-            roll, method=self.circlineal)
-        corr_matrix["slide"]["twist"] = slide.corrwith(
-            twist, method=self.circlineal)
+        # corr_matrix["slide"]["rise"] = slide.corrwith(rise, method="pearson")
+        corr_matrix.loc["rise", "slide"] = slide.corrwith(rise, method="pearson").values[0]
+        # corr_matrix["slide"]["tilt"] = slide.corrwith(tilt, method=self.circlineal)
+        corr_matrix.loc["tilt", "slide"] = slide.corrwith(tilt, method=self.circlineal).values[0]
+        # corr_matrix["slide"]["roll"] = slide.corrwith(roll, method=self.circlineal)
+        corr_matrix.loc["roll", "slide"] = slide.corrwith(roll, method=self.circlineal).values[0]
+        # corr_matrix["slide"]["twist"] = slide.corrwith(twist, method=self.circlineal)
+        corr_matrix.loc["twist", "slide"] = slide.corrwith(twist, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["rise"]["slide"] = corr_matrix["slide"]["rise"]
-        corr_matrix["tilt"]["slide"] = corr_matrix["slide"]["tilt"]
-        corr_matrix["roll"]["slide"] = corr_matrix["slide"]["roll"]
-        corr_matrix["twist"]["slide"] = corr_matrix["slide"]["twist"]
+        # corr_matrix["rise"]["slide"] = corr_matrix["slide"]["rise"]
+        corr_matrix.loc["slide", "rise"] = corr_matrix.loc["rise", "slide"]
+        # corr_matrix["tilt"]["slide"] = corr_matrix["slide"]["tilt"]
+        corr_matrix.loc["slide", "tilt"] = corr_matrix.loc["tilt", "slide"]
+        # corr_matrix["roll"]["slide"] = corr_matrix["slide"]["roll"]
+        corr_matrix.loc["slide", "roll"] = corr_matrix.loc["roll", "slide"]
+        # corr_matrix["twist"]["slide"] = corr_matrix["slide"]["twist"]
+        corr_matrix.loc["slide", "twist"] = corr_matrix.loc["twist", "slide"]
 
         # rise
-        corr_matrix["rise"]["tilt"] = rise.corrwith(
-            tilt, method=self.circlineal)
-        corr_matrix["rise"]["roll"] = rise.corrwith(
-            roll, method=self.circlineal)
-        corr_matrix["rise"]["twist"] = rise.corrwith(
-            twist, method=self.circlineal)
+        # corr_matrix["rise"]["tilt"] = rise.corrwith(tilt, method=self.circlineal)
+        corr_matrix.loc["tilt", "rise"] = rise.corrwith(tilt, method=self.circlineal).values[0]
+        # corr_matrix["rise"]["roll"] = rise.corrwith(roll, method=self.circlineal)
+        corr_matrix.loc["roll", "rise"] = rise.corrwith(roll, method=self.circlineal).values[0]
+        # corr_matrix["rise"]["twist"] = rise.corrwith(twist, method=self.circlineal)
+        corr_matrix.loc["twist", "rise"] = rise.corrwith(twist, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["tilt"]["rise"] = corr_matrix["rise"]["tilt"]
-        corr_matrix["roll"]["rise"] = corr_matrix["rise"]["roll"]
-        corr_matrix["twist"]["rise"] = corr_matrix["rise"]["twist"]
+        # corr_matrix["tilt"]["rise"] = corr_matrix["rise"]["tilt"]
+        corr_matrix.loc["rise", "tilt"] = corr_matrix.loc["tilt", "rise"]
+        # corr_matrix["roll"]["rise"] = corr_matrix["rise"]["roll"]
+        corr_matrix.loc["rise", "roll"] = corr_matrix.loc["roll", "rise"]
+        # corr_matrix["twist"]["rise"] = corr_matrix["rise"]["twist"]
+        corr_matrix.loc["rise", "twist"] = corr_matrix.loc["twist", "rise"]
 
         # tilt
-        corr_matrix["tilt"]["roll"] = tilt.corrwith(roll, method=self.circular)
-        corr_matrix["tilt"]["twist"] = tilt.corrwith(
-            twist, method=self.circular)
+        # corr_matrix["tilt"]["roll"] = tilt.corrwith(roll, method=self.circular)
+        corr_matrix.loc["roll", "tilt"] = tilt.corrwith(roll, method=self.circular).values[0]
+        # corr_matrix["tilt"]["twist"] = tilt.corrwith(twist, method=self.circular)
+        corr_matrix.loc["twist", "tilt"] = tilt.corrwith(twist, method=self.circular).values[0]
         # symmetric values
-        corr_matrix["roll"]["tilt"] = corr_matrix["tilt"]["roll"]
-        corr_matrix["twist"]["tilt"] = corr_matrix["tilt"]["twist"]
+        # corr_matrix["roll"]["tilt"] = corr_matrix["tilt"]["roll"]
+        corr_matrix.loc["tilt", "roll"] = corr_matrix.loc["roll", "tilt"]
+        # corr_matrix["twist"]["tilt"] = corr_matrix["tilt"]["twist"]
+        corr_matrix.loc["tilt", "twist"] = corr_matrix.loc["twist", "tilt"]
 
         # roll
-        corr_matrix["roll"]["twist"] = roll.corrwith(
-            twist, method=self.circular)
+        # corr_matrix["roll"]["twist"] = roll.corrwith(twist, method=self.circular)
+        corr_matrix.loc["twist", "roll"] = roll.corrwith(twist, method=self.circular).values[0]
         # symmetric values
-        corr_matrix["twist"]["roll"] = corr_matrix["roll"]["twist"]
+        # corr_matrix["twist"]["roll"] = corr_matrix["roll"]["twist"]
+        corr_matrix.loc["roll", "twist"] = corr_matrix.loc["twist", "roll"]
 
         # save csv data
-        corr_matrix.to_csv(self.io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -208,14 +222,16 @@ class InterHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.basepair}\'")
         fig.tight_layout()
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
+
+        # Copy files to host
+        self.copy_to_host()
 
         # Remove temporary file(s)
         self.tmp_files.extend([
             self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
         ])
         self.remove_tmp_files()
 

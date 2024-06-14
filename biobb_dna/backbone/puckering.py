@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Module containing the Puckering class and the command line interface."""
 
-import shutil
 import argparse
 
 import matplotlib.pyplot as plt
@@ -11,7 +10,6 @@ from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
 
 
@@ -112,20 +110,12 @@ class Puckering(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="backbone_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_phaseC_path'], self.tmp_folder)
-        shutil.copy(self.io_dict['in']['input_phaseW_path'], self.tmp_folder)
-
         # read input files
         phaseC = read_series(
-            self.io_dict['in']['input_phaseC_path'],
+            self.stage_io_dict['in']['input_phaseC_path'],
             usecols=self.seqpos)
         phaseW = read_series(
-            self.io_dict['in']['input_phaseW_path'],
+            self.stage_io_dict['in']['input_phaseW_path'],
             usecols=self.seqpos)
 
         # fix angle range so its not negative
@@ -172,7 +162,7 @@ class Puckering(BiobbObject):
         axs.set_ylabel("Puckering (%)")
         axs.set_title("Nucleotide parameter: Puckering")
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
 
         # save table
@@ -183,15 +173,17 @@ class Puckering(BiobbObject):
             "West": Wpop,
             "South": Spop})
         populations.to_csv(
-            self.io_dict['out']['output_csv_path'],
+            self.stage_io_dict['out']['output_csv_path'],
             index=False)
 
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

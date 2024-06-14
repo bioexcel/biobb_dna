@@ -8,8 +8,11 @@ biobb_curves:
     ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
     output_lis_path: curves_output.lis
     ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
+    output_zip_path: curves_output.zip
+    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.zip
   properties:
     s1range: "1:12"
+    ions: True
 
 biobb_canal:
   paths:

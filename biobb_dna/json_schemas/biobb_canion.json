@@ -19,7 +19,8 @@
     "required": [
         "input_cdi_path",
         "input_afr_path",
-        "input_avg_struc_path"
+        "input_avg_struc_path",
+        "output_zip_path"
     ],
     "properties": {
         "input_cdi_path": {

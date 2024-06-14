@@ -1,5 +1,6 @@
 {
   "properties": {
-    "s1range": "1:12"
+    "s1range": "1:12",
+    "ions": true
   }
 }

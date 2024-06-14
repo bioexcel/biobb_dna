@@ -1,6 +1,6 @@
 
      **************************************               **************
-     **** CURVES+ Version 3.0nc 09/2016 ***               *  25 Apr 23 *
+     **** CURVES+ Version 3.0nc 09/2016 ***               *  13 Jun 24 *
      **************************************               **************
 
 
@@ -15,7 +15,7 @@
   naxlim:     0
 
   circ  :     F  LINE  :     F  zaxe  :     F  FIT   :     T  TEST  :     F
-  IONS  :     F  refo  :     F  AXFRM :     F  frames:     F
+  IONS  :     T  refo  :     F  AXFRM :     F  frames:     F
 
 
   Strands =    2 Atoms =   486 Units =    24
@@ -24,3 +24,6 @@
 
   Strand  1 has  12 bases (5'-3'): CGCGAATTCGCG
   Strand  2 has  12 bases (3'-5'): GCGCTTAAGCGC
+
+  ... trj loop read     5000 snapshots
+

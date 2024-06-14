@@ -23,7 +23,7 @@ class Curves(BiobbObject):
         input_top_path (str) (Optional): Topology file, needed along with .trj file (optional). File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top>`_. Accepted formats: top (edam:format_3881).
         output_cda_path (str): Filename for Curves+ output .cda file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda>`_. Accepted formats: cda (edam:format_2330).
         output_lis_path (str): Filename for Curves+ output .lis file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis>`_. Accepted formats: lis (edam:format_2330).
-        output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. Accepted formats: zip (edam:format_3987).
+        output_zip_path (str) (Optional): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end".
             * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
@@ -105,6 +105,17 @@ class Curves(BiobbObject):
         self.check_properties(properties)
         self.check_arguments()
 
+    def create_curvesplus_folder(self):
+        """Create .curvesplus folder in the current temporal folder and copy the lib files inside."""
+        # Create .curvesplus directory in temporary folder
+        dst_dir = self.stage_io_dict.get("unique_dir") + '/.curvesplus'
+        os.makedirs(dst_dir, exist_ok=True)
+        # Get lib files from stdlib_path
+        lib_files = list(Path(os.path.dirname(self.stdlib_path)).glob("*.lib"))
+        # Copy each lib file to the .curvesplus directory in temporary folder
+        for file in lib_files:
+            shutil.copy(file, dst_dir)
+
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
@@ -143,31 +154,39 @@ class Curves(BiobbObject):
                         f"{os.getenv('CONDA_PREFIX')} !"
                         "Please indicate where standard_*.lib files are "
                         "located with the stdlib_path property.")
+                # copy standard library files to temporary folder
+                shutil.copytree(curves_aux_path, self.stage_io_dict.get("unique_dir") + '/.curvesplus')
+                relative_lib_path = '.curvesplus/standard'
             else:
                 # CONDA_PREFIX undefined
+                fu.log('CONDA_PREFIX undefined, please put the standard_b.lib, standard_s.lib and standard_i.lib files in the current working directory', self.out_log)
                 self.stdlib_path = Path.cwd() / "standard"
-
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="curves_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # copy input files to temporary folder
-        shutil.copy(self.io_dict['in']['input_struc_path'], self.tmp_folder)
-        tmp_struc_input = Path(self.io_dict['in']['input_struc_path']).name
-        if self.io_dict['in']['input_top_path'] is not None:
-            shutil.copy(self.io_dict['in']['input_top_path'], self.tmp_folder)
-            tmp_top_input = Path(self.io_dict['in']['input_top_path']).name
+                # create .curvesplus folder in the current temporal folder and copy the lib files inside
+                self.create_curvesplus_folder()
+                # set relative path
+                relative_lib_path = '.curvesplus/standard'
+        else:
+            # create .curvesplus folder in the current temporal folder and copy the lib files inside
+            self.create_curvesplus_folder()
+            # set relative path
+            path_parts = self.stdlib_path.split(os.sep)
+            relative_lib_path = '.curvesplus/' + os.sep.join(path_parts[-1:])
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.tmp_folder)
+        os.chdir(self.stage_io_dict.get("unique_dir"))
+
+        # define temporary file names
+        tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
+        if self.stage_io_dict['in']['input_top_path'] is not None:
+            tmp_top_input = Path(self.stage_io_dict['in']['input_top_path']).name
 
         # create intructions
         instructions = [
             f"{self.binary_path} <<! ",
             "&inp",
             f"  file={tmp_struc_input},"]
-        if self.io_dict['in']['input_top_path'] is not None:
+        if self.stage_io_dict['in']['input_top_path'] is not None:
             # add topology file if needed
             fu.log('Appending provided topology to command',
                    self.out_log, self.global_log)
@@ -177,7 +196,7 @@ class Curves(BiobbObject):
         # create intructions
         instructions = instructions + [
             "  lis='curves_output',",
-            f"  lib={self.stdlib_path},",
+            f"  lib={relative_lib_path},",
             f"  ions={self.ions},",
             f"  test={self.test},",
             f"  line={self.line},",
@@ -201,27 +220,29 @@ class Curves(BiobbObject):
         os.chdir(original_directory)
 
         # create zipfile and write output inside
-        if self.io_dict["out"]["output_zip_path"] is not None:
+        if self.stage_io_dict.get("out", {}).get("output_zip_path") is not None:
             zf = zipfile.ZipFile(
-                Path(self.io_dict["out"]["output_zip_path"]),
+                Path(self.stage_io_dict["out"]["output_zip_path"]),
                 "w")
-            for curves_outfile in Path(self.tmp_folder).glob("curves_output*"):
-                if curves_outfile.suffix not in (".cda", ".lis"):
+            for curves_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("curves_output*"):
+                if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
                     zf.write(
                         curves_outfile,
                         arcname=curves_outfile.name)
             zf.close()
 
         # rename cda and lis files
-        (Path(self.tmp_folder) / "curves_output.cda").rename(
-            self.io_dict["out"]["output_cda_path"])
-        (Path(self.tmp_folder) / "curves_output.lis").rename(
-            self.io_dict["out"]["output_lis_path"])
+        (Path(self.stage_io_dict.get("unique_dir")) / "curves_output.cda").rename(
+            self.stage_io_dict["out"]["output_cda_path"])
+        (Path(self.stage_io_dict.get("unique_dir")) / "curves_output.lis").rename(
+            self.stage_io_dict["out"]["output_lis_path"])
+
+        # Copy files to host
+        self.copy_to_host()
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

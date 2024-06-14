@@ -2,7 +2,6 @@
 
 """Module containing the HelParBimodality class and the command line interface."""
 import os
-import shutil
 import zipfile
 import argparse
 from pathlib import Path
@@ -15,7 +14,6 @@ from sklearn.mixture import GaussianMixture
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -110,14 +108,14 @@ class HelParBimodality(BiobbObject):
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                input_zip_path = self.io_dict['in']['input_zip_file']
+                input_zip_path = self.stage_io_dict['in']['input_zip_file']
                 if input_zip_path is not None:
                     condition_2 = (
                         hp.lower() in Path(input_zip_path).name.lower())
                 else:
                     condition_2 = False
                 condition_1 = hp.lower() in Path(
-                    self.io_dict['in']['input_csv_file']).name.lower()
+                    self.stage_io_dict['in']['input_csv_file']).name.lower()
                 if (condition_1 or condition_2):
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -138,32 +136,23 @@ class HelParBimodality(BiobbObject):
 
         # resolve output
         output_csv_path = Path(
-            self.io_dict['out']['output_csv_path']).resolve()
+            self.stage_io_dict['out']['output_csv_path']).resolve()
         output_jpg_path = Path(
-            self.io_dict['out']['output_jpg_path']).resolve()
+            self.stage_io_dict['out']['output_jpg_path']).resolve()
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="bimodality_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # read input
-        if self.io_dict['in']['input_zip_file'] is not None:
-            # Copy input_file_path1 to temporary folder
-            shutil.copy(self.io_dict['in']['input_zip_file'], self.tmp_folder)
-            # if zipfile is specified, extract to temporary folder
-            with zipfile.ZipFile(
-                    self.io_dict['in']['input_zip_file'],
-                    'r') as zip_ref:
-                zip_ref.extractall(self.tmp_folder)
-        else:
-            # copy input files to temporary folder
-            shutil.copy(
-                self.io_dict['in']['input_csv_file'],
-                self.tmp_folder)
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.tmp_folder)
-        data = load_data(Path(self.io_dict['in']['input_csv_file']).name)
+        os.chdir(self.stage_io_dict.get("unique_dir"))
+
+        # read input
+        if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
+            # if zipfile is specified, extract to temporary folder
+            with zipfile.ZipFile(
+                    self.stage_io_dict['in']['input_zip_file'],
+                    'r') as zip_ref:
+                zip_ref.extractall(self.stage_io_dict.get("unique_dir"))
+
+        data = load_data(Path(self.stage_io_dict['in']['input_csv_file']).name)
 
         means, variances, bics, weights = self.fit_to_model(data)
         uninormal, binormal, insuf_ev = self.bayes_factor_criteria(
@@ -237,10 +226,12 @@ class HelParBimodality(BiobbObject):
         # change back to original directory
         os.chdir(original_directory)
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 
