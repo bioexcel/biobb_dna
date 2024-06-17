@@ -108,10 +108,9 @@ class HelParBimodality(BiobbObject):
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                input_zip_path = self.stage_io_dict['in']['input_zip_file']
-                if input_zip_path is not None:
+                if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
                     condition_2 = (
-                        hp.lower() in Path(input_zip_path).name.lower())
+                        hp.lower() in Path(self.stage_io_dict['in']['input_zip_file']).name.lower())
                 else:
                     condition_2 = False
                 condition_1 = hp.lower() in Path(

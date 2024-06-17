@@ -1,5 +1,12 @@
 # Biobb Analysis changelog
 
+## What's new in version [4.2.2](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.2)?
+In version 4.2.2 a bug in HelParBimodality has been fixed.
+
+### New features
+
+* Bug fix in HelParBimodality (dna)
+
 ## What's new in version [4.2.1](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.1)?
 In version 4.2.1 the dependency curves+ has been updated to 3.0.2 version.
 
