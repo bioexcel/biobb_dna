@@ -1,5 +1,12 @@
 # Biobb Analysis changelog
 
+## What's new in version [4.2.1](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.1)?
+In version 4.2.1 the dependency curves+ has been updated to 3.0.2 version.
+
+### New features
+
+* Update to curves+ 3.0.2 (curvesplus)
+
 ## What's new in version [4.2.0](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.0)?
 In version 4.2.0 the dependency biobb_common has been updated to 4.2.0 version.
 

@@ -1196,7 +1196,7 @@ Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_struc_path** (*string*): Trajectory or PDB input file. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.trj). Accepted formats: TRJ, PDB, NETCDF, NC
-* **input_top_path** (*string*): Topology file, needed along with .trj file (optional). File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top). Accepted formats: TOP
+* **input_top_path** (*string*): Topology file, needed along with .trj file (optional). File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/structure.stripped.top). Accepted formats: TOP, PDB
 * **output_cda_path** (*string*): Filename for Curves+ output .cda file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.cda). Accepted formats: CDA
 * **output_lis_path** (*string*): Filename for Curves+ output .lis file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.lis). Accepted formats: LIS
 * **output_zip_path** (*string*): Filename for .zip files containing Curves+ output that is not .cda or .lis files. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/curves_trj_output.zip). Accepted formats: ZIP
