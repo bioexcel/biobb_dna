@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -107,17 +106,13 @@ class IntraHelParCorrelation(BiobbObject):
             return 0
         self.stage_files()
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="hpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
         # read input
-        shear = load_data(self.io_dict["in"]["input_filename_shear"])
-        stretch = load_data(self.io_dict["in"]["input_filename_stretch"])
-        stagger = load_data(self.io_dict["in"]["input_filename_stagger"])
-        buckle = load_data(self.io_dict["in"]["input_filename_buckle"])
-        propel = load_data(self.io_dict["in"]["input_filename_propel"])
-        opening = load_data(self.io_dict["in"]["input_filename_opening"])
+        shear = load_data(self.stage_io_dict["in"]["input_filename_shear"])
+        stretch = load_data(self.stage_io_dict["in"]["input_filename_stretch"])
+        stagger = load_data(self.stage_io_dict["in"]["input_filename_stagger"])
+        buckle = load_data(self.stage_io_dict["in"]["input_filename_buckle"])
+        propel = load_data(self.stage_io_dict["in"]["input_filename_propel"])
+        opening = load_data(self.stage_io_dict["in"]["input_filename_opening"])
 
         # get base
         if self.base is None:
@@ -131,67 +126,82 @@ class IntraHelParCorrelation(BiobbObject):
             np.eye(6, 6), index=coordinates, columns=coordinates)
 
         # shear
-        corr_matrix["shear"]["stretch"] = shear.corrwith(
-            stretch, method="pearson")
-        corr_matrix["shear"]["stagger"] = shear.corrwith(
-            stagger, method="pearson")
-        corr_matrix["shear"]["buckle"] = shear.corrwith(
-            buckle, method=self.circlineal)
-        corr_matrix["shear"]["propel"] = shear.corrwith(
-            propel, method=self.circlineal)
-        corr_matrix["shear"]["opening"] = shear.corrwith(
-            opening, method=self.circlineal)
+        # corr_matrix["shear"]["stretch"] = shear.corrwith(stretch, method="pearson")
+        corr_matrix.loc["stretch", "shear"] = shear.corrwith(stretch, method="pearson").values[0]
+        # corr_matrix["shear"]["stagger"] = shear.corrwith(stagger, method="pearson")
+        corr_matrix.loc["stagger", "shear"] = shear.corrwith(stagger, method="pearson").values[0]
+        # corr_matrix["shear"]["buckle"] = shear.corrwith(buckle, method=self.circlineal)
+        corr_matrix.loc["buckle", "shear"] = shear.corrwith(buckle, method=self.circlineal).values[0]
+        # corr_matrix["shear"]["propel"] = shear.corrwith(propel, method=self.circlineal)
+        corr_matrix.loc["propel", "shear"] = shear.corrwith(propel, method=self.circlineal).values[0]
+        # corr_matrix["shear"]["opening"] = shear.corrwith(opening, method=self.circlineal)
+        corr_matrix.loc["opening", "shear"] = shear.corrwith(opening, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["stretch"]["shear"] = corr_matrix["shear"]["stretch"]
-        corr_matrix["stagger"]["shear"] = corr_matrix["shear"]["stagger"]
-        corr_matrix["buckle"]["shear"] = corr_matrix["shear"]["buckle"]
-        corr_matrix["propel"]["shear"] = corr_matrix["shear"]["propel"]
-        corr_matrix["opening"]["shear"] = corr_matrix["shear"]["opening"]
+        # corr_matrix["stretch"]["shear"] = corr_matrix["shear"]["stretch"]
+        corr_matrix.loc["shear", "stretch"] = corr_matrix.loc["stretch", "shear"]
+        # corr_matrix["stagger"]["shear"] = corr_matrix["shear"]["stagger"]
+        corr_matrix.loc["shear", "stagger"] = corr_matrix.loc["stagger", "shear"]
+        # corr_matrix["buckle"]["shear"] = corr_matrix["shear"]["buckle"]
+        corr_matrix.loc["shear", "buckle"] = corr_matrix.loc["buckle", "shear"]
+        # corr_matrix["propel"]["shear"] = corr_matrix["shear"]["propel"]
+        corr_matrix.loc["shear", "propel"] = corr_matrix.loc["propel", "shear"]
+        # corr_matrix["opening"]["shear"] = corr_matrix["shear"]["opening"]
+        corr_matrix.loc["shear", "opening"] = corr_matrix.loc["opening", "shear"]
 
         # stretch
-        corr_matrix["stretch"]["stagger"] = stretch.corrwith(
-            stagger, method="pearson")
-        corr_matrix["stretch"]["buckle"] = stretch.corrwith(
-            buckle, method=self.circlineal)
-        corr_matrix["stretch"]["propel"] = stretch.corrwith(
-            propel, method=self.circlineal)
-        corr_matrix["stretch"]["opening"] = stretch.corrwith(
-            opening, method=self.circlineal)
+        # corr_matrix["stretch"]["stagger"] = stretch.corrwith(stagger, method="pearson")
+        corr_matrix.loc["stagger", "stretch"] = stretch.corrwith(stagger, method="pearson").values[0]
+        # corr_matrix["stretch"]["buckle"] = stretch.corrwith(buckle, method=self.circlineal)
+        corr_matrix.loc["buckle", "stretch"] = stretch.corrwith(buckle, method=self.circlineal).values[0]
+        # corr_matrix["stretch"]["propel"] = stretch.corrwith(propel, method=self.circlineal)
+        corr_matrix.loc["propel", "stretch"] = stretch.corrwith(propel, method=self.circlineal).values[0]
+        # corr_matrix["stretch"]["opening"] = stretch.corrwith(opening, method=self.circlineal)
+        corr_matrix.loc["opening", "stretch"] = stretch.corrwith(opening, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["stagger"]["stretch"] = corr_matrix["stretch"]["stagger"]
-        corr_matrix["buckle"]["stretch"] = corr_matrix["stretch"]["buckle"]
-        corr_matrix["propel"]["stretch"] = corr_matrix["stretch"]["propel"]
-        corr_matrix["opening"]["stretch"] = corr_matrix["stretch"]["opening"]
+        # corr_matrix["stagger"]["stretch"] = corr_matrix["stretch"]["stagger"]
+        corr_matrix.loc["stretch", "stagger"] = corr_matrix.loc["stagger", "stretch"]
+        # corr_matrix["buckle"]["stretch"] = corr_matrix["stretch"]["buckle"]
+        corr_matrix.loc["stretch", "buckle"] = corr_matrix.loc["buckle", "stretch"]
+        # corr_matrix["propel"]["stretch"] = corr_matrix["stretch"]["propel"]
+        corr_matrix.loc["stretch", "propel"] = corr_matrix.loc["propel", "stretch"]
+        # corr_matrix["opening"]["stretch"] = corr_matrix["stretch"]["opening"]
+        corr_matrix.loc["stretch", "opening"] = corr_matrix.loc["opening", "stretch"]
 
         # stagger
-        corr_matrix["stagger"]["buckle"] = stagger.corrwith(
-            buckle, method=self.circlineal)
-        corr_matrix["stagger"]["propel"] = stagger.corrwith(
-            propel, method=self.circlineal)
-        corr_matrix["stagger"]["opening"] = stagger.corrwith(
-            opening, method=self.circlineal)
+        # corr_matrix["stagger"]["buckle"] = stagger.corrwith(buckle, method=self.circlineal)
+        corr_matrix.loc["buckle", "stagger"] = stagger.corrwith(buckle, method=self.circlineal).values[0]
+        # corr_matrix["stagger"]["propel"] = stagger.corrwith(propel, method=self.circlineal)
+        corr_matrix.loc["propel", "stagger"] = stagger.corrwith(propel, method=self.circlineal).values[0]
+        # corr_matrix["stagger"]["opening"] = stagger.corrwith(opening, method=self.circlineal)
+        corr_matrix.loc["opening", "stagger"] = stagger.corrwith(opening, method=self.circlineal).values[0]
         # symmetric values
-        corr_matrix["buckle"]["stagger"] = corr_matrix["stagger"]["buckle"]
-        corr_matrix["propel"]["stagger"] = corr_matrix["stagger"]["propel"]
-        corr_matrix["opening"]["stagger"] = corr_matrix["stagger"]["opening"]
+        # corr_matrix["buckle"]["stagger"] = corr_matrix["stagger"]["buckle"]
+        corr_matrix.loc["stagger", "buckle"] = corr_matrix.loc["buckle", "stagger"]
+        # corr_matrix["propel"]["stagger"] = corr_matrix["stagger"]["propel"]
+        corr_matrix.loc["stagger", "propel"] = corr_matrix.loc["propel", "stagger"]
+        # corr_matrix["opening"]["stagger"] = corr_matrix["stagger"]["opening"]
+        corr_matrix.loc["stagger", "opening"] = corr_matrix.loc["opening", "stagger"]
 
         # buckle
-        corr_matrix["buckle"]["propel"] = buckle.corrwith(
-            propel, method=self.circular)
-        corr_matrix["buckle"]["opening"] = buckle.corrwith(
-            opening, method=self.circular)
+        # corr_matrix["buckle"]["propel"] = buckle.corrwith(propel, method=self.circular)
+        corr_matrix.loc["propel", "buckle"] = buckle.corrwith(propel, method=self.circular).values[0]
+        # corr_matrix["buckle"]["opening"] = buckle.corrwith(opening, method=self.circular)
+        corr_matrix.loc["opening", "buckle"] = buckle.corrwith(opening, method=self.circular).values[0]
         # symmetric values
-        corr_matrix["propel"]["buckle"] = corr_matrix["buckle"]["propel"]
-        corr_matrix["opening"]["buckle"] = corr_matrix["buckle"]["opening"]
+        # corr_matrix["propel"]["buckle"] = corr_matrix["buckle"]["propel"]
+        corr_matrix.loc["buckle", "propel"] = corr_matrix.loc["propel", "buckle"]
+        # corr_matrix["opening"]["buckle"] = corr_matrix["buckle"]["opening"]
+        corr_matrix.loc["buckle", "opening"] = corr_matrix.loc["opening", "buckle"]
 
         # propel
-        corr_matrix["propel"]["opening"] = propel.corrwith(
-            opening, method=self.circular)
+        # corr_matrix["propel"]["opening"] = propel.corrwith(opening, method=self.circular)
+        corr_matrix.loc["opening", "propel"] = propel.corrwith(opening, method=self.circular).values[0]
         # symmetric values
-        corr_matrix["opening"]["propel"] = corr_matrix["propel"]["opening"]
+        # corr_matrix["opening"]["propel"] = corr_matrix["propel"]["opening"]
+        corr_matrix.loc["propel", "opening"] = corr_matrix.loc["opening", "propel"]
 
         # save csv data
-        corr_matrix.to_csv(self.io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -215,14 +225,16 @@ class IntraHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.base}\'")
         fig.tight_layout()
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

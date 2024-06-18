@@ -2,7 +2,6 @@
 
 """Module containing the HelParTimeSeries class and the command line interface."""
 import argparse
-import shutil
 import zipfile
 from pathlib import Path
 
@@ -138,16 +137,9 @@ class HelParTimeSeries(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="timeseries_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # Copy input_ser_path to temporary folder
-        shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
-
         # read input .ser file
         ser_data = read_series(
-            self.io_dict['in']['input_ser_path'],
+            self.stage_io_dict['in']['input_ser_path'],
             usecols=self.seqpos)
         if self.seqpos is None:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -165,7 +157,7 @@ class HelParTimeSeries(BiobbObject):
 
         # write output files for all selected bases (one per column)
         zf = zipfile.ZipFile(
-            Path(self.io_dict["out"]["output_zip_path"]), "w")
+            Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
         for col in ser_data.columns:
             # unstack columns to prevent errors from repeated base pairs
             column_data = (
@@ -179,10 +171,10 @@ class HelParTimeSeries(BiobbObject):
             # column series
             series_colfn = f"series_{self.helpar_name}_{col}"
             column_data.to_csv(
-                Path(self.tmp_folder) / f"{series_colfn}.csv")
+                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.csv")
             # save table
             zf.write(
-                Path(self.tmp_folder) / f"{series_colfn}.csv", arcname=f"{series_colfn}.csv")
+                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.csv", arcname=f"{series_colfn}.csv")
 
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
             reduced_data = column_data.iloc[::self.stride]
@@ -194,10 +186,10 @@ class HelParTimeSeries(BiobbObject):
                 "(base pair "
                 f"{'step' if self.baselen==1 else ''} {col})")
             fig.savefig(
-                Path(self.tmp_folder) / f"{series_colfn}.jpg", format="jpg")
+                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.jpg", format="jpg")
             # save plot
             zf.write(
-                Path(self.tmp_folder) / f"{series_colfn}.jpg", arcname=f"{series_colfn}.jpg")
+                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.jpg", arcname=f"{series_colfn}.jpg")
             plt.close()
 
             # columns histogram
@@ -205,29 +197,31 @@ class HelParTimeSeries(BiobbObject):
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
             ybins, x, _ = axs.hist(column_data, bins=self.bins)
             pd.DataFrame({self.helpar_name: x[:-1], "density": ybins}).to_csv(
-                Path(self.tmp_folder) / f"{hist_colfn}.csv",
+                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.csv",
                 index=False)
             # save table
             zf.write(
-                Path(self.tmp_folder) / f"{hist_colfn}.csv",
+                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.csv",
                 arcname=f"{hist_colfn}.csv")
 
             axs.set_ylabel("Density")
             axs.set_xlabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
             fig.savefig(
-                Path(self.tmp_folder) / f"{hist_colfn}.jpg",
+                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.jpg",
                 format="jpg")
             # save plot
             zf.write(
-                Path(self.tmp_folder) / f"{hist_colfn}.jpg",
+                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.jpg",
                 arcname=f"{hist_colfn}.jpg")
             plt.close()
         zf.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

@@ -2,7 +2,6 @@
 
 """Module containing the Canal class and the command line interface."""
 import os
-import shutil
 import zipfile
 import argparse
 from pathlib import Path
@@ -112,38 +111,27 @@ class Canal(BiobbObject):
         self.stage_files()
 
         if self.sequence is None:
-            if self.io_dict['in']['input_lis_file'] is None:
+            if self.stage_io_dict['in']['input_lis_file'] is None:
                 raise RuntimeError(
                     "if no sequence is passed in the configuration, "
                     "you must at least specify `input_lis_file` "
                     "so sequence can be parsed from there")
             lis_lines = Path(
-                self.io_dict['in']['input_lis_file']).read_text().splitlines()
+                self.stage_io_dict['in']['input_lis_file']).read_text().splitlines()
             for line in lis_lines:
                 if line.strip().startswith("Strand  1"):
                     self.sequence = line.split(" ")[-1]
                     fu.log(
                         f"using sequence {self.sequence} "
-                        f"from {self.io_dict['in']['input_lis_file']}",
+                        f"from {self.stage_io_dict['in']['input_lis_file']}",
                         self.out_log)
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="canal_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # copy input files to temporary folder
-        shutil.copy(
-            self.io_dict['in']['input_cda_file'],
-            self.tmp_folder)
-        tmp_cda_path = Path(self.io_dict['in']['input_cda_file']).name
-        if self.io_dict['in']['input_lis_file'] is not None:
-            shutil.copy(
-                self.io_dict['in']['input_lis_file'],
-                self.tmp_folder)
+        # define temporary file name
+        tmp_cda_path = Path(self.stage_io_dict['in']['input_cda_file']).name
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.tmp_folder)
+        os.chdir(self.stage_io_dict.get("unique_dir"))
 
         # create intructions
         instructions = [
@@ -184,17 +172,20 @@ class Canal(BiobbObject):
 
         # create zipfile and write output inside
         zf = zipfile.ZipFile(
-            Path(self.io_dict["out"]["output_zip_path"]), "w")
-        for canal_outfile in Path(self.tmp_folder).glob("canal_output*"):
-            zf.write(
-                canal_outfile,
-                arcname=canal_outfile.name)
+            Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
+        for canal_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("canal_output*"):
+            if canal_outfile.suffix not in (".zip"):
+                zf.write(
+                    canal_outfile,
+                    arcname=canal_outfile.name)
         zf.close()
+
+        # Copy files to host
+        self.copy_to_host()
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

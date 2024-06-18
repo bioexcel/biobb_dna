@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParAverages class and the command line interface."""
-import shutil
 import argparse
 from pathlib import Path
 
@@ -11,7 +10,6 @@ from biobb_dna.utils import constants
 from biobb_dna.utils.loader import read_series
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
 
 
@@ -109,7 +107,7 @@ class HelParAverages(BiobbObject):
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
                 ser_name = Path(
-                    self.io_dict['in']['input_ser_path']).name.lower()
+                    self.stage_io_dict['in']['input_ser_path']).name.lower()
                 if hp.lower() in ser_name:
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -141,15 +139,9 @@ class HelParAverages(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="averages_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-        # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_ser_path'], self.tmp_folder)
-
         # read input .ser file
         ser_data = read_series(
-            self.io_dict['in']['input_ser_path'],
+            self.stage_io_dict['in']['input_ser_path'],
             usecols=self.seqpos)
         if self.seqpos is None:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -194,7 +186,7 @@ class HelParAverages(BiobbObject):
             f"{'Step' if self.baselen==1 else ''} "
             f"Helical Parameter: {self.helpar_name.capitalize()}")
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
 
         # save table
@@ -203,15 +195,17 @@ class HelParAverages(BiobbObject):
             "mean": means.to_numpy(),
             "std": stds.to_numpy()})
         dataset.to_csv(
-            self.io_dict['out']['output_csv_path'],
+            self.stage_io_dict['out']['output_csv_path'],
             index=False)
 
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

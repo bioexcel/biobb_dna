@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Module containing the BIPopulations class and the command line interface."""
 
-import shutil
 import argparse
 
 import matplotlib.pyplot as plt
@@ -11,7 +10,6 @@ from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.tools import file_utils as fu
 from biobb_common.configuration import settings
 
 
@@ -115,28 +113,18 @@ class BIPopulations(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="backbone_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
-        # Copy input_file_path1 to temporary folder
-        shutil.copy(self.io_dict['in']['input_epsilC_path'], self.tmp_folder)
-        shutil.copy(self.io_dict['in']['input_epsilW_path'], self.tmp_folder)
-        shutil.copy(self.io_dict['in']['input_zetaC_path'], self.tmp_folder)
-        shutil.copy(self.io_dict['in']['input_zetaW_path'], self.tmp_folder)
-
         # read input files
         epsilC = read_series(
-            self.io_dict['in']['input_epsilC_path'],
+            self.stage_io_dict['in']['input_epsilC_path'],
             usecols=self.seqpos)
         epsilW = read_series(
-            self.io_dict['in']['input_epsilW_path'],
+            self.stage_io_dict['in']['input_epsilW_path'],
             usecols=self.seqpos)
         zetaC = read_series(
-            self.io_dict['in']['input_zetaC_path'],
+            self.stage_io_dict['in']['input_zetaC_path'],
             usecols=self.seqpos)
         zetaW = read_series(
-            self.io_dict['in']['input_zetaW_path'],
+            self.stage_io_dict['in']['input_zetaW_path'],
             usecols=self.seqpos)
 
         # calculate difference between epsil and zeta parameters
@@ -159,7 +147,7 @@ class BIPopulations(BiobbObject):
             "BI population": BI,
             "BII population": BII})
         Bpopulations_df.to_csv(
-            self.io_dict['out']['output_csv_path'],
+            self.stage_io_dict['out']['output_csv_path'],
             index=False)
 
         # save plot
@@ -186,14 +174,16 @@ class BIPopulations(BiobbObject):
         axs.set_ylabel("BI/BII Population (%)")
         axs.set_title("Nucleotide parameter: BI/BII Population")
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 

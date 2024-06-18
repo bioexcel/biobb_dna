@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils import constants
@@ -103,7 +102,7 @@ class InterSequenceCorrelation(BiobbObject):
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
                 if hp.lower() in Path(
-                        self.io_dict['in']['input_ser_path']).name.lower():
+                        self.stage_io_dict['in']['input_ser_path']).name.lower():
                     self.helpar_name = hp
             if self.helpar_name is None:
                 raise ValueError(
@@ -127,13 +126,9 @@ class InterSequenceCorrelation(BiobbObject):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
-        # Creating temporary folder
-        self.tmp_folder = fu.create_unique_dir(prefix="bpcorrelation_")
-        fu.log('Creating %s temporary folder' % self.tmp_folder, self.out_log)
-
         # read input .ser file
         ser_data = read_series(
-            self.io_dict['in']['input_ser_path'],
+            self.stage_io_dict['in']['input_ser_path'],
             usecols=self.seqpos)
         if self.seqpos is None:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -149,7 +144,7 @@ class InterSequenceCorrelation(BiobbObject):
         corr_data = ser_data.corr(method=self.method)
 
         # save csv data
-        corr_data.to_csv(self.io_dict["out"]["output_csv_path"])
+        corr_data.to_csv(self.stage_io_dict["out"]["output_csv_path"])
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -173,14 +168,16 @@ class InterSequenceCorrelation(BiobbObject):
             f"for Helical Parameter \'{self.helpar_name}\'")
         fig.tight_layout()
         fig.savefig(
-            self.io_dict['out']['output_jpg_path'],
+            self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
 
+        # Copy files to host
+        self.copy_to_host()
+
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir"),
-            self.tmp_folder
+            self.stage_io_dict.get("unique_dir")
         ])
         self.remove_tmp_files()
 
