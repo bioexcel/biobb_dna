@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_dna",
-    version="4.2.3",
+    version="4.2.4",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.com",
     description="Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
@@ -27,9 +27,11 @@ setuptools.setup(
         "console_scripts": [
             "biobb_curves = biobb_dna.curvesplus.biobb_curves:main",
             "biobb_canal = biobb_dna.curvesplus.biobb_canal:main",
+            "canal_unzip = biobb_dna.curvesplus.canal_unzip:main",
             "biobb_canion = biobb_dna.curvesplus.biobb_canion:main",
             "dna_averages = biobb_dna.dna.dna_averages:main",
             "dna_timeseries = biobb_dna.dna.dna_timeseries:main",
+            "dna_timeseries_unzip = biobb_dna.dna.dna_timeseries_unzip:main",
             "dna_bimodality = biobb_dna.dna.dna_bimodality:main",
             "bipopulations = biobb_dna.backbone.bipopulations:main",
             "canonicalag = biobb_dna.backbone.canonicalag:main",

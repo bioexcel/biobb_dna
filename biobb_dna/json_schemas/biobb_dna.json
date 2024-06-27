@@ -4,9 +4,9 @@
     "github": "https://github.com/bioexcel/biobb_dna",
     "readthedocs": "https://biobb-dna.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_dna",
-    "docker": "https://quay.io/biocontainers/biobb_dna:4.2.3--pyhdfd78af_0",
-    "singularity": "https://depot.galaxyproject.org/singularity/biobb_dna:4.2.3--pyhdfd78af_0",
-    "version": "4.2.3",
+    "docker": "https://quay.io/biocontainers/biobb_dna:4.2.4--pyhdfd78af_0",
+    "singularity": "https://depot.galaxyproject.org/singularity/biobb_dna:4.2.4--pyhdfd78af_0",
+    "version": "4.2.4",
     "rest": true,
     "tools": [
         {
