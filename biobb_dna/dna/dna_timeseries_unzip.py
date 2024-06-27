@@ -16,6 +16,7 @@ class DnaTimeseriesUnzip(BiobbObject):
     """
     | biobb_dna DnaTimeseriesUnzip
     | Tool for extracting dna_timeseries output files.
+    | Unzips a zip file containing dna_timeseries output files and extracts the csv and jpg files.
 
     Args:
         input_zip_file (str): Zip file with dna_timeseries output files. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/timeseries_output.zip>`_. Accepted formats: zip (edam:format_3987).

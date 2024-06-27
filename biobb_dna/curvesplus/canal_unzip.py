@@ -16,6 +16,7 @@ class CanalUnzip(BiobbObject):
     """
     | biobb_dna CanalUnzip
     | Tool for extracting biobb_canal output files.
+    | Unzips a Canal output file contained within a zip file.
 
     Args:
         input_zip_file (str): Zip file with Canal output files. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/canal_output.zip>`_. Accepted formats: zip (edam:format_3987).

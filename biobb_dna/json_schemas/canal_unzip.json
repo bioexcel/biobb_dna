@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/canal_unzip",
     "name": "biobb_dna CanalUnzip",
     "title": "Tool for extracting biobb_canal output files.",
-    "description": null,
+    "description": "Unzips a Canal output file contained within a zip file.",
     "type": "object",
     "info": {
         "wrapped_software": {
