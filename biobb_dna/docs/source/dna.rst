@@ -20,6 +20,14 @@ dna.dna_timeseries module
     :undoc-members:
     :show-inheritance:
 
+dna.dna_timeseries_unzip module
+------------------------------------
+
+.. automodule:: dna.dna_timeseries_unzip
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dna.dna_bimodality module
 ------------------------------------
 

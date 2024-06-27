@@ -31,9 +31,9 @@ class Canion(BiobbObject):
             * **rhig** (*float*) - (0) Maximal distances from the helical axis taken into account in the analysis.
             * **alow** (*float*) - (0) Minimal angle range to analyze.
             * **ahig** (*float*) - (360) Maximal angle range to analyze.
-            * **itst** (*int*) - (None) Number of first snapshot to be analyzed.
-            * **itnd** (*int*) - (None) Number of last snapshot to be analyzed.
-            * **itdel** (*int*) - (None) Spacing between analyzed snapshots.
+            * **itst** (*int*) - (0) Number of first snapshot to be analyzed.
+            * **itnd** (*int*) - (0) Number of last snapshot to be analyzed.
+            * **itdel** (*int*) - (1) Spacing between analyzed snapshots.
             * **rmsf** (*bool*) - (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions.
             * **circ** (*bool*) - (False) If set to True, minicircles are analyzed.
             * **binary_path** (*str*) - (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
@@ -94,11 +94,11 @@ class Canion(BiobbObject):
         self.rhig = properties.get('rhig', 0)
         self.alow = properties.get('alow', 0)
         self.ahig = properties.get('ahig', 360)
-        self.itst = properties.get('itst', None)
-        self.itnd = properties.get('itnd', None)
-        self.itdel = properties.get('itdel', None)
-        self.rmsf = properties.get('rmsf', '.f.')
-        self.circ = properties.get('circ', '.f.')
+        self.itst = properties.get('itst', 0)
+        self.itnd = properties.get('itnd', 0)
+        self.itdel = properties.get('itdel', 1)
+        self.rmsf = ".t." if properties.get('rmsf', False) else ".f."
+        self.circ = ".t." if properties.get('circ', False) else ".f."
         self.properties = properties
 
         # Check the properties
@@ -158,7 +158,12 @@ class Canion(BiobbObject):
             f"  rlow={self.rlow},",
             f"  rhig={self.rhig},",
             f"  alow={self.alow},",
-            f"  ahig={self.ahig},"]
+            f"  ahig={self.ahig},",
+            f"  itst={self.itst},",
+            f"  itnd={self.itnd},",
+            f"  itdel={self.itdel},",
+            f"  rmsf={self.rmsf},",
+            f"  circ={self.circ},"]
         if self.bases is not None:
             # add topology file if needed
             fu.log('Appending sequence of bases to be searched to command',

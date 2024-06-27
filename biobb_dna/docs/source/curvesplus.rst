@@ -20,6 +20,14 @@ curvesplus.biobb_canal module
     :undoc-members:
     :show-inheritance:
 
+curvesplus.canal_unzip module
+------------------------------------
+
+.. automodule:: curvesplus.canal_unzip
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 curvesplus.biobb_canion module
 ------------------------------------
 
@@ -27,4 +35,3 @@ curvesplus.biobb_canion module
     :members:
     :undoc-members:
     :show-inheritance:
-

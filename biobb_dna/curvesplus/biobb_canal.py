@@ -31,9 +31,9 @@ class Canal(BiobbObject):
             * **lev2** (*int*) - (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels).
             * **nastr** (*str*) - ('NA') character string used to indicate missing data in .ser files.
             * **cormin** (*float*) - (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables.
-            * **series** (*str*) - (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
-            * **histo** (*str*) - (False) if True then output histogram data.
-            * **corr** (*str*) - (False) if True than output linear correlation coefficients between all variables.
+            * **series** (*bool*) - (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
+            * **histo** (*bool*) - (False) if True then output histogram data.
+            * **corr** (*bool*) - (False) if True than output linear correlation coefficients between all variables.
             * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
             * **binary_path** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -43,8 +43,8 @@ class Canal(BiobbObject):
 
             from biobb_dna.curvesplus.biobb_canal import biobb_canal
             prop = {
-                'series': '.t.',
-                'histo': '.t.',
+                'series': 'True',
+                'histo': 'True',
                 'sequence': 'CGCGAATTCGCG'
             }
             biobb_canal(

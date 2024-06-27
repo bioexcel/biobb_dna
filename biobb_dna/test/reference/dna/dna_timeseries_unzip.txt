@@ -1,0 +1,8 @@
+series_shift_5_AA.csv
+series_shift_5_AA.jpg
+hist_shift_5_AA.csv
+hist_shift_5_AA.jpg
+series_shift_6_AT.csv
+series_shift_6_AT.jpg
+hist_shift_6_AT.csv
+hist_shift_6_AT.jpg

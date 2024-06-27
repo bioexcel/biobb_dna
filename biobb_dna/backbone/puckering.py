@@ -26,7 +26,6 @@ class Puckering(BiobbObject):
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/backbone/puckering_ref.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
-            * **helpar_name** (*str*) - (None) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
             * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.

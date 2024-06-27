@@ -21,7 +21,20 @@ biobb_canal:
     ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
   properties:
     series: true
+    histo: true
+    corr: true
     sequence: "CGCGAATTCGCG"
+
+canal_unzip:
+  paths:
+    input_zip_file: file:test_data_dir/curvesplus/canal_output.zip
+    output_path: canal_unzip_output.ser
+    ref_output_path: file:test_reference_dir/curvesplus/canal_unzip_output.ser
+    output_list_path: canal_unzip_output.txt
+    ref_output_list_path: file:test_reference_dir/curvesplus/canal_unzip_output.txt
+  properties:
+    type: histo
+    helpar_name: alphaC
 
 biobb_canion:
   paths:
@@ -45,6 +58,21 @@ dna_timeseries:
   properties:
     sequence: "CGCGAATTCGCG"
     seqpos: [4,5]
+
+dna_timeseries_unzip:
+  paths:
+    input_zip_file: file:test_data_dir/dna/timeseries_output.zip
+    output_path_csv: dna_timeseries_unzip.csv
+    ref_output_path_csv: file:test_reference_dir/dna/dna_timeseries_unzip.csv
+    output_path_jpg: dna_timeseries_unzip.jpg
+    ref_output_path_jpg: file:test_reference_dir/dna/dna_timeseries_unzip.jpg
+    output_list_path: dna_timeseries_unzip.txt
+    ref_output_list_path: file:test_reference_dir/dna/dna_timeseries_unzip.txt
+  properties:
+    type: hist
+    parameter: shift
+    sequence: CGCGAATTCGCG
+    index: 5
   
 dna_averages:
   paths:

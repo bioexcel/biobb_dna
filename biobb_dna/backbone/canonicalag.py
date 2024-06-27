@@ -38,7 +38,6 @@ class CanonicalAG(BiobbObject):
             from biobb_dna.backbone.canonicalag import canonicalag
 
             prop = {
-                'helpar_name': 'twist',
                 'seqpos': [1,2],
                 'sequence': 'GCAT',
             }

@@ -29,9 +29,9 @@ class IntraHelParCorrelation(BiobbObject):
         output_csv_path (str): Path to directory where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/correlation/intra_hpcorr_ref.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
+            * **base** (*str*) - (None) Name of base analyzed.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
-            * **base** (*str*) - (None) Name of base analyzed.
 
     Examples:
         This is a use example of how to use the building block from Python::

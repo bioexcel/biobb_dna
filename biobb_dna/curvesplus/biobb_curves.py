@@ -94,11 +94,11 @@ class Curves(BiobbObject):
         self.itst = properties.get('itst', 0)
         self.itnd = properties.get('itnd', 0)
         self.itdel = properties.get('itdel', 1)
-        self.ions = properties.get('ions', '.f.')
-        self.test = properties.get('test', '.f.')
-        self.line = properties.get('line', '.f.')
-        self.fit = properties.get('fit', '.t.')
-        self.axfrm = properties.get('axfrm', '.f.')
+        self.ions = ".t." if properties.get('ions', False) else ".f."
+        self.test = ".t." if properties.get('test', False) else ".f."
+        self.line = ".t." if properties.get('line', False) else ".f."
+        self.fit = ".t." if properties.get('fit', True) else ".f."
+        self.axfrm = ".t." if properties.get('axfrm', False) else ".f."
         self.properties = properties
 
         # Check the properties
