@@ -121,20 +121,20 @@
                     "description": "minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables."
                 },
                 "series": {
-                    "type": "string",
-                    "default": "False",
+                    "type": "boolean",
+                    "default": false,
                     "wf_prop": false,
                     "description": "if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories."
                 },
                 "histo": {
-                    "type": "string",
-                    "default": "False",
+                    "type": "boolean",
+                    "default": false,
                     "wf_prop": false,
                     "description": "if True then output histogram data."
                 },
                 "corr": {
-                    "type": "string",
-                    "default": "False",
+                    "type": "boolean",
+                    "default": false,
                     "wf_prop": false,
                     "description": "if True than output linear correlation coefficients between all variables."
                 },
@@ -161,6 +161,12 @@
                     "default": false,
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
                 }
             }
         }

@@ -1,6 +1,8 @@
 {
   "properties": {
     "series": true,
+    "histo": true,
+    "corr": true,
     "sequence": "CGCGAATTCGCG"
   }
 }

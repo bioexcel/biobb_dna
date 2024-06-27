@@ -52,6 +52,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_bipopulations.yml)
 ```python
@@ -129,6 +130,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intrabpcorr.yml)
 ```python
@@ -206,6 +208,7 @@ Config parameters for this building block:
 * **scaling** (*array*): ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_basepair_stiffness.yml)
 ```python
@@ -270,6 +273,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_averages.yml)
 ```python
@@ -347,17 +351,20 @@ Config parameters for this building block:
 * **lev2** (*integer*): (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels)..
 * **nastr** (*string*): (NA) character string used to indicate missing data in .ser files..
 * **cormin** (*number*): (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables..
-* **series** (*string*): (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories..
-* **histo** (*string*): (False) if True then output histogram data..
-* **corr** (*string*): (False) if True than output linear correlation coefficients between all variables..
+* **series** (*boolean*): (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories..
+* **histo** (*boolean*): (False) if True then output histogram data..
+* **corr** (*boolean*): (False) if True than output linear correlation coefficients between all variables..
 * **sequence** (*string*): (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file..
 * **binary_path** (*string*): (Canal) Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal.yml)
 ```python
 properties:
+  corr: true
+  histo: true
   sequence: CGCGAATTCGCG
   series: true
 
@@ -372,6 +379,8 @@ biobb_canal --config config_biobb_canal.yml --input_cda_file curves_output.cda -
 {
   "properties": {
     "series": true,
+    "histo": true,
+    "corr": true,
     "sequence": "CGCGAATTCGCG"
   }
 }
@@ -379,6 +388,72 @@ biobb_canal --config config_biobb_canal.yml --input_cda_file curves_output.cda -
 #### Command line
 ```python
 biobb_canal --config config_biobb_canal.json --input_cda_file curves_output.cda --input_lis_file input.lis --output_zip_path canal_output.zip
+```
+
+## Canal_unzip
+Tool for extracting biobb_canal output files.
+### Get help
+Command:
+```python
+canal_unzip -h
+```
+    usage: canal_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path OUTPUT_PATH [--output_list_path OUTPUT_LIST_PATH]
+    
+    Tool for extracting biobb_canal output files.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+      --output_list_path OUTPUT_LIST_PATH
+                            Text file with a list of all Canal output files contained within input_zip_file. Accepted formats: txt.
+    
+    required arguments:
+      --input_zip_file INPUT_ZIP_FILE
+                            Zip file with Canal output files. Accepted formats: zip.
+      --output_path OUTPUT_PATH
+                            Canal output file contained within input_zip_file. Accepted formats: ser, his, cor.
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_zip_file** (*string*): Zip file with Canal output files. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/canal_output.zip). Accepted formats: ZIP
+* **output_path** (*string*): Canal output file contained within input_zip_file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_unzip_output.ser). Accepted formats: SER, HIS, COR
+* **output_list_path** (*string*): Text file with a list of all Canal output files contained within input_zip_file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_unzip_output.txt). Accepted formats: TXT
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **type** (*string*): (None) Type of file. .
+* **helpar_name** (*string*): (None) Helical parameter name, only for 'series' and 'histo' types. .
+* **correlation** (*string*): (None) Correlation indexes separated by underscore (ie '98_165'), only for 'corr' type..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_canal_unzip.yml)
+```python
+properties:
+  helpar_name: alphaC
+  type: histo
+
+```
+#### Command line
+```python
+canal_unzip --config config_canal_unzip.yml --input_zip_file canal_output.zip --output_path canal_unzip_output.ser --output_list_path canal_unzip_output.txt
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_canal_unzip.json)
+```python
+{
+  "properties": {
+    "type": "histo",
+    "helpar_name": "alphaC"
+  }
+}
+```
+#### Command line
+```python
+canal_unzip --config config_canal_unzip.json --input_zip_file canal_output.zip --output_path canal_unzip_output.ser --output_list_path canal_unzip_output.txt
 ```
 
 ## Biobb_canion
@@ -425,14 +500,15 @@ Config parameters for this building block:
 * **rhig** (*number*): (0.0) Maximal distances from the helical axis taken into account in the analysis..
 * **alow** (*number*): (0.0) Minimal angle range to analyze..
 * **ahig** (*number*): (360.0) Maximal angle range to analyze..
-* **itst** (*integer*): (None) Number of first snapshot to be analyzed..
-* **itnd** (*integer*): (None) Number of last snapshot to be analyzed..
-* **itdel** (*integer*): (None) Spacing between analyzed snapshots..
+* **itst** (*integer*): (0) Number of first snapshot to be analyzed..
+* **itnd** (*integer*): (0) Number of last snapshot to be analyzed..
+* **itdel** (*integer*): (1) Spacing between analyzed snapshots..
 * **rmsf** (*boolean*): (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions..
 * **circ** (*boolean*): (False) If set to True, minicircles are analyzed..
 * **binary_path** (*string*): (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion.yml)
 ```python
@@ -514,9 +590,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
+* **base** (*string*): (None) Name of base analyzed..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
-* **base** (*string*): (None) Name of base analyzed..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intrahpcorr.yml)
 ```python
@@ -580,6 +657,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intraseqcorr.yml)
 ```python
@@ -621,7 +699,7 @@ dna_bimodality -h
       --config CONFIG       Configuration file
       --input_zip_file INPUT_ZIP_FILE
                             Path to zip file containing csv input files. Accepted formats: zip.
-    
+
     required arguments:
       --input_csv_file INPUT_CSV_FILE
                             Path to csv file with data. Accepted formats: csv.
@@ -647,6 +725,7 @@ Config parameters for this building block:
 * **tol** (*number*): (1e-05) Tolerance value for EM algorithm..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist.1.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_bimodality.yml)
 ```python
@@ -715,11 +794,11 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
 * **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **helpar_name** (*string*): (None) helical parameter name..
 * **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series..
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_puckering.yml)
 ```python
@@ -782,6 +861,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_timeseries.yml)
 ```python
@@ -866,6 +946,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interbpcorr.yml)
 ```python
@@ -889,6 +970,80 @@ interbpcorr --config config_interbpcorr.yml --input_filename_shift canal_output_
 #### Command line
 ```python
 interbpcorr --config config_interbpcorr.json --input_filename_shift canal_output_shift.ser --input_filename_slide canal_output_slide.ser --input_filename_rise canal_output_rise.ser --input_filename_tilt canal_output_tilt.ser --input_filename_roll canal_output_roll.ser --input_filename_twist canal_output_twist.ser --output_csv_path inter_bpcorr_ref.csv --output_jpg_path inter_bpcorr_ref.jpg
+```
+
+## Dna_timeseries_unzip
+Tool for extracting dna_timeseries output files.
+### Get help
+Command:
+```python
+dna_timeseries_unzip -h
+```
+    usage: dna_timeseries_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path_csv OUTPUT_PATH_CSV --output_path_jpg OUTPUT_PATH_JPG [--output_list_path OUTPUT_LIST_PATH]
+    
+    Tool for extracting dna_timeseries output files.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+      --output_list_path OUTPUT_LIST_PATH
+                            Text file with a list of all dna_timeseries output files contained within input_zip_file. Accepted formats: txt.
+    
+    required arguments:
+      --input_zip_file INPUT_ZIP_FILE
+                            Zip file with dna_timeseries output files. Accepted formats: zip.
+      --output_path_csv OUTPUT_PATH_CSV
+                            dna_timeseries output csv file contained within input_zip_file. Accepted formats: csv.
+      --output_path_jpg OUTPUT_PATH_JPG
+                            dna_timeseries output jpg file contained within input_zip_file. Accepted formats: jpg.
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_zip_file** (*string*): Zip file with dna_timeseries output files. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/timeseries_output.zip). Accepted formats: ZIP
+* **output_path_csv** (*string*): dna_timeseries output csv file contained within input_zip_file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.csv). Accepted formats: CSV
+* **output_path_jpg** (*string*): dna_timeseries output jpg file contained within input_zip_file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.jpg). Accepted formats: JPG
+* **output_list_path** (*string*): Text file with a list of all dna_timeseries output files contained within input_zip_file. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.txt). Accepted formats: TXT
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **type** (*string*): (None) Type of analysis, series or histogram. .
+* **parameter** (*string*): (None) Type of parameter. .
+* **sequence** (*string*): (None) Nucleic acid sequence used for generating dna_timeseries output file..
+* **index** (*integer*): (0) Base pair index in the parameter 'sequence', starting from 0..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_timeseries_unzip.yml)
+```python
+properties:
+  index: 5
+  parameter: shift
+  sequence: CGCGAATTCGCG
+  type: hist
+
+```
+#### Command line
+```python
+dna_timeseries_unzip --config config_dna_timeseries_unzip.yml --input_zip_file timeseries_output.zip --output_path_csv dna_timeseries_unzip.csv --output_path_jpg dna_timeseries_unzip.jpg --output_list_path dna_timeseries_unzip.txt
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_timeseries_unzip.json)
+```python
+{
+  "properties": {
+    "type": "hist",
+    "parameter": "shift",
+    "sequence": "CGCGAATTCGCG",
+    "index": 5
+  }
+}
+```
+#### Command line
+```python
+dna_timeseries_unzip --config config_dna_timeseries_unzip.json --input_zip_file timeseries_output.zip --output_path_csv dna_timeseries_unzip.csv --output_path_jpg dna_timeseries_unzip.jpg --output_list_path dna_timeseries_unzip.txt
 ```
 
 ## Interseqcorr
@@ -929,6 +1084,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interseqcorr.yml)
 ```python
@@ -1002,9 +1158,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
+* **basepair** (*string*): (None) Name of basepair analyzed..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
-* **basepair** (*string*): (None) Name of basepair analyzed..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interhpcorr.yml)
 ```python
@@ -1076,6 +1233,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_canonicalag.yml)
 ```python
@@ -1140,6 +1298,7 @@ Config parameters for this building block:
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_average_stiffness.yml)
 ```python
@@ -1218,6 +1377,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.yml)
 ```python

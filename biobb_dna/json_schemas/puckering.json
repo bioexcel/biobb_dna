@@ -95,12 +95,6 @@
                     "wf_prop": false,
                     "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)."
                 },
-                "helpar_name": {
-                    "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "helical parameter name."
-                },
                 "stride": {
                     "type": "integer",
                     "default": 1000,
@@ -124,6 +118,12 @@
                     "default": false,
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
                 }
             }
         }

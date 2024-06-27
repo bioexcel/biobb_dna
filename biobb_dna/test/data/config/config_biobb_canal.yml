@@ -1,3 +1,5 @@
 properties:
+  corr: true
+  histo: true
   sequence: CGCGAATTCGCG
   series: true

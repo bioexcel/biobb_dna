@@ -1,131 +1,137 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_bimodality",
-    "name": "biobb_dna HelParBimodality",
-    "title": "Determine binormality/bimodality from a helical parameter series dataset.",
-    "description": "Determine binormality/bimodality from a helical parameter series dataset.",
-    "type": "object",
-    "info": {
-        "wrapped_software": {
-            "name": "In house",
-            "license": "Apache-2.0"
-        },
-        "ontology": {
-            "name": "EDAM",
-            "schema": "http://edamontology.org/EDAM.owl"
-        }
-    },
-    "required": [
-        "input_csv_file",
-        "output_csv_path",
-        "output_jpg_path"
-    ],
-    "properties": {
-        "input_csv_file": {
-            "type": "string",
-            "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
-            "filetype": "input",
-            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv",
-            "enum": [
-                ".*\\.csv$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
-                    "edam": "format_3752"
-                }
-            ]
-        },
-        "input_zip_file": {
-            "type": "string",
-            "description": ".zip file containing the `input_csv_file` .csv file",
-            "filetype": "input",
-            "sample": null,
-            "enum": [
-                ".*\\.zip$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.zip$",
-                    "description": "zip file containing the `input_csv_file` .csv file",
-                    "edam": "format_3987"
-                }
-            ]
-        },
-        "output_csv_path": {
-            "type": "string",
-            "description": "Path to .csv file where output is saved",
-            "filetype": "output",
-            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv",
-            "enum": [
-                ".*\\.csv$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.csv$",
-                    "description": "Path to .csv file where output is saved",
-                    "edam": "format_3752"
-                }
-            ]
-        },
-        "output_jpg_path": {
-            "type": "string",
-            "description": "Path to .jpg file where output is saved",
-            "filetype": "output",
-            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg",
-            "enum": [
-                ".*\\.jpg$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.jpg$",
-                    "description": "Path to .jpg file where output is saved",
-                    "edam": "format_3579"
-                }
-            ]
-        },
-        "properties": {
-            "type": "object",
-            "properties": {
-                "helpar_name": {
-                    "type": "string",
-                    "default": "Optional",
-                    "wf_prop": false,
-                    "description": "helical parameter name."
-                },
-                "confidence_level": {
-                    "type": "number",
-                    "default": 5.0,
-                    "wf_prop": false,
-                    "description": "Confidence level for Byes Factor test (in percentage)."
-                },
-                "max_iter": {
-                    "type": "integer",
-                    "default": 400,
-                    "wf_prop": false,
-                    "description": "Number of maximum iterations for EM algorithm."
-                },
-                "tol": {
-                    "type": "number",
-                    "default": 1e-05,
-                    "wf_prop": false,
-                    "description": "Tolerance value for EM algorithm."
-                },
-                "remove_tmp": {
-                    "type": "boolean",
-                    "default": true,
-                    "wf_prop": true,
-                    "description": "Remove temporal files."
-                },
-                "restart": {
-                    "type": "boolean",
-                    "default": false,
-                    "wf_prop": true,
-                    "description": "Do not execute if output files exist.1"
-                }
-            }
-        }
-    },
-    "additionalProperties": false
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_bimodality",
+  "name": "biobb_dna HelParBimodality",
+  "title": "Determine binormality/bimodality from a helical parameter series dataset.",
+  "description": "Determine binormality/bimodality from a helical parameter series dataset.",
+  "type": "object",
+  "info": {
+      "wrapped_software": {
+          "name": "In house",
+          "license": "Apache-2.0"
+      },
+      "ontology": {
+          "name": "EDAM",
+          "schema": "http://edamontology.org/EDAM.owl"
+      }
+  },
+  "required": [
+      "input_csv_file",
+      "output_csv_path",
+      "output_jpg_path"
+  ],
+  "properties": {
+      "input_csv_file": {
+          "type": "string",
+          "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
+          "filetype": "input",
+          "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/series_shift_AT.csv",
+          "enum": [
+              ".*\\.csv$"
+          ],
+          "file_formats": [
+              {
+                  "extension": ".*\\.csv$",
+                  "description": "Path to .csv file with helical parameter series. If `input_zip_file` is passed, this should be just the filename of the .csv file inside .zip",
+                  "edam": "format_3752"
+              }
+          ]
+      },
+      "input_zip_file": {
+          "type": "string",
+          "description": ".zip file containing the `input_csv_file` .csv file",
+          "filetype": "input",
+          "sample": null,
+          "enum": [
+              ".*\\.zip$"
+          ],
+          "file_formats": [
+              {
+                  "extension": ".*\\.zip$",
+                  "description": "zip file containing the `input_csv_file` .csv file",
+                  "edam": "format_3987"
+              }
+          ]
+      },
+      "output_csv_path": {
+          "type": "string",
+          "description": "Path to .csv file where output is saved",
+          "filetype": "output",
+          "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv",
+          "enum": [
+              ".*\\.csv$"
+          ],
+          "file_formats": [
+              {
+                  "extension": ".*\\.csv$",
+                  "description": "Path to .csv file where output is saved",
+                  "edam": "format_3752"
+              }
+          ]
+      },
+      "output_jpg_path": {
+          "type": "string",
+          "description": "Path to .jpg file where output is saved",
+          "filetype": "output",
+          "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg",
+          "enum": [
+              ".*\\.jpg$"
+          ],
+          "file_formats": [
+              {
+                  "extension": ".*\\.jpg$",
+                  "description": "Path to .jpg file where output is saved",
+                  "edam": "format_3579"
+              }
+          ]
+      },
+      "properties": {
+          "type": "object",
+          "properties": {
+              "helpar_name": {
+                  "type": "string",
+                  "default": "Optional",
+                  "wf_prop": false,
+                  "description": "helical parameter name."
+              },
+              "confidence_level": {
+                  "type": "number",
+                  "default": 5.0,
+                  "wf_prop": false,
+                  "description": "Confidence level for Byes Factor test (in percentage)."
+              },
+              "max_iter": {
+                  "type": "integer",
+                  "default": 400,
+                  "wf_prop": false,
+                  "description": "Number of maximum iterations for EM algorithm."
+              },
+              "tol": {
+                  "type": "number",
+                  "default": 1e-05,
+                  "wf_prop": false,
+                  "description": "Tolerance value for EM algorithm."
+              },
+              "remove_tmp": {
+                  "type": "boolean",
+                  "default": true,
+                  "wf_prop": true,
+                  "description": "Remove temporal files."
+              },
+              "restart": {
+                  "type": "boolean",
+                  "default": false,
+                  "wf_prop": true,
+                  "description": "Do not execute if output files exist.1"
+              },
+              "sandbox_path": {
+                  "type": "string",
+                  "default": "./",
+                  "wf_prop": true,
+                  "description": "Parent path to the sandbox directory."
+              }
+          }
+      }
+  },
+  "additionalProperties": false
 }

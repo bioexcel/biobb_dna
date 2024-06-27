@@ -157,6 +157,12 @@
         "properties": {
             "type": "object",
             "properties": {
+                "basepair": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Name of basepair analyzed."
+                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
@@ -169,11 +175,11 @@
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
                 },
-                "basepair": {
+                "sandbox_path": {
                     "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Name of basepair analyzed."
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
                 }
             }
         }

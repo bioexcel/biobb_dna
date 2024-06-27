@@ -140,19 +140,19 @@
                 },
                 "itst": {
                     "type": "integer",
-                    "default": null,
+                    "default": 0,
                     "wf_prop": false,
                     "description": "Number of first snapshot to be analyzed."
                 },
                 "itnd": {
                     "type": "integer",
-                    "default": null,
+                    "default": 0,
                     "wf_prop": false,
                     "description": "Number of last snapshot to be analyzed."
                 },
                 "itdel": {
                     "type": "integer",
-                    "default": null,
+                    "default": 1,
                     "wf_prop": false,
                     "description": "Spacing between analyzed snapshots."
                 },
@@ -185,6 +185,12 @@
                     "default": false,
                     "wf_prop": true,
                     "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
                 }
             }
         }

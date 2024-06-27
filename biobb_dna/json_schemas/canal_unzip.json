@@ -1,0 +1,369 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/canal_unzip",
+    "name": "biobb_dna CanalUnzip",
+    "title": "Tool for extracting biobb_canal output files.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_zip_file",
+        "output_path"
+    ],
+    "properties": {
+        "input_zip_file": {
+            "type": "string",
+            "description": "Zip file with Canal output files",
+            "filetype": "input",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/canal_output.zip",
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Zip file with Canal output files",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "output_path": {
+            "type": "string",
+            "description": "Canal output file contained within input_zip_file",
+            "filetype": "output",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_unzip_output.ser",
+            "enum": [
+                ".*\\.ser$",
+                ".*\\.his$",
+                ".*\\.cor$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.ser$",
+                    "description": "Canal output file contained within input_zip_file",
+                    "edam": "format_2330"
+                },
+                {
+                    "extension": ".*\\.his$",
+                    "description": "Canal output file contained within input_zip_file",
+                    "edam": "format_3905"
+                },
+                {
+                    "extension": ".*\\.cor$",
+                    "description": "Canal output file contained within input_zip_file",
+                    "edam": "format_3465"
+                }
+            ]
+        },
+        "output_list_path": {
+            "type": "string",
+            "description": "Text file with a list of all Canal output files contained within input_zip_file",
+            "filetype": "output",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canal_unzip_output.txt",
+            "enum": [
+                ".*\\.txt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.txt$",
+                    "description": "Text file with a list of all Canal output files contained within input_zip_file",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Type of file. ",
+                    "enum": [
+                        "series",
+                        "histo",
+                        "corr"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "series",
+                            "description": null
+                        },
+                        {
+                            "name": "histo",
+                            "description": null
+                        },
+                        {
+                            "name": "corr",
+                            "description": null
+                        }
+                    ]
+                },
+                "helpar_name": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Helical parameter name, only for 'series' and 'histo' types. ",
+                    "enum": [
+                        "alphaC",
+                        "alphaW",
+                        "ampC",
+                        "ampW",
+                        "ax-bend",
+                        "betaC",
+                        "betaW",
+                        "buckle",
+                        "chiC",
+                        "chiW",
+                        "curv",
+                        "deltaC",
+                        "deltaW",
+                        "epsilC",
+                        "epsilW",
+                        "gammaC",
+                        "gammaW",
+                        "h-ris",
+                        "h-twi",
+                        "inclin",
+                        "majd",
+                        "majw",
+                        "mind",
+                        "minw",
+                        "opening",
+                        "phaseC",
+                        "phaseW",
+                        "propel",
+                        "reg",
+                        "rise",
+                        "roll",
+                        "shear",
+                        "shift",
+                        "slide",
+                        "stagger",
+                        "stretch",
+                        "tbend",
+                        "tilt",
+                        "tip",
+                        "twist",
+                        "xdisp",
+                        "ydisp",
+                        "zetaC",
+                        "zetaW"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "alphaC",
+                            "description": null
+                        },
+                        {
+                            "name": "alphaW",
+                            "description": null
+                        },
+                        {
+                            "name": "ampC",
+                            "description": null
+                        },
+                        {
+                            "name": "ampW",
+                            "description": null
+                        },
+                        {
+                            "name": "ax-bend",
+                            "description": null
+                        },
+                        {
+                            "name": "betaC",
+                            "description": null
+                        },
+                        {
+                            "name": "betaW",
+                            "description": null
+                        },
+                        {
+                            "name": "buckle",
+                            "description": null
+                        },
+                        {
+                            "name": "chiC",
+                            "description": null
+                        },
+                        {
+                            "name": "chiW",
+                            "description": null
+                        },
+                        {
+                            "name": "curv",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaC",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaW",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilC",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilW",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaC",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaW",
+                            "description": null
+                        },
+                        {
+                            "name": "h-ris",
+                            "description": null
+                        },
+                        {
+                            "name": "h-twi",
+                            "description": null
+                        },
+                        {
+                            "name": "inclin",
+                            "description": null
+                        },
+                        {
+                            "name": "majd",
+                            "description": null
+                        },
+                        {
+                            "name": "majw",
+                            "description": null
+                        },
+                        {
+                            "name": "mind",
+                            "description": null
+                        },
+                        {
+                            "name": "minw",
+                            "description": null
+                        },
+                        {
+                            "name": "opening",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseC",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseW",
+                            "description": null
+                        },
+                        {
+                            "name": "propel",
+                            "description": null
+                        },
+                        {
+                            "name": "reg",
+                            "description": null
+                        },
+                        {
+                            "name": "rise",
+                            "description": null
+                        },
+                        {
+                            "name": "roll",
+                            "description": null
+                        },
+                        {
+                            "name": "shear",
+                            "description": null
+                        },
+                        {
+                            "name": "shift",
+                            "description": null
+                        },
+                        {
+                            "name": "slide",
+                            "description": null
+                        },
+                        {
+                            "name": "stagger",
+                            "description": null
+                        },
+                        {
+                            "name": "stretch",
+                            "description": null
+                        },
+                        {
+                            "name": "tbend",
+                            "description": null
+                        },
+                        {
+                            "name": "tilt",
+                            "description": null
+                        },
+                        {
+                            "name": "tip",
+                            "description": null
+                        },
+                        {
+                            "name": "twist",
+                            "description": null
+                        },
+                        {
+                            "name": "xdisp",
+                            "description": null
+                        },
+                        {
+                            "name": "ydisp",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaC",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaW",
+                            "description": null
+                        }
+                    ]
+                },
+                "correlation": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Correlation indexes separated by underscore (ie '98_165'), only for 'corr' type."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

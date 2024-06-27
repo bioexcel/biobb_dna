@@ -19,9 +19,9 @@ class DnaTimeseriesUnzip(BiobbObject):
 
     Args:
         input_zip_file (str): Zip file with dna_timeseries output files. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/timeseries_output.zip>`_. Accepted formats: zip (edam:format_3987).
-        output_path_csv (str): dna_timeseries output csv file contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip_output.csv>`_. Accepted formats: csv (edam:format_3752).
-        output_path_jpg (str): dna_timeseries output jpg file contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip_output.jpg>`_. Accepted formats: jpg (edam:format_3579).
-        output_list_path (str) (Optional): Text file with a list of all dna_timeseries output files contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip_output.txt>`_. Accepted formats: txt (edam:format_2330).
+        output_path_csv (str): dna_timeseries output csv file contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.csv>`_. Accepted formats: csv (edam:format_3752).
+        output_path_jpg (str): dna_timeseries output jpg file contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.jpg>`_. Accepted formats: jpg (edam:format_3579).
+        output_list_path (str) (Optional): Text file with a list of all dna_timeseries output files contained within input_zip_file. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.txt>`_. Accepted formats: txt (edam:format_2330).
         properties (dic):
             * **type** (*str*) - (None) Type of analysis, series or histogram. Values: series, hist.
             * **parameter** (*str*) - (None) Type of parameter. Values: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.
@@ -29,6 +29,7 @@ class DnaTimeseriesUnzip(BiobbObject):
             * **index** (*int*) - (0) Base pair index in the parameter 'sequence', starting from 0.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
     Examples:
         This is a use example of how to use the building block from Python::
 

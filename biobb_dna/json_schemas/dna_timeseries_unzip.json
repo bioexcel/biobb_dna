@@ -1,0 +1,335 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dna/json_schemas/1.0/dna_timeseries_unzip",
+    "name": "biobb_dna DnaTimeseriesUnzip",
+    "title": "Tool for extracting dna_timeseries output files.",
+    "description": null,
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "In house",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_zip_file",
+        "output_path_csv",
+        "output_path_jpg"
+    ],
+    "properties": {
+        "input_zip_file": {
+            "type": "string",
+            "description": "Zip file with dna_timeseries output files",
+            "filetype": "input",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/dna/timeseries_output.zip",
+            "enum": [
+                ".*\\.zip$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.zip$",
+                    "description": "Zip file with dna_timeseries output files",
+                    "edam": "format_3987"
+                }
+            ]
+        },
+        "output_path_csv": {
+            "type": "string",
+            "description": "dna_timeseries output csv file contained within input_zip_file",
+            "filetype": "output",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.csv",
+            "enum": [
+                ".*\\.csv$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.csv$",
+                    "description": "dna_timeseries output csv file contained within input_zip_file",
+                    "edam": "format_3752"
+                }
+            ]
+        },
+        "output_path_jpg": {
+            "type": "string",
+            "description": "dna_timeseries output jpg file contained within input_zip_file",
+            "filetype": "output",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.jpg",
+            "enum": [
+                ".*\\.jpg$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.jpg$",
+                    "description": "dna_timeseries output jpg file contained within input_zip_file",
+                    "edam": "format_3579"
+                }
+            ]
+        },
+        "output_list_path": {
+            "type": "string",
+            "description": "Text file with a list of all dna_timeseries output files contained within input_zip_file",
+            "filetype": "output",
+            "sample": "https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/dna_timeseries_unzip.txt",
+            "enum": [
+                ".*\\.txt$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.txt$",
+                    "description": "Text file with a list of all dna_timeseries output files contained within input_zip_file",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Type of analysis, series or histogram. ",
+                    "enum": [
+                        "series",
+                        "hist"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "series",
+                            "description": null
+                        },
+                        {
+                            "name": "hist",
+                            "description": null
+                        }
+                    ]
+                },
+                "parameter": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Type of parameter. ",
+                    "enum": [
+                        "majd",
+                        "majw",
+                        "mind",
+                        "minw",
+                        "inclin",
+                        "tip",
+                        "xdisp",
+                        "ydisp",
+                        "shear",
+                        "stretch",
+                        "stagger",
+                        "buckle",
+                        "propel",
+                        "opening",
+                        "rise",
+                        "roll",
+                        "twist",
+                        "shift",
+                        "slide",
+                        "tilt",
+                        "alphaC",
+                        "alphaW",
+                        "betaC",
+                        "betaW",
+                        "gammaC",
+                        "gammaW",
+                        "deltaC",
+                        "deltaW",
+                        "epsilC",
+                        "epsilW",
+                        "zetaC",
+                        "zetaW",
+                        "chiC",
+                        "chiW",
+                        "phaseC",
+                        "phaseW"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "majd",
+                            "description": null
+                        },
+                        {
+                            "name": "majw",
+                            "description": null
+                        },
+                        {
+                            "name": "mind",
+                            "description": null
+                        },
+                        {
+                            "name": "minw",
+                            "description": null
+                        },
+                        {
+                            "name": "inclin",
+                            "description": null
+                        },
+                        {
+                            "name": "tip",
+                            "description": null
+                        },
+                        {
+                            "name": "xdisp",
+                            "description": null
+                        },
+                        {
+                            "name": "ydisp",
+                            "description": null
+                        },
+                        {
+                            "name": "shear",
+                            "description": null
+                        },
+                        {
+                            "name": "stretch",
+                            "description": null
+                        },
+                        {
+                            "name": "stagger",
+                            "description": null
+                        },
+                        {
+                            "name": "buckle",
+                            "description": null
+                        },
+                        {
+                            "name": "propel",
+                            "description": null
+                        },
+                        {
+                            "name": "opening",
+                            "description": null
+                        },
+                        {
+                            "name": "rise",
+                            "description": null
+                        },
+                        {
+                            "name": "roll",
+                            "description": null
+                        },
+                        {
+                            "name": "twist",
+                            "description": null
+                        },
+                        {
+                            "name": "shift",
+                            "description": null
+                        },
+                        {
+                            "name": "slide",
+                            "description": null
+                        },
+                        {
+                            "name": "tilt",
+                            "description": null
+                        },
+                        {
+                            "name": "alphaC",
+                            "description": null
+                        },
+                        {
+                            "name": "alphaW",
+                            "description": null
+                        },
+                        {
+                            "name": "betaC",
+                            "description": null
+                        },
+                        {
+                            "name": "betaW",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaC",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaW",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaC",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaW",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilC",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilW",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaC",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaW",
+                            "description": null
+                        },
+                        {
+                            "name": "chiC",
+                            "description": null
+                        },
+                        {
+                            "name": "chiW",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseC",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseW",
+                            "description": null
+                        }
+                    ]
+                },
+                "sequence": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Nucleic acid sequence used for generating dna_timeseries output file."
+                },
+                "index": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Base pair index in the parameter 'sequence', starting from 0."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_dna",
-    version="4.2.2",
+    version="4.2.3",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.com",
     description="Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
@@ -21,7 +21,7 @@ setuptools.setup(
     install_requires=[
         'biobb_common==4.2.0',
         'pandas>=1.3.0',
-        'scikit-learn==0.24.2'],
+        'scikit-learn>=0.24.2'],
     python_requires='>=3.8',
     entry_points={
         "console_scripts": [

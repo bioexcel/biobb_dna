@@ -1,5 +1,14 @@
 # Biobb Analysis changelog
 
+## What's new in version [4.2.3](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.3)?
+In version 4.2.3 some bugs in Canion and Curves have been fixed. Added two new tools: CanalUnzip and DnaTimeseriesUnzip.
+
+### New features
+
+* Bug fixes in Canion and Curves (curvesplus)
+* New CanalUnzip tool (curvesplus)
+* New DnaTimeseriesUnzip tool (dna)
+
 ## What's new in version [4.2.2](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.2)?
 In version 4.2.2 a bug in HelParBimodality has been fixed.
 

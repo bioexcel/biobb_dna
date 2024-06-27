@@ -1,0 +1,5 @@
+properties:
+  index: 5
+  parameter: shift
+  sequence: CGCGAATTCGCG
+  type: hist
