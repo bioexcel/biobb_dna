@@ -397,21 +397,7 @@ Command:
 ```python
 canal_unzip -h
 ```
-    usage: canal_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path OUTPUT_PATH [--output_list_path OUTPUT_LIST_PATH]
-    
-    Tool for extracting biobb_canal output files.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --output_list_path OUTPUT_LIST_PATH
-                            Text file with a list of all Canal output files contained within input_zip_file. Accepted formats: txt.
-    
-    required arguments:
-      --input_zip_file INPUT_ZIP_FILE
-                            Zip file with Canal output files. Accepted formats: zip.
-      --output_path OUTPUT_PATH
-                            Canal output file contained within input_zip_file. Accepted formats: ser, his, cor.
+    /bin/sh: canal_unzip: command not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -691,15 +677,15 @@ Command:
 dna_bimodality -h
 ```
     usage: dna_bimodality [-h] [--config CONFIG] --input_csv_file INPUT_CSV_FILE [--input_zip_file INPUT_ZIP_FILE] --output_csv_path OUTPUT_CSV_PATH --output_jpg_path OUTPUT_JPG_PATH
-
+    
     Determine binormality/bimodality from a helical parameter dataset.
-
-    options:
+    
+    optional arguments:
       -h, --help            show this help message and exit
       --config CONFIG       Configuration file
       --input_zip_file INPUT_ZIP_FILE
                             Path to zip file containing csv input files. Accepted formats: zip.
-
+    
     required arguments:
       --input_csv_file INPUT_CSV_FILE
                             Path to csv file with data. Accepted formats: csv.
@@ -724,8 +710,8 @@ Config parameters for this building block:
 * **max_iter** (*integer*): (400) Number of maximum iterations for EM algorithm..
 * **tol** (*number*): (1e-05) Tolerance value for EM algorithm..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist.1.
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.1.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_bimodality.yml)
 ```python
@@ -979,23 +965,7 @@ Command:
 ```python
 dna_timeseries_unzip -h
 ```
-    usage: dna_timeseries_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path_csv OUTPUT_PATH_CSV --output_path_jpg OUTPUT_PATH_JPG [--output_list_path OUTPUT_LIST_PATH]
-    
-    Tool for extracting dna_timeseries output files.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      --config CONFIG       Configuration file
-      --output_list_path OUTPUT_LIST_PATH
-                            Text file with a list of all dna_timeseries output files contained within input_zip_file. Accepted formats: txt.
-    
-    required arguments:
-      --input_zip_file INPUT_ZIP_FILE
-                            Zip file with dna_timeseries output files. Accepted formats: zip.
-      --output_path_csv OUTPUT_PATH_CSV
-                            dna_timeseries output csv file contained within input_zip_file. Accepted formats: csv.
-      --output_path_jpg OUTPUT_PATH_JPG
-                            dna_timeseries output jpg file contained within input_zip_file. Accepted formats: jpg.
+    /bin/sh: dna_timeseries_unzip: command not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
