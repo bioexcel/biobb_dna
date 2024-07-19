@@ -6,6 +6,7 @@ import zipfile
 import shutil
 import argparse
 
+from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -27,7 +28,7 @@ class DnaTimeseriesUnzip(BiobbObject):
             * **type** (*str*) - (None) Type of analysis, series or histogram. Values: series, hist.
             * **parameter** (*str*) - (None) Type of parameter. Values: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.
             * **sequence** (*str*) - (None) Nucleic acid sequence used for generating dna_timeseries output file.
-            * **index** (*int*) - (0) Base pair index in the parameter 'sequence', starting from 0.
+            * **index** (*int*) - (1) Base pair index in the parameter 'sequence', starting from 1.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
@@ -79,7 +80,7 @@ class DnaTimeseriesUnzip(BiobbObject):
         self.type = properties.get('type', None)
         self.parameter = properties.get('parameter', None)
         self.sequence = properties.get('sequence', None)
-        self.index = properties.get('index', 0)
+        self.index = properties.get('index', 1)
         self.properties = properties
 
         # Check the properties
@@ -108,11 +109,8 @@ class DnaTimeseriesUnzip(BiobbObject):
             exit(1)
 
         # Check that the parameter is valid
-        if self.parameter not in ["majd", "majw", "mind", "minw", "inclin", "tip", "xdisp", "ydisp", "shear", "stretch",
-                                  "stagger", "buckle", "propel", "opening", "rise", "roll", "twist", "shift", "slide",
-                                  "tilt", "alphaC", "alphaW", "betaC", "betaW", "gammaC", "gammaW", "deltaC", "deltaW",
-                                  "epsilC", "epsilW", "zetaC", "zetaW", "chiC", "chiW", "phaseC", "phaseW"]:
-            fu.log(f"Parameter {self.parameter} not valid. Valid parameters are: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.",
+        if self.parameter not in constants.helical_parameters:
+            fu.log(f"Parameter {self.parameter} not valid. Valid parameters are: {constants.helical_parameters}.",
                    self.out_log, self.global_log)
             exit(1)
 
@@ -124,16 +122,16 @@ class DnaTimeseriesUnzip(BiobbObject):
             exit(1)
 
         # Check that the index is valid
-        if self.index < 0 or self.index >= len(self.sequence) - 1:
+        if self.index < 1 or self.index >= len(self.sequence) - 1:
             fu.log(f"Index {self.index} not valid. It should be between 0 and {len(self.sequence) - 2}.",
                    self.out_log, self.global_log)
             exit(1)
 
         # Get index sequence base and next base
-        bp = self.sequence[self.index] + self.sequence[self.index + 1]
+        bp = self.sequence[self.index-1] + self.sequence[self.index]
 
         # Get the filename
-        filename = f"{self.type}_{self.parameter}_{self.index + 1}_{bp}"
+        filename = f"{self.type}_{self.parameter}_{self.index}_{bp}"
         csv_file = f"{filename}.csv"
         jpg_file = f"{filename}.jpg"
 

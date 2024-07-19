@@ -3,6 +3,7 @@
 """Module containing the HelParTimeSeries class and the command line interface."""
 import argparse
 import zipfile
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -27,9 +28,9 @@ class HelParTimeSeries(BiobbObject):
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
             * **bins** (*int*) - (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
-            * **helpar_name** (*str*) - (Optional) helical parameter name.
+            * **helpar_name** (*str*) - (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. Values: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
-            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+            * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
@@ -101,11 +102,12 @@ class HelParTimeSeries(BiobbObject):
                     "Helical parameter name is invalid! "
                     f"Options: {constants.helical_parameters}")
 
-        # get base length and unit from helical parameter name
+        # get base length from helical parameter name
         if self.helpar_name.lower() in constants.hp_singlebases:
             self.baselen = 0
         else:
             self.baselen = 1
+        # get unit from helical parameter name
         if self.helpar_name in constants.hp_angular:
             self.hp_unit = "Degrees"
         else:
@@ -128,31 +130,71 @@ class HelParTimeSeries(BiobbObject):
         if self.sequence is None or len(self.sequence) < 2:
             raise ValueError("sequence is null or too short!")
 
-        # check seqpos
+        # calculate cols with 0 index
         if self.seqpos is not None:
-            if (max(self.seqpos) > len(self.sequence) - 2) or (min(self.seqpos) < 1):
+            cols = [i-1 for i in self.seqpos]
+        else:
+            cols = list(range(len(self.sequence)))
+
+        # sort cols in ascending order
+        cols.sort()
+
+        # check seqpos for base pairs
+        if self.seqpos is not None and self.helpar_name in constants.hp_basepairs:
+            if (max(cols) > len(self.sequence) - 2) or (min(cols) < 0):
                 raise ValueError(
-                    f"seqpos values must be between 1 and {len(self.sequence) - 2}")
+                    f"seqpos values must be between 1 and {len(self.sequence) - 1}")
+            if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
+                raise ValueError(
+                    "seqpos must be a list of at least two integers")
+        # check seqpos for non base pairs
+        elif self.seqpos is not None and self.helpar_name not in constants.hp_basepairs:
+            if (max(cols) > len(self.sequence) - 1) or (min(cols) < 0):
+                raise ValueError(
+                    f"seqpos values must be between 1 and {len(self.sequence)}")
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError(
                     "seqpos must be a list of at least two integers")
 
+        if self.helpar_name in constants.hp_basepairs:
+            # remove first and last base pairs from cols if they match 0 and len(sequence)
+            if min(cols) == 0:
+                cols.pop(0)
+            if max(cols) == len(self.sequence) - 1:
+                cols.pop(-1)
+
+            # discard first and last base(pairs) from sequence
+            sequence = self.sequence[1:-1]
+            # create indices list
+            indices = cols.copy()
+            # create subunits list from cols
+            subunits = [f"{i+1}_{sequence[i-1:i+self.baselen]}" for i in cols]
+            # clean subunits (leave only basepairs)
+            pattern = re.compile(r'\d+_[A-Za-z]{2}')
+            # get removed items
+            removed_items = [s for s in subunits if not pattern.fullmatch(s)]
+            # get indices of removed items (in integer format and starting from 0)
+            removed_numbers = [re.match(r'\d+', item).group() for item in removed_items]
+            removed_numbers = list(map(int, removed_numbers))
+            removed_numbers = [i-1 for i in removed_numbers]
+            # remove non basepairs from subunits and indices
+            subunits = [s for s in subunits if pattern.fullmatch(s)]
+            indices = [i for i in indices if i not in removed_numbers]
+        else:
+            sequence = self.sequence
+            # create indices list
+            indices = cols.copy()
+            # trick for getting the index column from the .ser file
+            indices.insert(0, 0)
+            # create subunits list from cols
+            subunits = [f"{i+1}_{sequence[i:i+1+self.baselen]}" for i in cols]
+
         # read input .ser file
         ser_data = read_series(
             self.stage_io_dict['in']['input_ser_path'],
-            usecols=self.seqpos)
-        if self.seqpos is None:
-            ser_data = ser_data[ser_data.columns[1:-1]]
-            # discard first and last base(pairs) from sequence
-            sequence = self.sequence[1:]
-            subunits = [
-                f"{i+1}_{sequence[i:i+1+self.baselen]}"
-                for i in range(len(ser_data.columns))]
-        else:
-            sequence = self.sequence
-            subunits = [
-                f"{i+1}_{sequence[i:i+1+self.baselen]}"
-                for i in self.seqpos]
+            usecols=indices)
+
+        # get columns for selected bases
         ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)

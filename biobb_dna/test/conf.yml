@@ -56,7 +56,7 @@ dna_timeseries:
     output_zip_path: timeseries_output.zip
     ref_output_zip_path: file:test_reference_dir/dna/timeseries_output.zip
   properties:
-    sequence: "CGCGAATTCGCG"
+    sequence: CGCGAATTCGCG
     seqpos: [4,5]
 
 dna_timeseries_unzip:
