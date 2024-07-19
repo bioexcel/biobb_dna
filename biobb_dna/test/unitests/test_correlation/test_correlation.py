@@ -50,6 +50,7 @@ class TestInterBasepairCorrelation():
 
     def teardown_class(self):
         fx.test_teardown(self)
+        # pass
 
     def test_basepaircorrelation(self):
         returncode = interbpcorr(
