@@ -1,4 +1,5 @@
-working_dir_path: /tmp/biobb/unitests
+global_properties:
+  working_dir_path: /tmp/biobb/unitests
 
 biobb_curves:
   paths:
@@ -73,7 +74,7 @@ dna_timeseries_unzip:
     parameter: shift
     sequence: CGCGAATTCGCG
     index: 5
-  
+
 dna_averages:
   paths:
     input_ser_path: file:test_data_dir/dna/canal_output_shift.ser
