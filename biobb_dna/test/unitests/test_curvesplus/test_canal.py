@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.curvesplus.biobb_canal import biobb_canal
 import platform

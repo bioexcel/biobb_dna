@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.stiffness.average_stiffness import average_stiffness
 from biobb_dna.stiffness.basepair_stiffness import basepair_stiffness

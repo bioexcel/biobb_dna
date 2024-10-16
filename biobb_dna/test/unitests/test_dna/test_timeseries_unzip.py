@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.dna.dna_timeseries_unzip import dna_timeseries_unzip
 

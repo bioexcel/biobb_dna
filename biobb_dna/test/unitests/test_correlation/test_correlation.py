@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.interbp_correlations.interhpcorr import interhpcorr
 from biobb_dna.interbp_correlations.interseqcorr import interseqcorr
