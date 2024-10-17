@@ -397,7 +397,21 @@ Command:
 ```python
 canal_unzip -h
 ```
-    /bin/sh: canal_unzip: command not found
+    usage: canal_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path OUTPUT_PATH [--output_list_path OUTPUT_LIST_PATH]
+    
+    Tool for extracting biobb_canal output files.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+      --output_list_path OUTPUT_LIST_PATH
+                            Text file with a list of all Canal output files contained within input_zip_file. Accepted formats: txt.
+    
+    required arguments:
+      --input_zip_file INPUT_ZIP_FILE
+                            Zip file with Canal output files. Accepted formats: zip.
+      --output_path OUTPUT_PATH
+                            Canal output file contained within input_zip_file. Accepted formats: ser, his, cor.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -842,9 +856,9 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 Config parameters for this building block:
 * **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)..
 * **bins** (*integer*): (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist..
-* **helpar_name** (*string*): (Optional) helical parameter name..
+* **helpar_name** (*string*): (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. .
 * **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
@@ -965,7 +979,23 @@ Command:
 ```python
 dna_timeseries_unzip -h
 ```
-    /bin/sh: dna_timeseries_unzip: command not found
+    usage: dna_timeseries_unzip [-h] [--config CONFIG] --input_zip_file INPUT_ZIP_FILE --output_path_csv OUTPUT_PATH_CSV --output_path_jpg OUTPUT_PATH_JPG [--output_list_path OUTPUT_LIST_PATH]
+    
+    Tool for extracting dna_timeseries output files.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      --config CONFIG       Configuration file
+      --output_list_path OUTPUT_LIST_PATH
+                            Text file with a list of all dna_timeseries output files contained within input_zip_file. Accepted formats: txt.
+    
+    required arguments:
+      --input_zip_file INPUT_ZIP_FILE
+                            Zip file with dna_timeseries output files. Accepted formats: zip.
+      --output_path_csv OUTPUT_PATH_CSV
+                            dna_timeseries output csv file contained within input_zip_file. Accepted formats: csv.
+      --output_path_jpg OUTPUT_PATH_JPG
+                            dna_timeseries output jpg file contained within input_zip_file. Accepted formats: jpg.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -981,7 +1011,7 @@ Config parameters for this building block:
 * **type** (*string*): (None) Type of analysis, series or histogram. .
 * **parameter** (*string*): (None) Type of parameter. .
 * **sequence** (*string*): (None) Nucleic acid sequence used for generating dna_timeseries output file..
-* **index** (*integer*): (0) Base pair index in the parameter 'sequence', starting from 0..
+* **index** (*integer*): (1) Base pair index in the parameter 'sequence', starting from 1..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory..

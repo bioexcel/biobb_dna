@@ -69,9 +69,193 @@
                 },
                 "helpar_name": {
                     "type": "string",
-                    "default": "Optional",
+                    "default": null,
                     "wf_prop": false,
-                    "description": "helical parameter name."
+                    "description": "Helical parameter name. It must match the name of the helical parameter in the .ser input file. ",
+                    "enum": [
+                        "majd",
+                        "majw",
+                        "mind",
+                        "minw",
+                        "inclin",
+                        "tip",
+                        "xdisp",
+                        "ydisp",
+                        "shear",
+                        "stretch",
+                        "stagger",
+                        "buckle",
+                        "propel",
+                        "opening",
+                        "rise",
+                        "roll",
+                        "twist",
+                        "shift",
+                        "slide",
+                        "tilt",
+                        "alphaC",
+                        "alphaW",
+                        "betaC",
+                        "betaW",
+                        "gammaC",
+                        "gammaW",
+                        "deltaC",
+                        "deltaW",
+                        "epsilC",
+                        "epsilW",
+                        "zetaC",
+                        "zetaW",
+                        "chiC",
+                        "chiW",
+                        "phaseC",
+                        "phaseW"
+                    ],
+                    "property_formats": [
+                        {
+                            "name": "majd",
+                            "description": null
+                        },
+                        {
+                            "name": "majw",
+                            "description": null
+                        },
+                        {
+                            "name": "mind",
+                            "description": null
+                        },
+                        {
+                            "name": "minw",
+                            "description": null
+                        },
+                        {
+                            "name": "inclin",
+                            "description": null
+                        },
+                        {
+                            "name": "tip",
+                            "description": null
+                        },
+                        {
+                            "name": "xdisp",
+                            "description": null
+                        },
+                        {
+                            "name": "ydisp",
+                            "description": null
+                        },
+                        {
+                            "name": "shear",
+                            "description": null
+                        },
+                        {
+                            "name": "stretch",
+                            "description": null
+                        },
+                        {
+                            "name": "stagger",
+                            "description": null
+                        },
+                        {
+                            "name": "buckle",
+                            "description": null
+                        },
+                        {
+                            "name": "propel",
+                            "description": null
+                        },
+                        {
+                            "name": "opening",
+                            "description": null
+                        },
+                        {
+                            "name": "rise",
+                            "description": null
+                        },
+                        {
+                            "name": "roll",
+                            "description": null
+                        },
+                        {
+                            "name": "twist",
+                            "description": null
+                        },
+                        {
+                            "name": "shift",
+                            "description": null
+                        },
+                        {
+                            "name": "slide",
+                            "description": null
+                        },
+                        {
+                            "name": "tilt",
+                            "description": null
+                        },
+                        {
+                            "name": "alphaC",
+                            "description": null
+                        },
+                        {
+                            "name": "alphaW",
+                            "description": null
+                        },
+                        {
+                            "name": "betaC",
+                            "description": null
+                        },
+                        {
+                            "name": "betaW",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaC",
+                            "description": null
+                        },
+                        {
+                            "name": "gammaW",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaC",
+                            "description": null
+                        },
+                        {
+                            "name": "deltaW",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilC",
+                            "description": null
+                        },
+                        {
+                            "name": "epsilW",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaC",
+                            "description": null
+                        },
+                        {
+                            "name": "zetaW",
+                            "description": null
+                        },
+                        {
+                            "name": "chiC",
+                            "description": null
+                        },
+                        {
+                            "name": "chiW",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseC",
+                            "description": null
+                        },
+                        {
+                            "name": "phaseW",
+                            "description": null
+                        }
+                    ]
                 },
                 "stride": {
                     "type": "integer",
@@ -83,7 +267,7 @@
                     "type": "array",
                     "default": null,
                     "wf_prop": false,
-                    "description": "list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence."
+                    "description": "list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence."
                 },
                 "remove_tmp": {
                     "type": "boolean",

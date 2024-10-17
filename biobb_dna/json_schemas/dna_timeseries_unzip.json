@@ -306,9 +306,9 @@
                 },
                 "index": {
                     "type": "integer",
-                    "default": 0,
+                    "default": 1,
                     "wf_prop": false,
-                    "description": "Base pair index in the parameter 'sequence', starting from 0."
+                    "description": "Base pair index in the parameter 'sequence', starting from 1."
                 },
                 "remove_tmp": {
                     "type": "boolean",
