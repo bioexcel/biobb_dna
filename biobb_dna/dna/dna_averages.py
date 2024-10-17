@@ -2,6 +2,7 @@
 
 """Module containing the HelParAverages class and the command line interface."""
 import argparse
+from typing import Optional
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -205,7 +206,7 @@ class HelParAverages(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -216,7 +217,7 @@ class HelParAverages(BiobbObject):
 
 def dna_averages(
         input_ser_path: str, output_csv_path: str, output_jpg_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParAverages <dna.dna_averages.HelParAverages>` class and
     execute the :meth:`launch() <dna.dna_averages.HelParAverages.launch>` method."""
 

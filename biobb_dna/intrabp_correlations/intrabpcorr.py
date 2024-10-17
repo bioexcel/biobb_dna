@@ -2,6 +2,7 @@
 
 """Module containing the IntraBasePairCorrelation class and the command line interface."""
 import argparse
+from typing import Optional
 from itertools import product
 
 import numpy as np
@@ -233,7 +234,7 @@ class IntraBasePairCorrelation(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -270,7 +271,7 @@ def intrabpcorr(
         input_filename_stagger: str, input_filename_buckle: str,
         input_filename_propel: str, input_filename_opening: str,
         output_csv_path: str, output_jpg_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParCorrelation <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation>` class and
     execute the :meth:`launch() <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation.launch>` method."""
 

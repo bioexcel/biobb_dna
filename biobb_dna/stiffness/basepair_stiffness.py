@@ -2,6 +2,7 @@
 
 """Module containing the HelParStiffness class and the command line interface."""
 import argparse
+from typing import Optional
 from pathlib import Path
 
 import pandas as pd
@@ -180,7 +181,7 @@ class BPStiffness(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -193,7 +194,7 @@ def basepair_stiffness(
         input_filename_shift: str, input_filename_slide: str,
         input_filename_rise: str, input_filename_tilt: str,
         input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, output_jpg_path: str, properties: dict = None, **kwargs) -> int:
+        output_csv_path: str, output_jpg_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` class and
     execute the :meth:`launch() <stiffness.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
 

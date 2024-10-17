@@ -2,6 +2,7 @@
 """Module containing the Puckering class and the command line interface."""
 
 import argparse
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -183,7 +184,7 @@ class Puckering(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -235,7 +236,7 @@ class Puckering(BiobbObject):
 def puckering(
         input_phaseC_path: str, input_phaseW_path: str,
         output_csv_path: str, output_jpg_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Puckering <dna.backbone.puckering.Puckering>` class and
     execute the: meth: `launch() <dna.backbone.puckering.Puckering.launch>` method. """
 

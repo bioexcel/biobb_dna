@@ -2,6 +2,7 @@
 
 """Module containing the HelParTimeSeries class and the command line interface."""
 import argparse
+from typing import Optional
 import zipfile
 import re
 from pathlib import Path
@@ -263,7 +264,7 @@ class HelParTimeSeries(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -274,7 +275,7 @@ class HelParTimeSeries(BiobbObject):
 
 def dna_timeseries(
         input_ser_path: str, output_zip_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
     execute the :meth:`launch() <dna.dna_timeseries.HelParTimeSeries.launch>` method."""
 

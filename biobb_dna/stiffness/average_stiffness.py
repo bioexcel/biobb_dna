@@ -2,6 +2,7 @@
 """Module containing the AverageStiffness class and the command line interface."""
 
 import argparse
+from typing import Optional
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -186,7 +187,7 @@ class AverageStiffness(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -197,7 +198,7 @@ class AverageStiffness(BiobbObject):
 
 def average_stiffness(
         input_ser_path: str, output_csv_path: str, output_jpg_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` class and
     execute the :meth:`launch() <stiffness.average_stiffness.AverageStiffness.launch>` method."""
 

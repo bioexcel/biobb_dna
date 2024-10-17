@@ -5,6 +5,7 @@ import re
 import zipfile
 import shutil
 import argparse
+from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -171,7 +172,7 @@ class CanalUnzip(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -183,8 +184,8 @@ class CanalUnzip(BiobbObject):
 def canal_unzip(
         input_zip_file: str,
         output_path: str,
-        output_list_path: str = None,
-        properties: dict = None,
+        output_list_path: Optional[str] = None,
+        properties: Optional[dict] = None,
         **kwargs) -> int:
     """Create :class:`CanalUnzip <biobb_dna.curvesplus.canal_unzip.CanalUnzip>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.canal_unzip.CanalUnzip.launch>` method."""

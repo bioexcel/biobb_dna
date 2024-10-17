@@ -2,6 +2,7 @@
 
 """Module containing the InterSequenceCorrelation class and the command line interface."""
 import argparse
+from typing import Optional
 from pathlib import Path
 
 import numpy as np
@@ -177,7 +178,7 @@ class InterSequenceCorrelation(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -199,7 +200,7 @@ class InterSequenceCorrelation(BiobbObject):
 def interseqcorr(
         input_ser_path: str,
         output_csv_path: str, output_jpg_path: str,
-        properties: dict = None, **kwargs) -> int:
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` class and
     execute the :meth:`launch() <interbp_correlations.interseqcorr.InterSequenceCorrelation.launch>` method."""
 

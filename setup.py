@@ -18,6 +18,7 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
+    package_data={'biobb_dna': ['py.typed']},
     install_requires=[
         'biobb_common==4.2.0',
         'pandas>=1.3.0',
@@ -46,13 +47,14 @@ setuptools.setup(
             "basepair_stiffness = biobb_dna.stiffness.basepair_stiffness:main"
         ]
     },
-    classifiers=(
-        "Development Status :: 3 - Alpha",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
-    ),
+        "Operating System :: Unix"
+    ],
 )

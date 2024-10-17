@@ -5,6 +5,7 @@ import re
 import zipfile
 import shutil
 import argparse
+from typing import Optional
 
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
@@ -173,7 +174,7 @@ class DnaTimeseriesUnzip(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -186,8 +187,8 @@ def dna_timeseries_unzip(
         input_zip_file: str,
         output_path_csv: str,
         output_path_jpg: str,
-        output_list_path: str = None,
-        properties: dict = None,
+        output_list_path: Optional[str] = None,
+        properties: Optional[dict] = None,
         **kwargs) -> int:
     """Create :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` class and
     execute the :meth:`launch() <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip.launch>` method."""

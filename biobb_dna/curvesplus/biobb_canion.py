@@ -4,6 +4,7 @@
 import os
 import zipfile
 import argparse
+from typing import Optional
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -196,7 +197,7 @@ class Canion(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -207,7 +208,7 @@ class Canion(BiobbObject):
 
 def biobb_canion(
         input_cdi_path: str, input_afr_path: str, input_avg_struc_path: str,
-        output_zip_path: str = None, properties: dict = None, **kwargs) -> int:
+        output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canion.Canion.launch>` method."""
 

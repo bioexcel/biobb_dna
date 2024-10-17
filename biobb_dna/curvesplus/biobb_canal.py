@@ -4,6 +4,7 @@
 import os
 import zipfile
 import argparse
+from typing import Optional
 from pathlib import Path
 
 from biobb_common.generic.biobb_object import BiobbObject
@@ -185,7 +186,7 @@ class Canal(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -197,8 +198,8 @@ class Canal(BiobbObject):
 def biobb_canal(
         input_cda_file: str,
         output_zip_path: str,
-        input_lis_file: str = None,
-        properties: dict = None,
+        input_lis_file: Optional[str] = None,
+        properties: Optional[dict] = None,
         **kwargs) -> int:
     """Create :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canal.Canal.launch>` method."""

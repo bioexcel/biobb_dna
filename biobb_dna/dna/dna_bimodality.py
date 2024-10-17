@@ -4,6 +4,7 @@
 import os
 import zipfile
 import argparse
+from typing import Optional
 from pathlib import Path
 
 import pandas as pd
@@ -231,7 +232,7 @@ class HelParBimodality(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -293,7 +294,7 @@ class HelParBimodality(BiobbObject):
 
 def dna_bimodality(
         input_csv_file, output_csv_path, output_jpg_path,
-        input_zip_file: str = None, properties: dict = None, **kwargs) -> int:
+        input_zip_file: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
     execute the :meth:`launch() <dna.dna_bimodality.HelParBimodality.launch>` method."""
 

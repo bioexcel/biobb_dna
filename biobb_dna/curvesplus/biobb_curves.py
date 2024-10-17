@@ -4,6 +4,7 @@
 import os
 import zipfile
 import argparse
+from typing import Optional
 import shutil
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
@@ -243,7 +244,7 @@ class Curves(BiobbObject):
 
         # Remove temporary file(s)
         self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir")
+            self.stage_io_dict.get("unique_dir", "")
         ])
         self.remove_tmp_files()
 
@@ -254,8 +255,8 @@ class Curves(BiobbObject):
 
 def biobb_curves(
         input_struc_path: str, output_lis_path: str, output_cda_path: str,
-        input_top_path: str = None, output_zip_path: str = None,
-        properties: dict = None, **kwargs) -> int:
+        input_top_path: Optional[str] = None, output_zip_path: Optional[str] = None,
+        properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_curves.Curves.launch>` method."""
 
