@@ -9,7 +9,7 @@ __pycache__/
 *.egg-info
 build/
 dist/
-THGA_K.cdi# Genbadge reports
+THGA_K.cdi
 reports/
 flake8-badge.svg
 *.pyc
