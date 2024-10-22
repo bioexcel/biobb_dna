@@ -1,3 +1,5 @@
+# Files too big to be stored in gitTHGA_K.cdi
+
 .gitignore
 __pycache__/
 *.py[cod]

@@ -214,10 +214,10 @@ class HelParTimeSeries(BiobbObject):
             # column series
             series_colfn = f"series_{self.helpar_name}_{col}"
             column_data.to_csv(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.csv")
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{series_colfn}.csv")
             # save table
             zf.write(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.csv", arcname=f"{series_colfn}.csv")
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{series_colfn}.csv", arcname=f"{series_colfn}.csv")
 
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
             reduced_data = column_data.iloc[::self.stride]
@@ -229,10 +229,10 @@ class HelParTimeSeries(BiobbObject):
                 "(base pair "
                 f"{'step' if self.baselen==1 else ''} {col})")
             fig.savefig(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.jpg", format="jpg")
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{series_colfn}.jpg", format="jpg")
             # save plot
             zf.write(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{series_colfn}.jpg", arcname=f"{series_colfn}.jpg")
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{series_colfn}.jpg", arcname=f"{series_colfn}.jpg")
             plt.close()
 
             # columns histogram
@@ -240,21 +240,21 @@ class HelParTimeSeries(BiobbObject):
             fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
             ybins, x, _ = axs.hist(column_data, bins=self.bins)
             pd.DataFrame({self.helpar_name: x[:-1], "density": ybins}).to_csv(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.csv",
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{hist_colfn}.csv",
                 index=False)
             # save table
             zf.write(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.csv",
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{hist_colfn}.csv",
                 arcname=f"{hist_colfn}.csv")
 
             axs.set_ylabel("Density")
             axs.set_xlabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
             fig.savefig(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.jpg",
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{hist_colfn}.jpg",
                 format="jpg")
             # save plot
             zf.write(
-                Path(self.stage_io_dict.get("unique_dir")) / f"{hist_colfn}.jpg",
+                Path(self.stage_io_dict.get("unique_dir", "")) / f"{hist_colfn}.jpg",
                 arcname=f"{hist_colfn}.jpg")
             plt.close()
         zf.close()

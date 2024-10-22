@@ -110,7 +110,7 @@ class Curves(BiobbObject):
     def create_curvesplus_folder(self):
         """Create .curvesplus folder in the current temporal folder and copy the lib files inside."""
         # Create .curvesplus directory in temporary folder
-        dst_dir = self.stage_io_dict.get("unique_dir") + '/.curvesplus'
+        dst_dir = self.stage_io_dict.get("unique_dir", "") + '/.curvesplus'
         os.makedirs(dst_dir, exist_ok=True)
         # Get lib files from stdlib_path
         lib_files = list(Path(os.path.dirname(self.stdlib_path)).glob("*.lib"))
@@ -140,7 +140,7 @@ class Curves(BiobbObject):
         if self.stdlib_path is None:
             if os.getenv("CONDA_PREFIX", False):
                 curves_aux_path = Path(
-                    os.getenv("CONDA_PREFIX")) / ".curvesplus"
+                    os.getenv("CONDA_PREFIX", "")) / ".curvesplus"
                 # check if .curvesplus directory is in $CONDA_PREFIX
                 if curves_aux_path.exists():
                     if len(list(curves_aux_path.glob("standard_*.lib"))) != 3:
@@ -157,7 +157,7 @@ class Curves(BiobbObject):
                         "Please indicate where standard_*.lib files are "
                         "located with the stdlib_path property.")
                 # copy standard library files to temporary folder
-                shutil.copytree(curves_aux_path, self.stage_io_dict.get("unique_dir") + '/.curvesplus')
+                shutil.copytree(curves_aux_path, self.stage_io_dict.get("unique_dir", "") + '/.curvesplus')
                 relative_lib_path = '.curvesplus/standard'
             else:
                 # CONDA_PREFIX undefined
@@ -171,12 +171,12 @@ class Curves(BiobbObject):
             # create .curvesplus folder in the current temporal folder and copy the lib files inside
             self.create_curvesplus_folder()
             # set relative path
-            path_parts = self.stdlib_path.split(os.sep)
+            path_parts = str(self.stdlib_path).split(os.sep)
             relative_lib_path = '.curvesplus/' + os.sep.join(path_parts[-1:])
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir"))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # define temporary file names
         tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
@@ -226,7 +226,7 @@ class Curves(BiobbObject):
             zf = zipfile.ZipFile(
                 Path(self.stage_io_dict["out"]["output_zip_path"]),
                 "w")
-            for curves_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("curves_output*"):
+            for curves_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("curves_output*"):
                 if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
                     zf.write(
                         curves_outfile,
@@ -234,9 +234,9 @@ class Curves(BiobbObject):
             zf.close()
 
         # rename cda and lis files
-        (Path(self.stage_io_dict.get("unique_dir")) / "curves_output.cda").rename(
+        (Path(self.stage_io_dict.get("unique_dir", "")) / "curves_output.cda").rename(
             self.stage_io_dict["out"]["output_cda_path"])
-        (Path(self.stage_io_dict.get("unique_dir")) / "curves_output.lis").rename(
+        (Path(self.stage_io_dict.get("unique_dir", "")) / "curves_output.lis").rename(
             self.stage_io_dict["out"]["output_lis_path"])
 
         # Copy files to host

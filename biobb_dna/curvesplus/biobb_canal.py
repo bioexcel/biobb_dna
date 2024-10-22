@@ -132,7 +132,7 @@ class Canal(BiobbObject):
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir"))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # create intructions
         instructions = [
@@ -174,7 +174,7 @@ class Canal(BiobbObject):
         # create zipfile and write output inside
         zf = zipfile.ZipFile(
             Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
-        for canal_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("canal_output*"):
+        for canal_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("canal_output*"):
             if canal_outfile.suffix not in (".zip"):
                 zf.write(
                     canal_outfile,

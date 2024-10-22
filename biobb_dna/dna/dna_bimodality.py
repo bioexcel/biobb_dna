@@ -143,7 +143,7 @@ class HelParBimodality(BiobbObject):
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir"))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # read input
         if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
@@ -151,7 +151,7 @@ class HelParBimodality(BiobbObject):
             with zipfile.ZipFile(
                     self.stage_io_dict['in']['input_zip_file'],
                     'r') as zip_ref:
-                zip_ref.extractall(self.stage_io_dict.get("unique_dir"))
+                zip_ref.extractall(self.stage_io_dict.get("unique_dir", ""))
 
         data = load_data(Path(self.stage_io_dict['in']['input_csv_file']).name)
 

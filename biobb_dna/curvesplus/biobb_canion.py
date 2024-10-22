@@ -144,7 +144,7 @@ class Canion(BiobbObject):
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir"))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # create intructions
         instructions = [
@@ -187,7 +187,7 @@ class Canion(BiobbObject):
         zf = zipfile.ZipFile(
             Path(self.stage_io_dict["out"]["output_zip_path"]),
             "w")
-        for curves_outfile in Path(self.stage_io_dict.get("unique_dir")).glob("canion_output*"):
+        for curves_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("canion_output*"):
             if curves_outfile.suffix not in (".zip"):
                 zf.write(curves_outfile, arcname=curves_outfile.name)
         zf.close()
