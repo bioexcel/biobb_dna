@@ -185,12 +185,12 @@ class InterBasePairCorrelation(BiobbObject):
             ):
                 method = self.circlineal
             else:
-                method = "pearson"
+                method = "pearson"  # type: ignore
             corr_data = ser1.corrwith(ser2_shifted, method=method)
             corr_data.index = corr_index
             results[f"{ser1.name}/{ser2.name}"] = corr_data
         result_df = pd.DataFrame.from_dict(results)
-        result_df.index = corr_index
+        result_df.index = corr_index  # type: ignore
 
         # save csv data
         result_df.to_csv(self.stage_io_dict["out"]["output_csv_path"])
@@ -199,7 +199,7 @@ class InterBasePairCorrelation(BiobbObject):
         cmap = plt.get_cmap("bwr").copy()
         bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
         num = cmap.N
-        norm = mpl.colors.BoundaryNorm(bounds, num)
+        norm = mpl.colors.BoundaryNorm(bounds, num)  # type: ignore
         cmap.set_bad(color="gainsboro")
         fig, ax = plt.subplots(
             1,
@@ -217,7 +217,7 @@ class InterBasePairCorrelation(BiobbObject):
 
         ylocs = np.arange(len(result_df.index))
         _ = ax.set_yticks(ylocs)
-        _ = ax.set_yticklabels(result_df.index.to_list())
+        _ = ax.set_yticklabels(result_df.index.to_list())  # type: ignore
 
         ax.set_title(
             "Correlation for neighboring basepairs "

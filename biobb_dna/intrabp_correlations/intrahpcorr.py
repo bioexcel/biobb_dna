@@ -132,11 +132,11 @@ class IntraHelParCorrelation(BiobbObject):
         # corr_matrix["shear"]["stagger"] = shear.corrwith(stagger, method="pearson")
         corr_matrix.loc["stagger", "shear"] = shear.corrwith(stagger, method="pearson").values[0]
         # corr_matrix["shear"]["buckle"] = shear.corrwith(buckle, method=self.circlineal)
-        corr_matrix.loc["buckle", "shear"] = shear.corrwith(buckle, method=self.circlineal).values[0]
+        corr_matrix.loc["buckle", "shear"] = shear.corrwith(buckle, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["shear"]["propel"] = shear.corrwith(propel, method=self.circlineal)
-        corr_matrix.loc["propel", "shear"] = shear.corrwith(propel, method=self.circlineal).values[0]
+        corr_matrix.loc["propel", "shear"] = shear.corrwith(propel, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["shear"]["opening"] = shear.corrwith(opening, method=self.circlineal)
-        corr_matrix.loc["opening", "shear"] = shear.corrwith(opening, method=self.circlineal).values[0]
+        corr_matrix.loc["opening", "shear"] = shear.corrwith(opening, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["stretch"]["shear"] = corr_matrix["shear"]["stretch"]
         corr_matrix.loc["shear", "stretch"] = corr_matrix.loc["stretch", "shear"]
@@ -153,11 +153,11 @@ class IntraHelParCorrelation(BiobbObject):
         # corr_matrix["stretch"]["stagger"] = stretch.corrwith(stagger, method="pearson")
         corr_matrix.loc["stagger", "stretch"] = stretch.corrwith(stagger, method="pearson").values[0]
         # corr_matrix["stretch"]["buckle"] = stretch.corrwith(buckle, method=self.circlineal)
-        corr_matrix.loc["buckle", "stretch"] = stretch.corrwith(buckle, method=self.circlineal).values[0]
+        corr_matrix.loc["buckle", "stretch"] = stretch.corrwith(buckle, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["stretch"]["propel"] = stretch.corrwith(propel, method=self.circlineal)
-        corr_matrix.loc["propel", "stretch"] = stretch.corrwith(propel, method=self.circlineal).values[0]
+        corr_matrix.loc["propel", "stretch"] = stretch.corrwith(propel, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["stretch"]["opening"] = stretch.corrwith(opening, method=self.circlineal)
-        corr_matrix.loc["opening", "stretch"] = stretch.corrwith(opening, method=self.circlineal).values[0]
+        corr_matrix.loc["opening", "stretch"] = stretch.corrwith(opening, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["stagger"]["stretch"] = corr_matrix["stretch"]["stagger"]
         corr_matrix.loc["stretch", "stagger"] = corr_matrix.loc["stagger", "stretch"]
@@ -170,11 +170,11 @@ class IntraHelParCorrelation(BiobbObject):
 
         # stagger
         # corr_matrix["stagger"]["buckle"] = stagger.corrwith(buckle, method=self.circlineal)
-        corr_matrix.loc["buckle", "stagger"] = stagger.corrwith(buckle, method=self.circlineal).values[0]
+        corr_matrix.loc["buckle", "stagger"] = stagger.corrwith(buckle, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["stagger"]["propel"] = stagger.corrwith(propel, method=self.circlineal)
-        corr_matrix.loc["propel", "stagger"] = stagger.corrwith(propel, method=self.circlineal).values[0]
+        corr_matrix.loc["propel", "stagger"] = stagger.corrwith(propel, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["stagger"]["opening"] = stagger.corrwith(opening, method=self.circlineal)
-        corr_matrix.loc["opening", "stagger"] = stagger.corrwith(opening, method=self.circlineal).values[0]
+        corr_matrix.loc["opening", "stagger"] = stagger.corrwith(opening, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["buckle"]["stagger"] = corr_matrix["stagger"]["buckle"]
         corr_matrix.loc["stagger", "buckle"] = corr_matrix.loc["buckle", "stagger"]
@@ -185,9 +185,9 @@ class IntraHelParCorrelation(BiobbObject):
 
         # buckle
         # corr_matrix["buckle"]["propel"] = buckle.corrwith(propel, method=self.circular)
-        corr_matrix.loc["propel", "buckle"] = buckle.corrwith(propel, method=self.circular).values[0]
+        corr_matrix.loc["propel", "buckle"] = buckle.corrwith(propel, method=self.circular).values[0]  # type: ignore
         # corr_matrix["buckle"]["opening"] = buckle.corrwith(opening, method=self.circular)
-        corr_matrix.loc["opening", "buckle"] = buckle.corrwith(opening, method=self.circular).values[0]
+        corr_matrix.loc["opening", "buckle"] = buckle.corrwith(opening, method=self.circular).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["propel"]["buckle"] = corr_matrix["buckle"]["propel"]
         corr_matrix.loc["buckle", "propel"] = corr_matrix.loc["propel", "buckle"]
@@ -196,7 +196,7 @@ class IntraHelParCorrelation(BiobbObject):
 
         # propel
         # corr_matrix["propel"]["opening"] = propel.corrwith(opening, method=self.circular)
-        corr_matrix.loc["opening", "propel"] = propel.corrwith(opening, method=self.circular).values[0]
+        corr_matrix.loc["opening", "propel"] = propel.corrwith(opening, method=self.circular).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["opening"]["propel"] = corr_matrix["propel"]["opening"]
         corr_matrix.loc["propel", "opening"] = corr_matrix.loc["opening", "propel"]

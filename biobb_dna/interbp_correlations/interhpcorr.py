@@ -130,11 +130,11 @@ class InterHelParCorrelation(BiobbObject):
         # corr_matrix["shift"]["rise"] = shift.corrwith(rise, method="pearson")
         corr_matrix.loc["rise", "shift"] = shift.corrwith(rise, method="pearson").values[0]
         # corr_matrix["shift"]["tilt"] = shift.corrwith(tilt, method=self.circlineal)
-        corr_matrix.loc["tilt", "shift"] = shift.corrwith(tilt, method=self.circlineal).values[0]
+        corr_matrix.loc["tilt", "shift"] = shift.corrwith(tilt, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["shift"]["roll"] = shift.corrwith(roll, method=self.circlineal)
-        corr_matrix.loc["roll", "shift"] = shift.corrwith(roll, method=self.circlineal).values[0]
+        corr_matrix.loc["roll", "shift"] = shift.corrwith(roll, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["shift"]["twist"] = shift.corrwith(twist, method=self.circlineal)
-        corr_matrix.loc["twist", "shift"] = shift.corrwith(twist, method=self.circlineal).values[0]
+        corr_matrix.loc["twist", "shift"] = shift.corrwith(twist, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["slide"]["shift"] = corr_matrix["shift"]["slide"]
         corr_matrix.loc["shift", "slide"] = corr_matrix.loc["slide", "shift"]
@@ -151,11 +151,11 @@ class InterHelParCorrelation(BiobbObject):
         # corr_matrix["slide"]["rise"] = slide.corrwith(rise, method="pearson")
         corr_matrix.loc["rise", "slide"] = slide.corrwith(rise, method="pearson").values[0]
         # corr_matrix["slide"]["tilt"] = slide.corrwith(tilt, method=self.circlineal)
-        corr_matrix.loc["tilt", "slide"] = slide.corrwith(tilt, method=self.circlineal).values[0]
+        corr_matrix.loc["tilt", "slide"] = slide.corrwith(tilt, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["slide"]["roll"] = slide.corrwith(roll, method=self.circlineal)
-        corr_matrix.loc["roll", "slide"] = slide.corrwith(roll, method=self.circlineal).values[0]
+        corr_matrix.loc["roll", "slide"] = slide.corrwith(roll, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["slide"]["twist"] = slide.corrwith(twist, method=self.circlineal)
-        corr_matrix.loc["twist", "slide"] = slide.corrwith(twist, method=self.circlineal).values[0]
+        corr_matrix.loc["twist", "slide"] = slide.corrwith(twist, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["rise"]["slide"] = corr_matrix["slide"]["rise"]
         corr_matrix.loc["slide", "rise"] = corr_matrix.loc["rise", "slide"]
@@ -168,11 +168,11 @@ class InterHelParCorrelation(BiobbObject):
 
         # rise
         # corr_matrix["rise"]["tilt"] = rise.corrwith(tilt, method=self.circlineal)
-        corr_matrix.loc["tilt", "rise"] = rise.corrwith(tilt, method=self.circlineal).values[0]
+        corr_matrix.loc["tilt", "rise"] = rise.corrwith(tilt, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["rise"]["roll"] = rise.corrwith(roll, method=self.circlineal)
-        corr_matrix.loc["roll", "rise"] = rise.corrwith(roll, method=self.circlineal).values[0]
+        corr_matrix.loc["roll", "rise"] = rise.corrwith(roll, method=self.circlineal).values[0]  # type: ignore
         # corr_matrix["rise"]["twist"] = rise.corrwith(twist, method=self.circlineal)
-        corr_matrix.loc["twist", "rise"] = rise.corrwith(twist, method=self.circlineal).values[0]
+        corr_matrix.loc["twist", "rise"] = rise.corrwith(twist, method=self.circlineal).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["tilt"]["rise"] = corr_matrix["rise"]["tilt"]
         corr_matrix.loc["rise", "tilt"] = corr_matrix.loc["tilt", "rise"]
@@ -183,9 +183,9 @@ class InterHelParCorrelation(BiobbObject):
 
         # tilt
         # corr_matrix["tilt"]["roll"] = tilt.corrwith(roll, method=self.circular)
-        corr_matrix.loc["roll", "tilt"] = tilt.corrwith(roll, method=self.circular).values[0]
+        corr_matrix.loc["roll", "tilt"] = tilt.corrwith(roll, method=self.circular).values[0]  # type: ignore
         # corr_matrix["tilt"]["twist"] = tilt.corrwith(twist, method=self.circular)
-        corr_matrix.loc["twist", "tilt"] = tilt.corrwith(twist, method=self.circular).values[0]
+        corr_matrix.loc["twist", "tilt"] = tilt.corrwith(twist, method=self.circular).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["roll"]["tilt"] = corr_matrix["tilt"]["roll"]
         corr_matrix.loc["tilt", "roll"] = corr_matrix.loc["roll", "tilt"]
@@ -194,7 +194,7 @@ class InterHelParCorrelation(BiobbObject):
 
         # roll
         # corr_matrix["roll"]["twist"] = roll.corrwith(twist, method=self.circular)
-        corr_matrix.loc["twist", "roll"] = roll.corrwith(twist, method=self.circular).values[0]
+        corr_matrix.loc["twist", "roll"] = roll.corrwith(twist, method=self.circular).values[0]  # type: ignore
         # symmetric values
         # corr_matrix["twist"]["roll"] = corr_matrix["roll"]["twist"]
         corr_matrix.loc["roll", "twist"] = corr_matrix.loc["twist", "roll"]

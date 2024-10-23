@@ -175,9 +175,9 @@ class HelParTimeSeries(BiobbObject):
             # get removed items
             removed_items = [s for s in subunits if not pattern.fullmatch(s)]
             # get indices of removed items (in integer format and starting from 0)
-            removed_numbers = [re.match(r'\d+', item).group() for item in removed_items]
+            removed_numbers = [int(match.group()) for item in removed_items if (match := re.match(r'\d+', item))]
             removed_numbers = list(map(int, removed_numbers))
-            removed_numbers = [i-1 for i in removed_numbers]
+            removed_numbers = [int(i)-1 for i in removed_numbers]
             # remove non basepairs from subunits and indices
             subunits = [s for s in subunits if pattern.fullmatch(s)]
             indices = [i for i in indices if i not in removed_numbers]

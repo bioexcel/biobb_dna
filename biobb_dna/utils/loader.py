@@ -13,7 +13,7 @@ def read_series(input_serfile, usecols=None):
         header=None,
         sep='\\s+',
         index_col=0)
-    ser_data = pd.read_csv(input_serfile, **extra_kwargs)
+    ser_data = pd.read_csv(input_serfile, **extra_kwargs)  # type: ignore
     if usecols is not None:
         if 0 in usecols:
             usecols.pop(usecols.index(0))

@@ -10,8 +10,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.mixture import GaussianMixture
-
+from sklearn.mixture import GaussianMixture  # type: ignore
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
@@ -210,12 +209,12 @@ class HelParBimodality(BiobbObject):
             label1 = "Single State"
         out = plt.hist(
             synth1, bins=bins, alpha=alpha, density=True, label=label1)
-        ylim = max(out[0])
+        ylim = max(out[0])  # type: ignore
         plt.vlines(info['mean1'], 0, ylim, colors="r", linestyles="dashed")
         if binormal:
             out = plt.hist(
                 synth2, bins=bins, alpha=alpha, density=True, label="high state")
-            ylim = max(out[0])
+            ylim = max(out[0])  # type: ignore
             plt.vlines(info['mean2'], 0, ylim, colors="r", linestyles="dashed")
         plt.legend()
         plt.ylabel("Density")
@@ -255,10 +254,10 @@ class HelParBimodality(BiobbObject):
                 max_iter=self.max_iter,
                 tol=self.tol)
             gmm = gmm.fit(data)
-            m = gmm.means_.flatten()
-            v = gmm.covariances_.flatten()
+            m = gmm.means_.flatten()  # type: ignore
+            v = gmm.covariances_.flatten()  # type: ignore
             b = gmm.bic(data)
-            w = gmm.weights_.flatten()
+            w = gmm.weights_.flatten()  # type: ignore
             means.append(m)
             variances.append(v)
             bics.append(b)

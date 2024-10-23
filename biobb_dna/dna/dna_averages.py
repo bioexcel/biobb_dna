@@ -158,11 +158,11 @@ class HelParAverages(BiobbObject):
                 for i in self.seqpos]
 
         # rename duplicated subunits
-        while any(ser_data.columns.duplicated()):
+        while any(pd.Index(ser_data.columns).duplicated()):
             ser_data.columns = [
                 name if not duplicated else name + "_dup"
                 for duplicated, name
-                in zip(ser_data.columns.duplicated(), ser_data.columns)]
+                in zip(pd.Index(ser_data.columns).duplicated(), ser_data.columns)]
 
         # write output files for all selected bases
         means = ser_data.mean(axis=0).iloc[:len(xlabels)]
