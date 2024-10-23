@@ -1,5 +1,12 @@
 # Biobb Analysis changelog
 
+## What's new in version [5.0.0](https://github.com/bioexcel/biobb_dna/releases/tag/v5.0.0)?
+
+### Changes
+
+* [FIX] Bug fixes in seqpos of dna timeseries
+* [UPDATE] Adding sandbox_path property to the json schemas
+
 ## What's new in version [4.2.4](https://github.com/bioexcel/biobb_dna/releases/tag/v4.2.4)?
 In version 4.2.4 some bugs in Canion and Curves have been fixed. Added two new tools: CanalUnzip and DnaTimeseriesUnzip.
 
@@ -53,28 +60,28 @@ In version 3.9.0 the dependency biobb_common has been updated to 3.9.0 version.
 * All inputs/outputs are checked for correct file format, extension and type (general)
 
 ## What's new in version [3.8.2](https://github.com/bioexcel/biobb_dna/releases/tag/v3.8.2)?
-In version 3.8.2 the some dependencies have been updated for the sake of having compatibility woth other BioBB packages. 
+In version 3.8.2 the some dependencies have been updated for the sake of having compatibility woth other BioBB packages.
 
 ### New features
 
 * Updated dependencies (general)
 
 ## What's new in version [3.8.1](https://github.com/bioexcel/biobb_dna/releases/tag/v3.8.1)?
-In version 3.8.1 the some dependencies have been updated for the sake of having compatibility woth other BioBB packages. 
+In version 3.8.1 the some dependencies have been updated for the sake of having compatibility woth other BioBB packages.
 
 ### New features
 
 * Updated dependencies (general)
 
 ## What's new in version [3.8.0](https://github.com/bioexcel/biobb_dna/releases/tag/v3.8.0)?
-In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version. 
+In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version.
 
 ### New features
 
 * Update to biobb_common 3.8.1 (general)
 
 ## What's new in version [3.7.0](https://github.com/bioexcel/biobb_dna/releases/tag/v3.7.0)?
-In version 3.7.0 the dependency biobb_common has been updated to 3.7.0 version. 
+In version 3.7.0 the dependency biobb_common has been updated to 3.7.0 version.
 
 ### New features
 
