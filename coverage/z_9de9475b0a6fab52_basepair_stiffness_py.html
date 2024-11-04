@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_957b841f7413f0a1___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-04 11:02 +0000
+            created at 2024-11-04 11:05 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -236,7 +236,7 @@
     <p class="run"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">                <span class="nam">axs</span><span class="op">.</span><span class="nam">text</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">                    <span class="nam">j</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">                    <span class="nam">i</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">                    <span class="fst">f"</span><span class="op">{</span><span class="nam">stiff_df</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">j</span><span class="op">]</span><span class="op">]</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">i</span><span class="op">]</span><span class="op">]</span><span class="op">:</span><span class="fst">.2f</span><span class="op">}</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">                    <span class="str">f"{stiff_df[coordinates[j]].loc[coordinates[i]]:.2f}"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">                    <span class="nam">ha</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">                    <span class="nam">va</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">                    <span class="nam">color</span><span class="op">=</span><span class="str">"w"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -251,7 +251,7 @@
     <p class="run"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_yticks</span><span class="op">(</span><span class="op">[</span><span class="nam">i</span><span class="op">+</span><span class="num">0.5</span> <span class="key">for</span> <span class="nam">i</span> <span class="key">in</span> <span class="nam">range</span><span class="op">(</span><span class="nam">len</span><span class="op">(</span><span class="nam">stiff_df</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_yticklabels</span><span class="op">(</span><span class="nam">stiff_df</span><span class="op">.</span><span class="nam">index</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_title</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">            <span class="fst">f"</span><span class="fst">Stiffness Constants for Base Pair Step \'</span><span class="op">{</span><span class="nam">basepairname</span><span class="op">}</span><span class="fst">\'</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">            <span class="str">f"Stiffness Constants for Base Pair Step \'{basepairname}\'"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">tight_layout</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">savefig</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">'out'</span><span class="op">]</span><span class="op">[</span><span class="str">'output_jpg_path'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -343,7 +343,7 @@
             <a class="nav" href="z_957b841f7413f0a1___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-04 11:02 +0000
+            created at 2024-11-04 11:05 +0000
         </p>
     </div>
 </footer>
