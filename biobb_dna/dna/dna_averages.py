@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParAverages class and the command line interface."""
+
 import argparse
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_dna.utils import constants
-from biobb_dna.utils.loader import read_series
+from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-from biobb_common.configuration import settings
+
+from biobb_dna.utils import constants
+from biobb_dna.utils.common import _from_string_to_list
+from biobb_dna.utils.loader import read_series
 
 
 class HelParAverages(BiobbObject):
@@ -58,8 +61,14 @@ class HelParAverages(BiobbObject):
 
     """
 
-    def __init__(self, input_ser_path, output_csv_path, output_jpg_path,
-                 properties=None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_ser_path,
+        output_csv_path,
+        output_jpg_path,
+        properties=None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -68,24 +77,23 @@ class HelParAverages(BiobbObject):
 
         # Input/Output files
         self.io_dict = {
-            'in': {
-                'input_ser_path': input_ser_path,
+            "in": {
+                "input_ser_path": input_ser_path,
             },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
+            "out": {
+                "output_csv_path": output_csv_path,
+                "output_jpg_path": output_jpg_path,
+            },
         }
 
         # Properties specific for BB
         self.properties = properties
         self.sequence = properties.get("sequence", None)
-        self.stride = properties.get(
-            "stride", 1000)
-        self.seqpos = properties.get(
-            "seqpos", None)
-        self.helpar_name = properties.get(
-            "helpar_name", None)
+        self.stride = properties.get("stride", 1000)
+        self.seqpos = [
+            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+        ]
+        self.helpar_name = properties.get("helpar_name", None)
 
         # Check the properties
         self.check_properties(properties)
@@ -101,25 +109,26 @@ class HelParAverages(BiobbObject):
         self.stage_files()
 
         # check sequence
-        if self.sequence is None or len(self.sequence) < 2:
+        if not self.sequence or len(self.sequence) < 2:
             raise ValueError("sequence is null or too short!")
 
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                ser_name = Path(
-                    self.stage_io_dict['in']['input_ser_path']).name.lower()
+                ser_name = Path(self.stage_io_dict["in"]["input_ser_path"]).name.lower()
                 if hp.lower() in ser_name:
                     self.helpar_name = hp
             if self.helpar_name is None:
                 raise ValueError(
                     "Helical parameter name can't be inferred from file, "
-                    "so it must be specified!")
+                    "so it must be specified!"
+                )
         else:
             if self.helpar_name not in constants.helical_parameters:
                 raise ValueError(
                     "Helical parameter name is invalid! "
-                    f"Options: {constants.helical_parameters}")
+                    f"Options: {constants.helical_parameters}"
+                )
 
         # get base length and unit from helical parameter name
         if self.helpar_name.lower() in constants.hp_basepairs:
@@ -132,72 +141,68 @@ class HelParAverages(BiobbObject):
             self.hp_unit = "Angstroms"
 
         # check seqpos
-        if self.seqpos is not None:
+        if self.seqpos:
             if (max(self.seqpos) > len(self.sequence) - 2) or (min(self.seqpos) < 1):
                 raise ValueError(
-                    f"seqpos values must be between 1 and {len(self.sequence) - 2}")
+                    f"seqpos values must be between 1 and {len(self.sequence) - 2}"
+                )
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
-                raise ValueError(
-                    "seqpos must be a list of at least two integers")
+                raise ValueError("seqpos must be a list of at least two integers")
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict['in']['input_ser_path'],
-            usecols=self.seqpos)
-        if self.seqpos is None:
+            self.stage_io_dict["in"]["input_ser_path"], usecols=self.seqpos
+        )
+        if not self.seqpos:
             ser_data = ser_data[ser_data.columns[1:-1]]
             # discard first and last base(pairs) from sequence
             sequence = self.sequence[1:]
             xlabels = [
                 f"{sequence[i:i+1+self.baselen]}"
-                for i in range(len(ser_data.columns) - self.baselen)]
+                for i in range(len(ser_data.columns) - self.baselen)
+            ]
         else:
             sequence = self.sequence
-            xlabels = [
-                f"{sequence[i:i+1+self.baselen]}"
-                for i in self.seqpos]
+            xlabels = [f"{sequence[i:i+1+self.baselen]}" for i in self.seqpos]
 
         # rename duplicated subunits
         while any(pd.Index(ser_data.columns).duplicated()):
             ser_data.columns = [
                 name if not duplicated else name + "_dup"
-                for duplicated, name
-                in zip(pd.Index(ser_data.columns).duplicated(), ser_data.columns)]
+                for duplicated, name in zip(
+                    pd.Index(ser_data.columns).duplicated(), ser_data.columns
+                )
+            ]
 
         # write output files for all selected bases
-        means = ser_data.mean(axis=0).iloc[:len(xlabels)]
-        stds = ser_data.std(axis=0).iloc[:len(xlabels)]
+        means = ser_data.mean(axis=0).iloc[: len(xlabels)]
+        stds = ser_data.std(axis=0).iloc[: len(xlabels)]
 
         # save plot
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
         axs.errorbar(
-            means.index,
-            means.to_numpy(),
-            yerr=stds.to_numpy(),
-            marker="o",
-            capsize=5)
+            means.index, means.to_numpy(), yerr=stds.to_numpy(), marker="o", capsize=5
+        )
         axs.set_xticks(means.index)
         axs.set_xticklabels(xlabels, rotation=90)
-        axs.set_xlabel(
-            "Sequence Base Pair "
-            f"{'Step' if self.baselen==1 else ''}")
+        axs.set_xlabel("Sequence Base Pair " f"{'Step' if self.baselen==1 else ''}")
         axs.set_ylabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
         axs.set_title(
             "Base Pair "
             f"{'Step' if self.baselen==1 else ''} "
-            f"Helical Parameter: {self.helpar_name.capitalize()}")
-        fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
-            format="jpg")
+            f"Helical Parameter: {self.helpar_name.capitalize()}"
+        )
+        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
 
         # save table
-        dataset = pd.DataFrame({
-            f"Base Pair {'Step' if self.baselen==1 else ''}": xlabels,
-            "mean": means.to_numpy(),
-            "std": stds.to_numpy()})
-        dataset.to_csv(
-            self.stage_io_dict['out']['output_csv_path'],
-            index=False)
+        dataset = pd.DataFrame(
+            {
+                f"Base Pair {'Step' if self.baselen==1 else ''}": xlabels,
+                "mean": means.to_numpy(),
+                "std": stds.to_numpy(),
+            }
+        )
+        dataset.to_csv(self.stage_io_dict["out"]["output_csv_path"], index=False)
 
         plt.close()
 
@@ -205,9 +210,7 @@ class HelParAverages(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -216,30 +219,48 @@ class HelParAverages(BiobbObject):
 
 
 def dna_averages(
-        input_ser_path: str, output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
+    input_ser_path: str,
+    output_csv_path: str,
+    output_jpg_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`HelParAverages <dna.dna_averages.HelParAverages>` class and
     execute the :meth:`launch() <dna.dna_averages.HelParAverages.launch>` method."""
 
-    return HelParAverages(input_ser_path=input_ser_path,
-                          output_csv_path=output_csv_path,
-                          output_jpg_path=output_jpg_path,
-                          properties=properties, **kwargs).launch()
+    return HelParAverages(
+        input_ser_path=input_ser_path,
+        output_csv_path=output_csv_path,
+        output_jpg_path=output_jpg_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and calculate average values for each base pair.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Load helical parameter file and calculate average values for each base pair.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_ser_path', required=True,
-                               help='Helical parameter input ser file path. Accepted formats: ser.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Path to output csv file. Accepted formats: csv.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Path to output jpg file. Accepted formats: jpg.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_ser_path",
+        required=True,
+        help="Helical parameter input ser file path. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--output_csv_path",
+        required=True,
+        help="Path to output csv file. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--output_jpg_path",
+        required=True,
+        help="Path to output jpg file. Accepted formats: jpg.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -249,8 +270,9 @@ def main():
         input_ser_path=args.input_ser_path,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
-        properties=properties)
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParStiffness class and the command line interface."""
+
 import argparse
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-
-from biobb_common.generic.biobb_object import BiobbObject
+import numpy as np
+import pandas as pd
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
+
+from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import load_data
 
 
@@ -66,10 +68,19 @@ class BPStiffness(BiobbObject):
 
     """
 
-    def __init__(self, input_filename_shift, input_filename_slide,
-                 input_filename_rise, input_filename_tilt,
-                 input_filename_roll, input_filename_twist,
-                 output_csv_path, output_jpg_path, properties=None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_filename_shift,
+        input_filename_slide,
+        input_filename_rise,
+        input_filename_tilt,
+        input_filename_roll,
+        input_filename_twist,
+        output_csv_path,
+        output_jpg_path,
+        properties=None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -78,25 +89,28 @@ class BPStiffness(BiobbObject):
 
         # Input/Output files
         self.io_dict = {
-            'in': {
-                'input_filename_shift': input_filename_shift,
-                'input_filename_slide': input_filename_slide,
-                'input_filename_rise': input_filename_rise,
-                'input_filename_tilt': input_filename_tilt,
-                'input_filename_roll': input_filename_roll,
-                'input_filename_twist': input_filename_twist
+            "in": {
+                "input_filename_shift": input_filename_shift,
+                "input_filename_slide": input_filename_slide,
+                "input_filename_rise": input_filename_rise,
+                "input_filename_tilt": input_filename_tilt,
+                "input_filename_roll": input_filename_roll,
+                "input_filename_twist": input_filename_twist,
             },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
+            "out": {
+                "output_csv_path": output_csv_path,
+                "output_jpg_path": output_jpg_path,
+            },
         }
 
         self.properties = properties
-        self.KT = properties.get(
-            "KT", 0.592186827)
-        self.scaling = properties.get(
-            "scaling", [1, 1, 1, 10.6, 10.6, 10.6])
+        self.KT = properties.get("KT", 0.592186827)
+        self.scaling = [
+            int(elem)
+            for elem in _from_string_to_list(
+                properties.get("scaling", [1, 1, 1, 10.6, 10.6, 10.6])
+            )
+        ]
 
         # Check the properties
         self.check_properties(properties)
@@ -112,34 +126,24 @@ class BPStiffness(BiobbObject):
         self.stage_files()
 
         # read input
-        shift = load_data(
-            self.stage_io_dict["in"]["input_filename_shift"])
-        slide = load_data(
-            self.stage_io_dict["in"]["input_filename_slide"])
-        rise = load_data(
-            self.stage_io_dict["in"]["input_filename_rise"])
-        tilt = load_data(
-            self.stage_io_dict["in"]["input_filename_tilt"])
-        roll = load_data(
-            self.stage_io_dict["in"]["input_filename_roll"])
-        twist = load_data(
-            self.stage_io_dict["in"]["input_filename_twist"])
+        shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])
+        slide = load_data(self.stage_io_dict["in"]["input_filename_slide"])
+        rise = load_data(self.stage_io_dict["in"]["input_filename_rise"])
+        tilt = load_data(self.stage_io_dict["in"]["input_filename_tilt"])
+        roll = load_data(self.stage_io_dict["in"]["input_filename_roll"])
+        twist = load_data(self.stage_io_dict["in"]["input_filename_twist"])
 
         # build matrix cols_arr from helpar input data files
         coordinates = ["shift", "slide", "rise", "tilt", "roll", "twist"]
         basepairname = shift.columns[0]
-        helpar_matrix = pd.concat(
-            [shift, slide, rise, tilt, roll, twist], axis=1)
+        helpar_matrix = pd.concat([shift, slide, rise, tilt, roll, twist], axis=1)
         helpar_matrix.columns = coordinates
         # covariance
         cov_df = helpar_matrix.cov()
         # stiffness
         stiff = np.linalg.inv(cov_df) * self.KT
         stiff_diag = stiff * np.array(self.scaling)
-        stiff_df = pd.DataFrame(
-            stiff_diag,
-            columns=cov_df.columns,
-            index=cov_df.index)
+        stiff_df = pd.DataFrame(stiff_diag, columns=cov_df.columns, index=cov_df.index)
         stiff_df.index.name = basepairname
 
         # save csv data
@@ -152,37 +156,35 @@ class BPStiffness(BiobbObject):
         for i in range(len(stiff_df)):
             for j in range(len(stiff_df)):
                 axs.text(
-                    j+.5,
-                    i+.5,
+                    j + 0.5,
+                    i + 0.5,
                     f"{stiff_df[coordinates[j]].loc[coordinates[i]]:.2f}",
                     ha="center",
                     va="center",
-                    color="w")
+                    color="w",
+                )
         axs.text(
-            0, -1.35,
+            0,
+            -1.35,
             "Units:\n"
             "Diagonal Shift/Slide/Rise in kcal/(mol*Å²), Diagonal Tilt/Roll/Twist in kcal/(mol*degree²)\n"
             "Out of Diagonal: Shift/Slide/Rise in kcal/(mol*Å), Out of Diagonal Tilt/Roll/Twist in kcal/(mol*degree)",
-            fontsize=6)
+            fontsize=6,
+        )
         axs.set_xticks([i + 0.5 for i in range(len(stiff_df))])
         axs.set_xticklabels(stiff_df.columns, rotation=90)
-        axs.set_yticks([i+0.5 for i in range(len(stiff_df))])
+        axs.set_yticks([i + 0.5 for i in range(len(stiff_df))])
         axs.set_yticklabels(stiff_df.index)
-        axs.set_title(
-            f"Stiffness Constants for Base Pair Step \'{basepairname}\'")
+        axs.set_title(f"Stiffness Constants for Base Pair Step '{basepairname}'")
         fig.tight_layout()
-        fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
-            format="jpg")
+        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
         plt.close()
 
         # Copy files to host
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -191,10 +193,17 @@ class BPStiffness(BiobbObject):
 
 
 def basepair_stiffness(
-        input_filename_shift: str, input_filename_slide: str,
-        input_filename_rise: str, input_filename_tilt: str,
-        input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, output_jpg_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+    input_filename_shift: str,
+    input_filename_slide: str,
+    input_filename_rise: str,
+    input_filename_tilt: str,
+    input_filename_roll: str,
+    input_filename_twist: str,
+    output_csv_path: str,
+    output_jpg_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` class and
     execute the :meth:`launch() <stiffness.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
 
@@ -207,32 +216,60 @@ def basepair_stiffness(
         input_filename_twist=input_filename_twist,
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
-        properties=properties, **kwargs).launch()
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Calculate stiffness constants matrix between all six helical parameters for a single base pair step.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_filename_shift', required=True,
-                               help='Path to csv file with shift inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_slide', required=True,
-                               help='Path to csv file with slide inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_rise', required=True,
-                               help='Path to csv file with rise inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_tilt', required=True,
-                               help='Path to csv file with tilt inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_roll', required=True,
-                               help='Path to csv file with roll inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_twist', required=True,
-                               help='Path to csv file with twist inputs. Accepted formats: csv.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Path to output covariance data file. Accepted formats: csv.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Path to output covariance data file. Accepted formats: csv.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_filename_shift",
+        required=True,
+        help="Path to csv file with shift inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--input_filename_slide",
+        required=True,
+        help="Path to csv file with slide inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--input_filename_rise",
+        required=True,
+        help="Path to csv file with rise inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--input_filename_tilt",
+        required=True,
+        help="Path to csv file with tilt inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--input_filename_roll",
+        required=True,
+        help="Path to csv file with roll inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--input_filename_twist",
+        required=True,
+        help="Path to csv file with twist inputs. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--output_csv_path",
+        required=True,
+        help="Path to output covariance data file. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--output_jpg_path",
+        required=True,
+        help="Path to output covariance data file. Accepted formats: csv.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -247,8 +284,9 @@ def main():
         input_filename_twist=args.input_filename_twist,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
-        properties=properties)
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

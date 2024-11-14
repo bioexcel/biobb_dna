@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 """Module containing the InterBasePairCorrelation class and the command line interface."""
-import argparse
-from typing import Optional
-from itertools import product
 
-import numpy as np
-import pandas as pd
+import argparse
+from itertools import product
+from typing import Optional
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-
-from biobb_common.generic.biobb_object import BiobbObject
+import numpy as np
+import pandas as pd
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
-from biobb_dna.utils.loader import read_series
+
 from biobb_dna.utils import constants
+from biobb_dna.utils.common import _from_string_to_list
+from biobb_dna.utils.loader import read_series
 
 
 class InterBasePairCorrelation(BiobbObject):
@@ -65,11 +67,18 @@ class InterBasePairCorrelation(BiobbObject):
     """
 
     def __init__(
-            self, input_filename_shift, input_filename_slide,
-            input_filename_rise, input_filename_tilt,
-            input_filename_roll, input_filename_twist,
-            output_csv_path, output_jpg_path,
-            properties=None, **kwargs) -> None:
+        self,
+        input_filename_shift,
+        input_filename_slide,
+        input_filename_rise,
+        input_filename_tilt,
+        input_filename_roll,
+        input_filename_twist,
+        output_csv_path,
+        output_jpg_path,
+        properties=None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -78,23 +87,25 @@ class InterBasePairCorrelation(BiobbObject):
 
         # Input/Output files
         self.io_dict = {
-            'in': {
-                'input_filename_shift': input_filename_shift,
-                'input_filename_slide': input_filename_slide,
-                'input_filename_rise': input_filename_rise,
-                'input_filename_tilt': input_filename_tilt,
-                'input_filename_roll': input_filename_roll,
-                'input_filename_twist': input_filename_twist
+            "in": {
+                "input_filename_shift": input_filename_shift,
+                "input_filename_slide": input_filename_slide,
+                "input_filename_rise": input_filename_rise,
+                "input_filename_tilt": input_filename_tilt,
+                "input_filename_roll": input_filename_roll,
+                "input_filename_twist": input_filename_twist,
             },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
+            "out": {
+                "output_csv_path": output_csv_path,
+                "output_jpg_path": output_jpg_path,
+            },
         }
 
         self.properties = properties
         self.sequence = properties.get("sequence", None)
-        self.seqpos = properties.get("seqpos", None)
+        self.seqpos = [
+            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+        ]
 
         # Check the properties
         self.check_properties(properties)
@@ -110,30 +121,35 @@ class InterBasePairCorrelation(BiobbObject):
         self.stage_files()
 
         # check sequence
-        if self.sequence is None or len(self.sequence) < 2:
+        if not self.sequence or len(self.sequence) < 2:
             raise ValueError("sequence is null or too short!")
 
         # check seqpos
-        if self.seqpos is not None:
+        if self.seqpos:
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
-                raise ValueError(
-                    "seqpos must be a list of at least two integers")
+                raise ValueError("seqpos must be a list of at least two integers")
 
         # read input
         shift = read_series(
-            self.stage_io_dict["in"]["input_filename_shift"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_shift"], usecols=self.seqpos
+        )
         slide = read_series(
-            self.stage_io_dict["in"]["input_filename_slide"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_slide"], usecols=self.seqpos
+        )
         rise = read_series(
-            self.stage_io_dict["in"]["input_filename_rise"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_rise"], usecols=self.seqpos
+        )
         tilt = read_series(
-            self.stage_io_dict["in"]["input_filename_tilt"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_tilt"], usecols=self.seqpos
+        )
         roll = read_series(
-            self.stage_io_dict["in"]["input_filename_roll"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_roll"], usecols=self.seqpos
+        )
         twist = read_series(
-            self.stage_io_dict["in"]["input_filename_twist"], usecols=self.seqpos)
+            self.stage_io_dict["in"]["input_filename_twist"], usecols=self.seqpos
+        )
 
-        if self.seqpos is None:
+        if not self.seqpos:
             # drop first and last columns
             shift = shift[shift.columns[1:-2]]
             slide = slide[slide.columns[1:-2]]
@@ -142,9 +158,12 @@ class InterBasePairCorrelation(BiobbObject):
             roll = roll[roll.columns[1:-2]]
             twist = twist[twist.columns[1:-2]]
             labels = [
-                f"{i+1}_{self.sequence[i:i+2]}" for i in range(1, len(shift.columns) + 1)]
+                f"{i+1}_{self.sequence[i:i+2]}"
+                for i in range(1, len(shift.columns) + 1)
+            ]
             corr_index = [
-                f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)]
+                f"{self.sequence[i:i+3]}" for i in range(1, len(shift.columns) + 1)
+            ]
         else:
             labels = [f"{i+1}_{self.sequence[i:i+2]}" for i in self.seqpos]
             corr_index = [f"{self.sequence[i:i+3]}" for i in self.seqpos]
@@ -171,17 +190,14 @@ class InterBasePairCorrelation(BiobbObject):
         for ser1, ser2 in product(datasets, datasets):
             ser2_shifted = ser2.shift(axis=1)
             ser2_shifted[labels[0]] = ser2[labels[-1]]
-            if (
-                    ser1.name in constants.hp_angular and ser2.name in constants.hp_angular):
+            if ser1.name in constants.hp_angular and ser2.name in constants.hp_angular:
                 method = self.circular
             elif (
-                (
-                    ser1.name in constants.hp_angular and not (
-                        ser2.name in constants.hp_angular)
-                ) or (
-                    ser2.name in constants.hp_angular and not (
-                        ser1.name in constants.hp_angular)
-                )
+                ser1.name in constants.hp_angular
+                and ser2.name not in constants.hp_angular
+            ) or (
+                ser2.name in constants.hp_angular
+                and ser1.name not in constants.hp_angular
             ):
                 method = self.circlineal
             else:
@@ -197,18 +213,13 @@ class InterBasePairCorrelation(BiobbObject):
 
         # create heatmap
         cmap = plt.get_cmap("bwr").copy()
-        bounds = [-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1]
+        bounds = [-1, -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 1]
         num = cmap.N
         norm = mpl.colors.BoundaryNorm(bounds, num)  # type: ignore
         cmap.set_bad(color="gainsboro")
-        fig, ax = plt.subplots(
-            1,
-            1,
-            dpi=300,
-            figsize=(7.5, 5),
-            tight_layout=True)
-        im = ax.imshow(result_df, cmap=cmap, norm=norm, aspect='auto')
-        plt.colorbar(im, ticks=[-1, -.8, -.6, -.4, -.2, .2, .4, .6, .8, 1])
+        fig, ax = plt.subplots(1, 1, dpi=300, figsize=(7.5, 5), tight_layout=True)
+        im = ax.imshow(result_df, cmap=cmap, norm=norm, aspect="auto")
+        plt.colorbar(im, ticks=[-1, -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 1])
 
         # axes
         xlocs = np.arange(len(result_df.columns))
@@ -220,22 +231,22 @@ class InterBasePairCorrelation(BiobbObject):
         _ = ax.set_yticklabels(result_df.index.to_list())  # type: ignore
 
         ax.set_title(
-            "Correlation for neighboring basepairs "
-            "and pairs of helical parameters")
+            "Correlation for neighboring basepairs " "and pairs of helical parameters"
+        )
 
         fig.tight_layout()
-        fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
-            format="jpg")
+        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
         plt.close()
 
         # Copy files to host
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", ""),
-        ])
+        self.tmp_files.extend(
+            [
+                self.stage_io_dict.get("unique_dir", ""),
+            ]
+        )
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -249,7 +260,7 @@ class InterBasePairCorrelation(BiobbObject):
         diff_1 = np.sin(x1 - x1.mean())
         diff_2 = np.sin(x2 - x2.mean())
         num = (diff_1 * diff_2).sum()
-        den = np.sqrt((diff_1 ** 2).sum() * (diff_2 ** 2).sum())
+        den = np.sqrt((diff_1**2).sum() * (diff_2**2).sum())
         return num / den
 
     @staticmethod
@@ -258,8 +269,8 @@ class InterBasePairCorrelation(BiobbObject):
         rc = np.corrcoef(x1, np.cos(x2))[1, 0]
         rs = np.corrcoef(x1, np.sin(x2))[1, 0]
         rcs = np.corrcoef(np.sin(x2), np.cos(x2))[1, 0]
-        num = (rc ** 2) + (rs ** 2) - 2 * rc * rs * rcs
-        den = 1 - (rcs ** 2)
+        num = (rc**2) + (rs**2) - 2 * rc * rs * rcs
+        den = 1 - (rcs**2)
         correlation = np.sqrt(num / den)
         if np.corrcoef(x1, x2)[1, 0] < 0:
             correlation *= -1
@@ -267,11 +278,17 @@ class InterBasePairCorrelation(BiobbObject):
 
 
 def interbpcorr(
-        input_filename_shift: str, input_filename_slide: str,
-        input_filename_rise: str, input_filename_tilt: str,
-        input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
+    input_filename_shift: str,
+    input_filename_slide: str,
+    input_filename_rise: str,
+    input_filename_tilt: str,
+    input_filename_roll: str,
+    input_filename_twist: str,
+    output_csv_path: str,
+    output_jpg_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`HelParCorrelation <correlations.interbpcorr.InterBasePairCorrelation>` class and
     execute the :meth:`launch() <correlations.interbpcorr.InterBasePairCorrelation.launch>` method."""
 
@@ -284,32 +301,60 @@ def interbpcorr(
         input_filename_twist=input_filename_twist,
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
-        properties=properties, **kwargs).launch()
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
+    parser = argparse.ArgumentParser(
+        description="Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument("--config", required=False, help="Configuration file")
 
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_filename_shift', required=True,
-                               help='Path to ser file for helical parameter shift. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_slide', required=True,
-                               help='Path to ser file for helical parameter slide. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_rise', required=True,
-                               help='Path to ser file for helical parameter rise. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_tilt', required=True,
-                               help='Path to ser file for helical parameter tilt. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_roll', required=True,
-                               help='Path to ser file for helical parameter roll. Accepted formats: ser.')
-    required_args.add_argument('--input_filename_twist', required=True,
-                               help='Path to ser file for helical parameter twist. Accepted formats: ser.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Path to output file. Accepted formats: csv.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Path to output plot. Accepted formats: jpg.')
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "--input_filename_shift",
+        required=True,
+        help="Path to ser file for helical parameter shift. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--input_filename_slide",
+        required=True,
+        help="Path to ser file for helical parameter slide. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--input_filename_rise",
+        required=True,
+        help="Path to ser file for helical parameter rise. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--input_filename_tilt",
+        required=True,
+        help="Path to ser file for helical parameter tilt. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--input_filename_roll",
+        required=True,
+        help="Path to ser file for helical parameter roll. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--input_filename_twist",
+        required=True,
+        help="Path to ser file for helical parameter twist. Accepted formats: ser.",
+    )
+    required_args.add_argument(
+        "--output_csv_path",
+        required=True,
+        help="Path to output file. Accepted formats: csv.",
+    )
+    required_args.add_argument(
+        "--output_jpg_path",
+        required=True,
+        help="Path to output plot. Accepted formats: jpg.",
+    )
 
     args = parser.parse_args()
     args.config = args.config or "{}"
@@ -324,8 +369,9 @@ def main():
         input_filename_twist=args.input_filename_twist,
         output_csv_path=args.output_csv_path,
         output_jpg_path=args.output_jpg_path,
-        properties=properties)
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
