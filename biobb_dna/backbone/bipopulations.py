@@ -95,10 +95,12 @@ class BIPopulations(BiobbObject):
 
         self.properties = properties
         self.sequence = properties.get("sequence")
+        # self.seqpos = properties.get("seqpos", None)
         self.seqpos = [
-            int(item) for item in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
         ]
-
+        print("seqpos::::::::")
+        print(self.seqpos)
         # Check the properties
         self.check_properties(properties)
         self.check_arguments()
@@ -124,6 +126,8 @@ class BIPopulations(BiobbObject):
                 )
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError("seqpos must be a list of at least two integers")
+        else:
+            self.seqpos = None  # type: ignore
 
         # read input files
         epsilC = read_series(
@@ -192,7 +196,7 @@ class BIPopulations(BiobbObject):
         labelsC[-1] = f"{labelsC[-1]}3'"
         labelsC = [f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
 
-        if self.seqpos:
+        if self.seqpos is not None:
             labelsC = [labelsC[i] for i in self.seqpos]
             labelsW = [labelsW[i] for i in self.seqpos]
         xlabels = labelsW + ["-"] + labelsC
