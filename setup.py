@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_dna",
-    version="5.0.0",
+    version="5.0.1",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.com",
     description="Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
@@ -15,15 +15,12 @@ setuptools.setup(
     url="https://github.com/bioexcel/biobb_dna",
     project_urls={
         "Documentation": "http://biobb-dna.readthedocs.io/en/latest/",
-        "Bioexcel": "https://bioexcel.eu/"
+        "Bioexcel": "https://bioexcel.eu/",
     },
-    packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
-    package_data={'biobb_dna': ['py.typed']},
-    install_requires=[
-        'biobb_common==5.0.0',
-        'pandas>=1.3.0',
-        'scikit-learn>=0.24.2'],
-    python_requires='>=3.9',
+    packages=setuptools.find_packages(exclude=["adapters", "docs", "test"]),
+    package_data={"biobb_dna": ["py.typed"]},
+    install_requires=["biobb_common==5.0.0", "pandas>=1.3.0", "scikit-learn>=0.24.2"],
+    python_requires=">=3.9",
     entry_points={
         "console_scripts": [
             "biobb_curves = biobb_dna.curvesplus.biobb_curves:main",
@@ -44,7 +41,7 @@ setuptools.setup(
             "intrahpcorr = biobb_dna.intrabp_correlations.intrahpcorr:main",
             "intraseqcorr = biobb_dna.intrabp_correlations.intraseqcorr:main",
             "average_stiffness = biobb_dna.stiffness.average_stiffness:main",
-            "basepair_stiffness = biobb_dna.stiffness.basepair_stiffness:main"
+            "basepair_stiffness = biobb_dna.stiffness.basepair_stiffness:main",
         ]
     },
     classifiers=[
@@ -53,6 +50,6 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
-        "Operating System :: Unix"
+        "Operating System :: Unix",
     ],
 )
