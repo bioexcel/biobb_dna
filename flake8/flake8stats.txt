@@ -1,2 +1,1 @@
-4     E225 missing whitespace around operator
 4     W503 line break before binary operator
