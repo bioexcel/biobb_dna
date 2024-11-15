@@ -115,7 +115,7 @@ class CanonicalAG(BiobbObject):
         self.stage_files()
 
         # check sequence
-        if not self.sequence or len(self.sequence) < 2:
+        if self.sequence is None or len(self.sequence) < 2:
             raise ValueError("sequence is null or too short!")
 
         # check seqpos
@@ -202,7 +202,7 @@ class CanonicalAG(BiobbObject):
         labelsC[-1] = f"{labelsC[-1]}3'"
         labelsC = [f"{i}-{j}" for i, j in zip(labelsC, range(len(labelsC), 0, -1))]
 
-        if self.seqpos is not None:
+        if self.seqpos:
             labelsC = [labelsC[i] for i in self.seqpos]
             labelsW = [labelsW[i] for i in self.seqpos]
         xlabels = labelsW + ["-"] + labelsC

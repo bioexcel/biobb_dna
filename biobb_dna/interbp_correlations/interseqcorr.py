@@ -103,7 +103,7 @@ class InterSequenceCorrelation(BiobbObject):
         self.stage_files()
 
         # check sequence
-        if not self.sequence or len(self.sequence) < 2:
+        if self.sequence is None or len(self.sequence) < 2:
             raise ValueError("sequence is null or too short!")
 
         # get helical parameter from filename if not specified
