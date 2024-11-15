@@ -128,6 +128,8 @@ class IntraBasePairCorrelation(BiobbObject):
         if self.seqpos:
             if not (isinstance(self.seqpos, list) and len(self.seqpos) > 1):
                 raise ValueError("seqpos must be a list of at least two integers")
+        else:
+            self.seqpos = None  # type: ignore
 
         # read input
         shear = read_series(
