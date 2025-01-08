@@ -195,11 +195,9 @@ class IntraBasePairCorrelation(BiobbObject):
             if ser1.name in constants.hp_angular and ser2.name in constants.hp_angular:
                 method = self.circular
             elif (
-                ser1.name in constants.hp_angular
-                and ser2.name not in constants.hp_angular
+                ser1.name in constants.hp_angular and ser2.name not in constants.hp_angular
             ) or (
-                ser2.name in constants.hp_angular
-                and ser1.name not in constants.hp_angular
+                ser2.name in constants.hp_angular and ser1.name not in constants.hp_angular
             ):
                 method = self.circlineal
             else:
