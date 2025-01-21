@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_3afbcd666ed82c91_dna_timeseries_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-21 16:20 +0000
+            created at 2025-01-21 16:21 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -208,7 +208,7 @@
     <p class="run"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">helpar_name</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">constants</span><span class="op">.</span><span class="nam">helical_parameters</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t127" href="#t127">127</a></span><span class="t">                <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t128" href="#t128">128</a></span><span class="t">                    <span class="str">"Helical parameter name is invalid! "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t">                    <span class="str">f"Options: {constants.helical_parameters}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t129" href="#t129">129</a></span><span class="t">                    <span class="fst">f"</span><span class="fst">Options: </span><span class="op">{</span><span class="nam">constants</span><span class="op">.</span><span class="nam">helical_parameters</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t130" href="#t130">130</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t131" href="#t131">131</a></span><span class="t">        <span class="com"># get  unit from helical parameter name</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">helpar_name</span> <span class="key">in</span> <span class="nam">constants</span><span class="op">.</span><span class="nam">hp_angular</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -300,8 +300,8 @@
     <p class="mis show_mis"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">            <span class="nam">plt</span><span class="op">.</span><span class="nam">vlines</span><span class="op">(</span><span class="nam">info</span><span class="op">[</span><span class="str">'mean2'</span><span class="op">]</span><span class="op">,</span> <span class="num">0</span><span class="op">,</span> <span class="nam">ylim</span><span class="op">,</span> <span class="nam">colors</span><span class="op">=</span><span class="str">"r"</span><span class="op">,</span> <span class="nam">linestyles</span><span class="op">=</span><span class="str">"dashed"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">legend</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">ylabel</span><span class="op">(</span><span class="str">"Density"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">xlabel</span><span class="op">(</span><span class="str">f"{self.helpar_name.capitalize()} ({self.hp_unit})"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">title</span><span class="op">(</span><span class="str">f"Distribution of {self.helpar_name} states"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">xlabel</span><span class="op">(</span><span class="fst">f"</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">helpar_name</span><span class="op">.</span><span class="nam">capitalize</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="fst"> (</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">hp_unit</span><span class="op">}</span><span class="fst">)</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">title</span><span class="op">(</span><span class="fst">f"</span><span class="fst">Distribution of </span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">helpar_name</span><span class="op">}</span><span class="fst"> states</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">savefig</span><span class="op">(</span><span class="nam">output_jpg_path</span><span class="op">,</span> <span class="nam">format</span><span class="op">=</span><span class="str">"jpg"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">        <span class="nam">plt</span><span class="op">.</span><span class="nam">close</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -426,7 +426,7 @@
             <a class="nav" href="z_3afbcd666ed82c91_dna_timeseries_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-21 16:20 +0000
+            created at 2025-01-21 16:21 +0000
         </p>
     </div>
 </footer>
