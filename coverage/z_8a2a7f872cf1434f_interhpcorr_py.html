@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for biobb_dna/interbp_correlations/interhpcorr.py: 81%</title>
+    <title>Coverage for biobb_dna/interbp_correlations/interhpcorr.py: 80%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>biobb_dna/interbp_correlations/interhpcorr.py</b>:
-            <span class="pc_cov">81%</span>
+            <span class="pc_cov">80%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,9 +54,9 @@
             </div>
         </aside>
         <h2>
-            <span class="text">132 statements &nbsp;</span>
+            <span class="text">133 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">107<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">25<span class="text"> missing</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">26<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8a2a7f872cf1434f_interseqcorr_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-28 10:29 +0000
+            created at 2025-01-28 10:36 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -293,7 +293,7 @@
     <p class="run"><span class="n"><a id="t211" href="#t211">211</a></span><span class="t">                <span class="nam">axs</span><span class="op">.</span><span class="nam">text</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">                    <span class="nam">j</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">                    <span class="nam">i</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">                    <span class="fst">f"</span><span class="op">{</span><span class="nam">corr_matrix</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">j</span><span class="op">]</span><span class="op">]</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">i</span><span class="op">]</span><span class="op">]</span><span class="op">:</span><span class="fst">.2f</span><span class="op">}</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">                    <span class="str">f"{corr_matrix[coordinates[j]].loc[coordinates[i]]:.2f}"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">                    <span class="nam">ha</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">                    <span class="nam">va</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">                    <span class="nam">color</span><span class="op">=</span><span class="str">"w"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -303,7 +303,7 @@
     <p class="run"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_yticklabels</span><span class="op">(</span><span class="nam">corr_matrix</span><span class="op">.</span><span class="nam">index</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_title</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">            <span class="str">"Helical Parameter Correlation "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">            <span class="fst">f"</span><span class="fst">for Base Pair Step \'</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">basepair</span><span class="op">}</span><span class="fst">\'</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">            <span class="str">f"for Base Pair Step \'{self.basepair}\'"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">tight_layout</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">savefig</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">'out'</span><span class="op">]</span><span class="op">[</span><span class="str">'output_jpg_path'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -378,7 +378,7 @@
     <p class="pln"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t">        <span class="nam">output_jpg_path</span><span class="op">=</span><span class="nam">output_jpg_path</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t297" href="#t297">297</a></span><span class="t">        <span class="nam">properties</span><span class="op">=</span><span class="nam">properties</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">.</span><span class="nam">launch</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t298" href="#t298">298</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t299" href="#t299">299</a></span><span class="t">    <span class="nam">interhpcorr</span><span class="op">.</span><span class="nam">__doc__</span> <span class="op">=</span> <span class="nam">InterHelParCorrelation</span><span class="op">.</span><span class="nam">__doc__</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t299" href="#t299">299</a></span><span class="t">    <span class="nam">interhpcorr</span><span class="op">.</span><span class="nam">__doc__</span> <span class="op">=</span> <span class="nam">InterHelParCorrelation</span><span class="op">.</span><span class="nam">__doc__</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t300" href="#t300">300</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t301" href="#t301">301</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t302" href="#t302">302</a></span><span class="t"><span class="key">def</span> <span class="nam">main</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -432,7 +432,7 @@
             <a class="nav" href="z_8a2a7f872cf1434f_interseqcorr_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2025-01-28 10:29 +0000
+            created at 2025-01-28 10:36 +0000
         </p>
     </div>
 </footer>
