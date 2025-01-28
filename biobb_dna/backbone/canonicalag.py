@@ -188,7 +188,7 @@ class CanonicalAG(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
+        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         return 0
@@ -251,6 +251,8 @@ def canonicalag(
         properties=properties,
         **kwargs,
     ).launch()
+
+    canonicalag.__doc__ = CanonicalAG.__doc__
 
 
 def main():

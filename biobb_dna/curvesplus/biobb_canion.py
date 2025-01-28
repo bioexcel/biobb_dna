@@ -196,9 +196,9 @@ class Canion(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        # self.tmp_files.extend([
+        #     self.stage_io_dict.get("unique_dir", "")
+        # ])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -218,6 +218,8 @@ def biobb_canion(
         input_avg_struc_path=input_avg_struc_path,
         output_zip_path=output_zip_path,
         properties=properties, **kwargs).launch()
+
+    biobb_canion.__doc__ = Canion.__doc__
 
 
 def main():

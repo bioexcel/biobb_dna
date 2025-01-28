@@ -230,9 +230,9 @@ class HelParBimodality(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        # self.tmp_files.extend([
+        #     self.stage_io_dict.get("unique_dir", "")
+        # ])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -303,6 +303,8 @@ def dna_bimodality(
         output_csv_path=output_csv_path,
         output_jpg_path=output_jpg_path,
         properties=properties, **kwargs).launch()
+
+    dna_bimodality.__doc__ = HelParBimodality.__doc__
 
 
 def main():

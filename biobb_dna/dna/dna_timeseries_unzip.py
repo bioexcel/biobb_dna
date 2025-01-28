@@ -173,9 +173,9 @@ class DnaTimeseriesUnzip(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([
-            self.stage_io_dict.get("unique_dir", "")
-        ])
+        # self.tmp_files.extend([
+        #     self.stage_io_dict.get("unique_dir", "")
+        # ])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -199,6 +199,8 @@ def dna_timeseries_unzip(
         output_path_jpg=output_path_jpg,
         output_list_path=output_list_path,
         properties=properties, **kwargs).launch()
+
+    dna_timeseries_unzip.__doc__ = DnaTimeseriesUnzip.__doc__
 
 
 def main():
