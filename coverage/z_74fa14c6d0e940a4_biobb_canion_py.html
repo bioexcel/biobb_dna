@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for biobb_dna/curvesplus/biobb_canion.py: 80%</title>
+    <title>Coverage for biobb_dna/curvesplus/biobb_canion.py: 79%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_81f8c14c.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>biobb_dna/curvesplus/biobb_canion.py</b>:
-            <span class="pc_cov">80%</span>
+            <span class="pc_cov">79%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,9 +54,9 @@
             </div>
         </aside>
         <h2>
-            <span class="text">80 statements &nbsp;</span>
+            <span class="text">81 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">64<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">16<span class="text"> missing</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">17<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_74fa14c6d0e940a4_biobb_curves_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.9.1">coverage.py v7.9.1</a>,
-            created at 2025-06-19 13:38 +0000
+            created at 2025-06-19 13:41 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -217,7 +217,7 @@
     <p class="pln"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">type</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">ion_type_options</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t137" href="#t137">137</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="op">(</span><span class="str">"Invalid value for property type! "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">                              <span class="fst">f"</span><span class="fst">Option include: </span><span class="op">{</span><span class="nam">ion_type_options</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">                              <span class="str">f"Option include: {ion_type_options}"</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t139" href="#t139">139</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t140" href="#t140">140</a></span><span class="t">        <span class="com"># define temporary file names</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t141" href="#t141">141</a></span><span class="t">        <span class="nam">input_cdi_file</span> <span class="op">=</span> <span class="nam">Path</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">'in'</span><span class="op">]</span><span class="op">[</span><span class="str">'input_cdi_path'</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
@@ -230,29 +230,29 @@
     <p class="pln"><span class="n"><a id="t148" href="#t148">148</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t149" href="#t149">149</a></span><span class="t">        <span class="com"># create intructions</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t">        <span class="nam">instructions</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">            <span class="fst">f"</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">binary_path</span><span class="op">}</span><span class="fst"> &lt;&lt;! </span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">            <span class="str">f"{self.binary_path} &lt;&lt;! "</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">            <span class="str">"&amp;inp"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">            <span class="str">"  lis=canion_output,"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  dat=</span><span class="op">{</span><span class="nam">input_cdi_file</span><span class="op">[</span><span class="op">:</span><span class="op">-</span><span class="num">4</span><span class="op">]</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  axfrm=</span><span class="op">{</span><span class="nam">input_afr_file</span><span class="op">[</span><span class="op">:</span><span class="op">-</span><span class="num">4</span><span class="op">]</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  solute=</span><span class="op">{</span><span class="nam">input_avg_struc</span><span class="op">[</span><span class="op">:</span><span class="op">-</span><span class="num">4</span><span class="op">]</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  type=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  dlow=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">dlow</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  dhig=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">dhig</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  rlow=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">rlow</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  rhig=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">rhig</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  alow=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">alow</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  ahig=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">ahig</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  itst=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">itst</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  itnd=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">itnd</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  itdel=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">itdel</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  rmsf=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">rmsf</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">            <span class="fst">f"</span><span class="fst">  circ=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">circ</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">            <span class="str">f"  dat={input_cdi_file[:-4]},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">            <span class="str">f"  axfrm={input_afr_file[:-4]},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">            <span class="str">f"  solute={input_avg_struc[:-4]},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">            <span class="str">f"  type={self.type},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">            <span class="str">f"  dlow={self.dlow},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">            <span class="str">f"  dhig={self.dhig},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">            <span class="str">f"  rlow={self.rlow},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t">            <span class="str">f"  rhig={self.rhig},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">            <span class="str">f"  alow={self.alow},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">            <span class="str">f"  ahig={self.ahig},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">            <span class="str">f"  itst={self.itst},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">            <span class="str">f"  itnd={self.itnd},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t">            <span class="str">f"  itdel={self.itdel},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">            <span class="str">f"  rmsf={self.rmsf},"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">            <span class="str">f"  circ={self.circ},"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">bases</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">            <span class="com"># add topology file if needed</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">            <span class="nam">fu</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">'Appending sequence of bases to be searched to command'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">                   <span class="nam">self</span><span class="op">.</span><span class="nam">out_log</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">global_log</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">            <span class="nam">instructions</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="fst">f"</span><span class="fst">  seq=</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">bases</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">            <span class="nam">instructions</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="str">f"  seq={self.bases},"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">        <span class="nam">instructions</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="str">"&amp;end"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">        <span class="nam">instructions</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="str">"!"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">cmd</span> <span class="op">=</span> <span class="op">[</span><span class="str">"\n"</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">instructions</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -301,7 +301,7 @@
     <p class="pln"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t">        <span class="nam">output_zip_path</span><span class="op">=</span><span class="nam">output_zip_path</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t">        <span class="nam">properties</span><span class="op">=</span><span class="nam">properties</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">.</span><span class="nam">launch</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">    <span class="nam">biobb_canion</span><span class="op">.</span><span class="nam">__doc__</span> <span class="op">=</span> <span class="nam">Canion</span><span class="op">.</span><span class="nam">__doc__</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">    <span class="nam">biobb_canion</span><span class="op">.</span><span class="nam">__doc__</span> <span class="op">=</span> <span class="nam">Canion</span><span class="op">.</span><span class="nam">__doc__</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t"><span class="key">def</span> <span class="nam">main</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -343,7 +343,7 @@
             <a class="nav" href="z_74fa14c6d0e940a4_biobb_curves_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.9.1">coverage.py v7.9.1</a>,
-            created at 2025-06-19 13:38 +0000
+            created at 2025-06-19 13:41 +0000
         </p>
     </div>
 </footer>
