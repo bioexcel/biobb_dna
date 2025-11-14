@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8a2a7f872cf1434f_interseqcorr_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.11.3">coverage.py v7.11.3</a>,
-            created at 2025-11-14 14:52 +0000
+            created at 2025-11-14 14:55 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -293,7 +293,7 @@
     <p class="run"><span class="n"><a id="t211" href="#t211">211</a></span><span class="t">                <span class="nam">axs</span><span class="op">.</span><span class="nam">text</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">                    <span class="nam">j</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">                    <span class="nam">i</span><span class="op">+</span><span class="num">.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">                    <span class="fst">f"</span><span class="op">{</span><span class="nam">corr_matrix</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">j</span><span class="op">]</span><span class="op">]</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">coordinates</span><span class="op">[</span><span class="nam">i</span><span class="op">]</span><span class="op">]</span><span class="op">:</span><span class="fst">.2f</span><span class="op">}</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">                    <span class="str">f"{corr_matrix[coordinates[j]].loc[coordinates[i]]:.2f}"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">                    <span class="nam">ha</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">                    <span class="nam">va</span><span class="op">=</span><span class="str">"center"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">                    <span class="nam">color</span><span class="op">=</span><span class="str">"w"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -303,7 +303,7 @@
     <p class="run"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_yticklabels</span><span class="op">(</span><span class="nam">corr_matrix</span><span class="op">.</span><span class="nam">index</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">        <span class="nam">axs</span><span class="op">.</span><span class="nam">set_title</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">            <span class="str">"Helical Parameter Correlation "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">            <span class="fst">f"</span><span class="fst">for Base Pair Step \'</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">basepair</span><span class="op">}</span><span class="fst">\'</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">            <span class="str">f"for Base Pair Step \'{self.basepair}\'"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">tight_layout</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">        <span class="nam">fig</span><span class="op">.</span><span class="nam">savefig</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">'out'</span><span class="op">]</span><span class="op">[</span><span class="str">'output_jpg_path'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -432,7 +432,7 @@
             <a class="nav" href="z_8a2a7f872cf1434f_interseqcorr_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.11.3">coverage.py v7.11.3</a>,
-            created at 2025-11-14 14:52 +0000
+            created at 2025-11-14 14:55 +0000
         </p>
     </div>
 </footer>
