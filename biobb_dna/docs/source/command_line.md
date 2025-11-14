@@ -484,7 +484,7 @@ biobb_canion -h
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
-* **input_cdi_path** (*string*): Trajectory input file. File type: input. [Sample file](https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi). Accepted formats: CDI
+* **input_cdi_path** (*string*): Trajectory input file. File type: input. [Sample file](None). Accepted formats: CDI
 * **input_afr_path** (*string*): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr). Accepted formats: AFR
 * **input_avg_struc_path** (*string*): Average DNA conformation. File type: input. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb). Accepted formats: PDB
 * **output_zip_path** (*string*): Filename for .zip files containing Canion output files. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip). Accepted formats: ZIP
