@@ -2,14 +2,12 @@
 
 """Module containing the HelParStiffness class and the command line interface."""
 
-import argparse
 from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -205,89 +203,11 @@ def basepair_stiffness(
 ) -> int:
     """Create :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` class and
     execute the :meth:`launch() <stiffness.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
-
-    return BPStiffness(
-        input_filename_shift=input_filename_shift,
-        input_filename_slide=input_filename_slide,
-        input_filename_rise=input_filename_rise,
-        input_filename_tilt=input_filename_tilt,
-        input_filename_roll=input_filename_roll,
-        input_filename_twist=input_filename_twist,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    basepair_stiffness.__doc__ = BPStiffness.__doc__
+    return BPStiffness(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Calculate stiffness constants matrix between all six helical parameters for a single base pair step.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+basepair_stiffness.__doc__ = BPStiffness.__doc__
+main = BPStiffness.get_main(basepair_stiffness, "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_filename_shift",
-        required=True,
-        help="Path to csv file with shift inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--input_filename_slide",
-        required=True,
-        help="Path to csv file with slide inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--input_filename_rise",
-        required=True,
-        help="Path to csv file with rise inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--input_filename_tilt",
-        required=True,
-        help="Path to csv file with tilt inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--input_filename_roll",
-        required=True,
-        help="Path to csv file with roll inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--input_filename_twist",
-        required=True,
-        help="Path to csv file with twist inputs. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output covariance data file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output covariance data file. Accepted formats: csv.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    basepair_stiffness(
-        input_filename_shift=args.input_filename_shift,
-        input_filename_slide=args.input_filename_slide,
-        input_filename_rise=args.input_filename_rise,
-        input_filename_tilt=args.input_filename_tilt,
-        input_filename_roll=args.input_filename_roll,
-        input_filename_twist=args.input_filename_twist,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

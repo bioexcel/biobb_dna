@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Module containing the CanonicalAG class and the command line interface."""
 
-import argparse
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -239,75 +237,11 @@ def canonicalag(
 ) -> int:
     """Create :class:`CanonicalAG <dna.backbone.canonicalag.CanonicalAG>` class and
     execute the: meth: `launch() <dna.backbone.canonicalag.CanonicalAG.launch>` method."""
-
-    return CanonicalAG(
-        input_alphaC_path=input_alphaC_path,
-        input_alphaW_path=input_alphaW_path,
-        input_gammaC_path=input_gammaC_path,
-        input_gammaW_path=input_gammaW_path,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    canonicalag.__doc__ = CanonicalAG.__doc__
+    return CanonicalAG(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Calculate Canonical Alpha/Gamma distributions.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_alphaC_path",
-        required=True,
-        help="Helical parameter <alphaC> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_alphaW_path",
-        required=True,
-        help="Helical parameter <alphaW> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_gammaC_path",
-        required=True,
-        help="Helical parameter <gammaC> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_gammaW_path",
-        required=True,
-        help="Helical parameter <gammaW> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output csv file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output jpg file. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    canonicalag(
-        input_alphaC_path=args.input_alphaC_path,
-        input_alphaW_path=args.input_alphaW_path,
-        input_gammaC_path=args.input_gammaC_path,
-        input_gammaW_path=args.input_gammaW_path,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
+canonicalag.__doc__ = CanonicalAG.__doc__
+main = CanonicalAG.get_main(canonicalag, "Calculate Canonical Alpha/Gamma distributions.")
 
 if __name__ == "__main__":
     main()

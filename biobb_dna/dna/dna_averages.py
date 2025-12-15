@@ -2,13 +2,11 @@
 
 """Module containing the HelParAverages class and the command line interface."""
 
-import argparse
 from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -187,11 +185,11 @@ class HelParAverages(BiobbObject):
         )
         axs.set_xticks(means.index)
         axs.set_xticklabels(xlabels, rotation=90)
-        axs.set_xlabel("Sequence Base Pair " f"{'Step' if self.baselen==1 else ''}")
+        axs.set_xlabel("Sequence Base Pair " f"{'Step' if self.baselen == 1 else ''}")
         axs.set_ylabel(f"{self.helpar_name.capitalize()} ({self.hp_unit})")
         axs.set_title(
             "Base Pair "
-            f"{'Step' if self.baselen==1 else ''} "
+            f"{'Step' if self.baselen == 1 else ''} "
             f"Helical Parameter: {self.helpar_name.capitalize()}"
         )
         fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
@@ -199,7 +197,7 @@ class HelParAverages(BiobbObject):
         # save table
         dataset = pd.DataFrame(
             {
-                f"Base Pair {'Step' if self.baselen==1 else ''}": xlabels,
+                f"Base Pair {'Step' if self.baselen == 1 else ''}": xlabels,
                 "mean": means.to_numpy(),
                 "std": stds.to_numpy(),
             }
@@ -228,54 +226,11 @@ def dna_averages(
 ) -> int:
     """Create :class:`HelParAverages <dna.dna_averages.HelParAverages>` class and
     execute the :meth:`launch() <dna.dna_averages.HelParAverages.launch>` method."""
-
-    return HelParAverages(
-        input_ser_path=input_ser_path,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    dna_averages.__doc__ = HelParAverages.__doc__
+    return HelParAverages(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Load helical parameter file and calculate average values for each base pair.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+dna_averages.__doc__ = HelParAverages.__doc__
+main = HelParAverages.get_main(dna_averages, "Load helical parameter file and calculate average values for each base pair.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_ser_path",
-        required=True,
-        help="Helical parameter input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output csv file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output jpg file. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    dna_averages(
-        input_ser_path=args.input_ser_path,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

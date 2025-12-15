@@ -3,7 +3,6 @@
 """Module containing the HelParBimodality class and the command line interface."""
 import os
 import zipfile
-import argparse
 from typing import Optional
 from pathlib import Path
 
@@ -13,7 +12,6 @@ import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture  # type: ignore
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -293,44 +291,11 @@ def dna_bimodality(
         input_zip_file: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
     execute the :meth:`launch() <dna.dna_bimodality.HelParBimodality.launch>` method."""
-
-    return HelParBimodality(
-        input_csv_file=input_csv_file,
-        input_zip_file=input_zip_file,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties, **kwargs).launch()
-
-    dna_bimodality.__doc__ = HelParBimodality.__doc__
+    return HelParBimodality(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Determine binormality/bimodality from a helical parameter dataset.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_csv_file', required=True,
-                               help='Path to csv file with data. Accepted formats: csv.')
-    parser.add_argument('--input_zip_file',
-                        help='Path to zip file containing csv input files. Accepted formats: zip.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Filename and/or path of output csv file.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Filename and/or path of output jpg file.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    dna_bimodality(
-        input_csv_file=args.input_csv_file,
-        input_zip_file=args.input_zip_file,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties)
-
+dna_bimodality.__doc__ = HelParBimodality.__doc__
+main = HelParBimodality.get_main(dna_bimodality, "Determine binormality/bimodality from a helical parameter dataset.")
 
 if __name__ == '__main__':
     main()

@@ -3,12 +3,10 @@
 """Module containing the Curves class and the command line interface."""
 import os
 import zipfile
-import argparse
 from typing import Optional
 import shutil
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
@@ -256,48 +254,11 @@ def biobb_curves(
         properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_curves.Curves.launch>` method."""
-
-    return Curves(
-        input_struc_path=input_struc_path,
-        input_top_path=input_top_path,
-        output_lis_path=output_lis_path,
-        output_cda_path=output_cda_path,
-        output_zip_path=output_zip_path,
-        properties=properties, **kwargs).launch()
-
-    biobb_curves.__doc__ = Curves.__doc__
+    return Curves(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Execute Cur+ form the Curves+ software suite.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_struc_path', required=True,
-                               help='Trajectory or PDB input file. Accepted formats: trj, pdb.')
-    required_args.add_argument('--output_cda_path', required=True,
-                               help='Filename to give to output .cda file. Accepted formats: str.')
-    required_args.add_argument('--output_lis_path', required=True,
-                               help='Filename to give to output .lis file. Accepted formats: str.')
-    parser.add_argument('--input_top_path', required=False,
-                        help='Topology file, needed along with .trj file (optional). Accepted formats: top.')
-    parser.add_argument('--output_zip_path', required=False,
-                        help='Filename to give to output files (except .cda and .lis files). Accepted formats: str.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    biobb_curves(
-        input_struc_path=args.input_struc_path,
-        input_top_path=args.input_top_path,
-        output_cda_path=args.output_cda_path,
-        output_lis_path=args.output_lis_path,
-        output_zip_path=args.output_zip_path,
-        properties=properties)
-
+biobb_curves.__doc__ = Curves.__doc__
+main = Curves.get_main(biobb_curves, "Execute Cur+ form the Curves+ software suite.")
 
 if __name__ == '__main__':
     main()

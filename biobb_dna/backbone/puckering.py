@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Module containing the Puckering class and the command line interface."""
 
-import argparse
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -222,61 +220,11 @@ def puckering(
 ) -> int:
     """Create :class:`Puckering <dna.backbone.puckering.Puckering>` class and
     execute the: meth: `launch() <dna.backbone.puckering.Puckering.launch>` method."""
-
-    return Puckering(
-        input_phaseC_path=input_phaseC_path,
-        input_phaseW_path=input_phaseW_path,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    puckering.__doc__ = Puckering.__doc__
+    return Puckering(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Calculate North/East/West/South distribution of sugar puckering backbone torsions.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_phaseC_path",
-        required=True,
-        help="Helical parameter <alphaC> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_phaseW_path",
-        required=True,
-        help="Helical parameter <alphaW> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output csv file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output jpg file. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    puckering(
-        input_phaseC_path=args.input_phaseC_path,
-        input_phaseW_path=args.input_phaseW_path,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
+puckering.__doc__ = Puckering.__doc__
+main = Puckering.get_main(puckering, "Calculate North/East/West/South distribution of sugar puckering backbone torsions.")
 
 if __name__ == "__main__":
     main()

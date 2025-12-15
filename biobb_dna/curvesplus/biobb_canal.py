@@ -3,12 +3,10 @@
 """Module containing the Canal class and the command line interface."""
 import os
 import zipfile
-import argparse
 from typing import Optional
 from pathlib import Path
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
@@ -200,39 +198,11 @@ def biobb_canal(
         **kwargs) -> int:
     """Create :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canal.Canal.launch>` method."""
-
-    return Canal(
-        input_cda_file=input_cda_file,
-        input_lis_file=input_lis_file,
-        output_zip_path=output_zip_path,
-        properties=properties, **kwargs).launch()
-
-    biobb_canal.__doc__ = Canal.__doc__
+    return Canal(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Execute Canal from the Curves+ software suite.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_cda_file', required=True,
-                               help='cda input file from Curves+ output. Accepted formats: cda.')
-    required_args.add_argument('--output_zip_path', required=True,
-                               help='Filename for .zip file with Canal output. Accepted formats: zip.')
-    parser.add_argument('--input_lis_file', required=False,
-                        help='lis input file from Curves+ output. Accepted formats: lis.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    biobb_canal(
-        input_cda_file=args.input_cda_file,
-        input_lis_file=args.input_lis_file,
-        output_zip_path=args.output_zip_path,
-        properties=properties)
+biobb_canal.__doc__ = Canal.__doc__
+main = Canal.get_main(biobb_canal, "Execute Canal from the Curves+ software suite.")
 
 
 if __name__ == '__main__':

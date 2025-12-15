@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the IntraBasePairCorrelation class and the command line interface."""
-
-import argparse
 from itertools import product
 from typing import Optional
 
@@ -10,7 +8,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -286,89 +283,11 @@ def intrabpcorr(
 ) -> int:
     """Create :class:`HelParCorrelation <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation>` class and
     execute the :meth:`launch() <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation.launch>` method."""
-
-    return IntraBasePairCorrelation(
-        input_filename_shear=input_filename_shear,
-        input_filename_stretch=input_filename_stretch,
-        input_filename_stagger=input_filename_stagger,
-        input_filename_buckle=input_filename_buckle,
-        input_filename_propel=input_filename_propel,
-        input_filename_opening=input_filename_opening,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    intrabpcorr.__doc__ = IntraBasePairCorrelation.__doc__
+    return IntraBasePairCorrelation(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+intrabpcorr.__doc__ = IntraBasePairCorrelation.__doc__
+main = IntraBasePairCorrelation.get_main(intrabpcorr, "Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_filename_shear",
-        required=True,
-        help="Path to ser file for helical parameter shear. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_stretch",
-        required=True,
-        help="Path to ser file for helical parameter stretch. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_stagger",
-        required=True,
-        help="Path to ser file for helical parameter stagger. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_buckle",
-        required=True,
-        help="Path to ser file for helical parameter buckle. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_propel",
-        required=True,
-        help="Path to ser file for helical parameter propel. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_opening",
-        required=True,
-        help="Path to ser file for helical parameter opening. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output plot. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    intrabpcorr(
-        input_filename_shear=args.input_filename_shear,
-        input_filename_stretch=args.input_filename_stretch,
-        input_filename_stagger=args.input_filename_stagger,
-        input_filename_buckle=args.input_filename_buckle,
-        input_filename_propel=args.input_filename_propel,
-        input_filename_opening=args.input_filename_opening,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

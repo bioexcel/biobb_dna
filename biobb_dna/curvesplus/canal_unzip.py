@@ -4,11 +4,9 @@
 import re
 import zipfile
 import shutil
-import argparse
 from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
@@ -186,40 +184,11 @@ def canal_unzip(
         **kwargs) -> int:
     """Create :class:`CanalUnzip <biobb_dna.curvesplus.canal_unzip.CanalUnzip>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.canal_unzip.CanalUnzip.launch>` method."""
-
-    return CanalUnzip(
-        input_zip_file=input_zip_file,
-        output_path=output_path,
-        output_list_path=output_list_path,
-        properties=properties, **kwargs).launch()
-
-    canal_unzip.__doc__ = CanalUnzip.__doc__
+    return CanalUnzip(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Tool for extracting biobb_canal output files.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_zip_file', required=True,
-                               help='Zip file with Canal output files. Accepted formats: zip.')
-    required_args.add_argument('--output_path', required=True,
-                               help='Canal output file contained within input_zip_file. Accepted formats: ser, his, cor.')
-    parser.add_argument('--output_list_path', required=False,
-                        help='Text file with a list of all Canal output files contained within input_zip_file. Accepted formats: txt.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    canal_unzip(
-        input_zip_file=args.input_zip_file,
-        output_path=args.output_path,
-        output_list_path=args.output_list_path,
-        properties=properties)
-
+canal_unzip.__doc__ = CanalUnzip.__doc__
+main = CanalUnzip.get_main(canal_unzip, "Tool for extracting biobb_canal output files.")
 
 if __name__ == '__main__':
     main()

@@ -2,7 +2,6 @@
 
 """Module containing the HelParTimeSeries class and the command line interface."""
 
-import argparse
 import re
 import zipfile
 from pathlib import Path
@@ -10,7 +9,6 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -292,45 +290,11 @@ def dna_timeseries(
 ) -> int:
     """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
     execute the :meth:`launch() <dna.dna_timeseries.HelParTimeSeries.launch>` method."""
-
-    return HelParTimeSeries(
-        input_ser_path=input_ser_path,
-        output_zip_path=output_zip_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    dna_timeseries.__doc__ = HelParTimeSeries.__doc__
+    return HelParTimeSeries(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Created time series and histogram plots for each base pair from a helical parameter series file.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+dna_timeseries.__doc__ = HelParTimeSeries.__doc__
+main = HelParTimeSeries.get_main(dna_timeseries, "Created time series and histogram plots for each base pair from a helical parameter series file.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_ser_path",
-        required=True,
-        help="Helical parameter input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_zip_path", required=True, help="Path to output directory."
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    dna_timeseries(
-        input_ser_path=args.input_ser_path,
-        output_zip_path=args.output_zip_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

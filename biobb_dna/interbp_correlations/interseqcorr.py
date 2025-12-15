@@ -2,13 +2,11 @@
 
 """Module containing the InterSequenceCorrelation class and the command line interface."""
 
-import argparse
 from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -213,54 +211,11 @@ def interseqcorr(
 ) -> int:
     """Create :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` class and
     execute the :meth:`launch() <interbp_correlations.interseqcorr.InterSequenceCorrelation.launch>` method."""
-
-    return InterSequenceCorrelation(
-        input_ser_path=input_ser_path,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    interseqcorr.__doc__ = InterSequenceCorrelation.__doc__
+    return InterSequenceCorrelation(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+interseqcorr.__doc__ = InterSequenceCorrelation.__doc__
+main = InterSequenceCorrelation.get_main(interseqcorr, "Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_ser_path",
-        required=True,
-        help="Path to ser file with inputs. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output plot. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    interseqcorr(
-        input_ser_path=args.input_ser_path,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

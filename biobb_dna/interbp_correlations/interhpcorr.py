@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the InterHelParCorrelation class and the command line interface."""
-import argparse
 from typing import Optional
 
 import pandas as pd
@@ -9,7 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -281,60 +279,11 @@ def interhpcorr(
         properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` class and
     execute the :meth:`launch() <interbp_correlations.interhpcorr.InterHelParCorrelation.launch>` method."""
-
-    return InterHelParCorrelation(
-        input_filename_shift=input_filename_shift,
-        input_filename_slide=input_filename_slide,
-        input_filename_rise=input_filename_rise,
-        input_filename_tilt=input_filename_tilt,
-        input_filename_roll=input_filename_roll,
-        input_filename_twist=input_filename_twist,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties, **kwargs).launch()
-
-    interhpcorr.__doc__ = InterHelParCorrelation.__doc__
+    return InterHelParCorrelation(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_filename_shift', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_slide', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_rise', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_tilt', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_roll', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_twist', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Path to output file. Accepted formats: csv.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Path to output file. Accepted formats: csv.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    interhpcorr(
-        input_filename_shift=args.input_filename_shift,
-        input_filename_slide=args.input_filename_slide,
-        input_filename_rise=args.input_filename_rise,
-        input_filename_tilt=args.input_filename_tilt,
-        input_filename_roll=args.input_filename_roll,
-        input_filename_twist=args.input_filename_twist,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties)
-
+interhpcorr.__doc__ = InterHelParCorrelation.__doc__
+main = InterHelParCorrelation.get_main(interhpcorr, "Load helical parameter file and save base data individually.")
 
 if __name__ == '__main__':
     main()

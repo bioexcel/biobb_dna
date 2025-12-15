@@ -3,11 +3,9 @@
 """Module containing the Canion class and the command line interface."""
 import os
 import zipfile
-import argparse
 from typing import Optional
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
@@ -19,7 +17,7 @@ class Canion(BiobbObject):
     | Analyzes the trajectory of ions around a DNA molecule.
 
     Args:
-        input_cdi_path (str): Trajectory input file. File type: input. Accepted formats: cdi (edam:format_2330).
+        input_cdi_path (str): Trajectory input file. File type: input. `Sample file <https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi>`_. Accepted formats: cdi (edam:format_2330).
         input_afr_path (str): Helical axis frames corresponding to the input conformation to be analyzed. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA.afr>`_. Accepted formats: afr (edam:format_2330).
         input_avg_struc_path (str): Average DNA conformation. File type: input. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/data/curvesplus/THGA_avg.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_zip_path (str): Filename for .zip files containing Canion output files. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/curvesplus/canion_output.zip>`_. Accepted formats: zip (edam:format_3987).
@@ -208,44 +206,11 @@ def biobb_canion(
         output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` class and
     execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canion.Canion.launch>` method."""
-
-    return Canion(
-        input_cdi_path=input_cdi_path,
-        input_afr_path=input_afr_path,
-        input_avg_struc_path=input_avg_struc_path,
-        output_zip_path=output_zip_path,
-        properties=properties, **kwargs).launch()
-
-    biobb_canion.__doc__ = Canion.__doc__
+    return Canion(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Execute Canion form the Curves+ software suite.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_cdi_path', required=True,
-                               help='Ion position data file. Accepted formats: cdi.')
-    required_args.add_argument('--input_afr_path', required=True,
-                               help='Helical axis frames data. Accepted formats: afr.')
-    required_args.add_argument('--input_avg_struc_path', required=True,
-                               help='Average DNA conformation fike file. Accepted formats: pdb.')
-    parser.add_argument('--output_zip_path', required=False,
-                        help='Filename to give to output files. Accepted formats: zip.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    biobb_canion(
-        input_cdi_path=args.input_cdi_path,
-        input_afr_path=args.input_afr_path,
-        input_avg_struc_path=args.input_avg_struc_path,
-        output_zip_path=args.output_zip_path,
-        properties=properties)
-
+biobb_canion.__doc__ = Canion.__doc__
+main = Canion.get_main(biobb_canion, "Execute Canion form the Curves+ software suite.")
 
 if __name__ == '__main__':
     main()

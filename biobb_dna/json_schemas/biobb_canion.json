@@ -27,7 +27,7 @@
             "type": "string",
             "description": "Trajectory input file",
             "filetype": "input",
-            "sample": null,
+            "sample": "https://mmb.irbbarcelona.org/biobb-dev/biobb-api/public/samples/THGA_K.cdi",
             "enum": [
                 ".*\\.cdi$"
             ],

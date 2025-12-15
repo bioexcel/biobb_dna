@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the InterBasePairCorrelation class and the command line interface."""
-
-import argparse
 from itertools import product
 from typing import Optional
 
@@ -10,7 +8,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -286,89 +283,11 @@ def interbpcorr(
 ) -> int:
     """Create :class:`HelParCorrelation <correlations.interbpcorr.InterBasePairCorrelation>` class and
     execute the :meth:`launch() <correlations.interbpcorr.InterBasePairCorrelation.launch>` method."""
-
-    return InterBasePairCorrelation(
-        input_filename_shift=input_filename_shift,
-        input_filename_slide=input_filename_slide,
-        input_filename_rise=input_filename_rise,
-        input_filename_tilt=input_filename_tilt,
-        input_filename_roll=input_filename_roll,
-        input_filename_twist=input_filename_twist,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    interbpcorr.__doc__ = InterBasePairCorrelation.__doc__
+    return InterBasePairCorrelation(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
+interbpcorr.__doc__ = InterBasePairCorrelation.__doc__
+main = InterBasePairCorrelation.get_main(interbpcorr, "Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.")
 
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_filename_shift",
-        required=True,
-        help="Path to ser file for helical parameter shift. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_slide",
-        required=True,
-        help="Path to ser file for helical parameter slide. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_rise",
-        required=True,
-        help="Path to ser file for helical parameter rise. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_tilt",
-        required=True,
-        help="Path to ser file for helical parameter tilt. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_roll",
-        required=True,
-        help="Path to ser file for helical parameter roll. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_filename_twist",
-        required=True,
-        help="Path to ser file for helical parameter twist. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output plot. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    interbpcorr(
-        input_filename_shift=args.input_filename_shift,
-        input_filename_slide=args.input_filename_slide,
-        input_filename_rise=args.input_filename_rise,
-        input_filename_tilt=args.input_filename_tilt,
-        input_filename_roll=args.input_filename_roll,
-        input_filename_twist=args.input_filename_twist,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

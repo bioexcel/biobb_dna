@@ -4,12 +4,10 @@
 import re
 import zipfile
 import shutil
-import argparse
 from typing import Optional
 
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
@@ -189,44 +187,11 @@ def dna_timeseries_unzip(
         **kwargs) -> int:
     """Create :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` class and
     execute the :meth:`launch() <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip.launch>` method."""
-
-    return DnaTimeseriesUnzip(
-        input_zip_file=input_zip_file,
-        output_path_csv=output_path_csv,
-        output_path_jpg=output_path_jpg,
-        output_list_path=output_list_path,
-        properties=properties, **kwargs).launch()
-
-    dna_timeseries_unzip.__doc__ = DnaTimeseriesUnzip.__doc__
+    return DnaTimeseriesUnzip(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Tool for extracting dna_timeseries output files.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_zip_file', required=True,
-                               help='Zip file with dna_timeseries output files. Accepted formats: zip.')
-    required_args.add_argument('--output_path_csv', required=True,
-                               help='dna_timeseries output csv file contained within input_zip_file. Accepted formats: csv.')
-    required_args.add_argument('--output_path_jpg', required=True,
-                               help='dna_timeseries output jpg file contained within input_zip_file. Accepted formats: jpg.')
-    parser.add_argument('--output_list_path', required=False,
-                        help='Text file with a list of all dna_timeseries output files contained within input_zip_file. Accepted formats: txt.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    dna_timeseries_unzip(
-        input_zip_file=args.input_zip_file,
-        output_path_csv=args.output_path_csv,
-        output_path_jpg=args.output_path_jpg,
-        output_list_path=args.output_list_path,
-        properties=properties)
-
+dna_timeseries_unzip.__doc__ = DnaTimeseriesUnzip.__doc__
+main = DnaTimeseriesUnzip.get_main(dna_timeseries_unzip, "Tool for extracting dna_timeseries output files.")
 
 if __name__ == '__main__':
     main()

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Module containing the BIPopulations class and the command line interface."""
 
-import argparse
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 from numpy import nan
@@ -224,75 +222,11 @@ def bipopulations(
 ) -> int:
     """Create :class:`BIPopulations <dna.backbone.bipopulations.BIPopulations>` class and
     execute the: meth: `launch() <dna.backbone.bipopulations.BIPopulations.launch>` method."""
-
-    return BIPopulations(
-        input_epsilC_path=input_epsilC_path,
-        input_epsilW_path=input_epsilW_path,
-        input_zetaC_path=input_zetaC_path,
-        input_zetaW_path=input_zetaW_path,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    bipopulations.__doc__ = BIPopulations.__doc__
+    return BIPopulations(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(
-        description="Calculate BI/BII populations.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument("--config", required=False, help="Configuration file")
-
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "--input_epsilC_path",
-        required=True,
-        help="Helical parameter <epsilC> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_epsilW_path",
-        required=True,
-        help="Helical parameter <epsilW> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_zetaC_path",
-        required=True,
-        help="Helical parameter <zetaC> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--input_zetaW_path",
-        required=True,
-        help="Helical parameter <zetaW> input ser file path. Accepted formats: ser.",
-    )
-    required_args.add_argument(
-        "--output_csv_path",
-        required=True,
-        help="Path to output csv file. Accepted formats: csv.",
-    )
-    required_args.add_argument(
-        "--output_jpg_path",
-        required=True,
-        help="Path to output jpg file. Accepted formats: jpg.",
-    )
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    bipopulations(
-        input_epsilC_path=args.input_epsilC_path,
-        input_epsilW_path=args.input_epsilW_path,
-        input_zetaC_path=args.input_zetaC_path,
-        input_zetaW_path=args.input_zetaW_path,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties,
-    )
-
+bipopulations.__doc__ = BIPopulations.__doc__
+main = BIPopulations.get_main(bipopulations, "Calculate BI/BII populations.")
 
 if __name__ == "__main__":
     main()

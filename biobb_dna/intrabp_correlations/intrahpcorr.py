@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the IntraHelParCorrelation class and the command line interface."""
-import argparse
 from typing import Optional
 
 import pandas as pd
@@ -9,7 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
@@ -283,60 +281,11 @@ def intrahpcorr(
         properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` class and
     execute the :meth:`launch() <intrabp_correlations.intrahpcorr.IntraHelParCorrelation.launch>` method."""
-
-    return IntraHelParCorrelation(
-        input_filename_shear=input_filename_shear,
-        input_filename_stretch=input_filename_stretch,
-        input_filename_stagger=input_filename_stagger,
-        input_filename_buckle=input_filename_buckle,
-        input_filename_propel=input_filename_propel,
-        input_filename_opening=input_filename_opening,
-        output_csv_path=output_csv_path,
-        output_jpg_path=output_jpg_path,
-        properties=properties, **kwargs).launch()
-
-    intrahpcorr.__doc__ = IntraHelParCorrelation.__doc__
+    return IntraHelParCorrelation(**dict(locals())).launch()
 
 
-def main():
-    """Command line execution of this building block. Please check the command line documentation."""
-    parser = argparse.ArgumentParser(description='Load helical parameter file and save base data individually.',
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('--config', required=False, help='Configuration file')
-
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('--input_filename_shear', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_stretch', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_stagger', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_buckle', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_propel', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--input_filename_opening', required=True,
-                               help='Path to csv file with inputs. Accepted formats: csv.')
-    required_args.add_argument('--output_csv_path', required=True,
-                               help='Path to output file. Accepted formats: csv.')
-    required_args.add_argument('--output_jpg_path', required=True,
-                               help='Path to output file. Accepted formats: csv.')
-
-    args = parser.parse_args()
-    args.config = args.config or "{}"
-    properties = settings.ConfReader(config=args.config).get_prop_dic()
-
-    intrahpcorr(
-        input_filename_shear=args.input_filename_shear,
-        input_filename_stretch=args.input_filename_stretch,
-        input_filename_stagger=args.input_filename_stagger,
-        input_filename_buckle=args.input_filename_buckle,
-        input_filename_propel=args.input_filename_propel,
-        input_filename_opening=args.input_filename_opening,
-        output_csv_path=args.output_csv_path,
-        output_jpg_path=args.output_jpg_path,
-        properties=properties)
-
+intrahpcorr.__doc__ = IntraHelParCorrelation.__doc__
+main = IntraHelParCorrelation.get_main(intrahpcorr, "Load helical parameter file and save base data individually.")
 
 if __name__ == '__main__':
     main()
