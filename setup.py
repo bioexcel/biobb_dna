@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_dna",
-    version="5.1.0",
+    version="5.2.0",
     author="Biobb developers",
     author_email="genis.bayarri@irbbarcelona.com",
     description="Biobb_dna is a package composed of different analyses for nucleic acid trajectories.",
@@ -19,8 +19,8 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(exclude=["adapters", "docs", "test"]),
     package_data={"biobb_dna": ["py.typed"]},
-    install_requires=["biobb_common==5.1.1", "pandas>=1.3.0", "scikit-learn>=0.24.2"],
-    python_requires=">=3.9",
+    install_requires=["biobb_common==5.2.0", "pandas>=1.3.0", "scikit-learn>=0.24.2"],
+    python_requires=">=3.10",
     entry_points={
         "console_scripts": [
             "biobb_curves = biobb_dna.curvesplus.biobb_curves:main",
@@ -46,7 +46,7 @@ setuptools.setup(
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",

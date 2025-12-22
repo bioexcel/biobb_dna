@@ -229,7 +229,7 @@ class InterHelParCorrelation(BiobbObject):
         # Copy files to host
         self.copy_to_host()
 
-        # Remove temporary file(s) 
+        # Remove temporary file(s)
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
