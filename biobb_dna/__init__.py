@@ -16,4 +16,4 @@ __all__ = [
     "interbp_correlations",
     "intrabp_correlations",
 ]
-__version__ = "5.2.0"
+__version__ = "5.2.1"
