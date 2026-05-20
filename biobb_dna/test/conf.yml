@@ -15,6 +15,42 @@ biobb_curves:
     s1range: "1:12"
     ions: True
 
+biobb_curves_docker:
+  paths:
+    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
+    input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
+    output_cda_path: curves_output.cda
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
+    output_lis_path: curves_output.lis
+    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
+    output_zip_path: curves_output.zip
+    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.zip
+  properties:
+    s1range: "1:12"
+    ions: True
+    container_path: docker
+    container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
+
+biobb_curves_singularity:
+  paths:
+    input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
+    input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
+    output_cda_path: curves_output.cda
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
+    output_lis_path: curves_output.lis
+    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
+    output_zip_path: curves_output.zip
+    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.zip
+  properties:
+    s1range: "1:12"
+    ions: True
+    container_path: singularity
+    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
+
 biobb_canal:
   paths:
     input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
@@ -25,6 +61,36 @@ biobb_canal:
     histo: true
     corr: true
     sequence: "CGCGAATTCGCG"
+
+biobb_canal_docker:
+  paths:
+    input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
+    output_zip_path: canal_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
+  properties:
+    series: true
+    histo: true
+    corr: true
+    sequence: "CGCGAATTCGCG"
+    container_path: docker
+    container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
+
+biobb_canal_singularity:
+  paths:
+    input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
+    output_zip_path: canal_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
+  properties:
+    series: true
+    histo: true
+    corr: true
+    sequence: "CGCGAATTCGCG"
+    container_path: singularity
+    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
 
 canal_unzip:
   paths:
@@ -50,6 +116,42 @@ biobb_canion:
     type: K+
     rlow: 0
     rhig: 18
+
+biobb_canion_docker:
+  paths:
+    input_cdi_path: file:test_data_dir/curvesplus/THGA_K.cdi
+    input_afr_path: file:test_data_dir/curvesplus/THGA.afr
+    input_avg_struc_path: file:test_data_dir/curvesplus/THGA_avg.pdb
+    output_zip_path: canion_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.zip
+  properties:
+    dlow: 5.8
+    dhig: 7.2
+    type: K+
+    rlow: 0
+    rhig: 18
+    container_path: docker
+    container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
+
+biobb_canion_singularity:
+  paths:
+    input_cdi_path: file:test_data_dir/curvesplus/THGA_K.cdi
+    input_afr_path: file:test_data_dir/curvesplus/THGA.afr
+    input_avg_struc_path: file:test_data_dir/curvesplus/THGA_avg.pdb
+    output_zip_path: canion_output.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.zip
+  properties:
+    dlow: 5.8
+    dhig: 7.2
+    type: K+
+    rlow: 0
+    rhig: 18
+    container_path: singularity
+    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+    container_volume_path: /tmp
+    container_working_dir: /tmp
 
 dna_timeseries:
   paths:

@@ -39,6 +39,12 @@ class Curves(BiobbObject):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
+            * **container_path** (*str*) - (None)  Path to the binary executable of your container.
+            * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
+            * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
+            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
+            * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
+            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -174,7 +180,11 @@ class Curves(BiobbObject):
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+
+        if self.container_path:
+            os.chdir(self.container_working_dir)
+        else:
+            os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # define temporary file names
         tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
@@ -219,23 +229,39 @@ class Curves(BiobbObject):
         # change back to original directory
         os.chdir(original_directory)
 
+        workdir = self.stage_io_dict.get("unique_dir", "")
+        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
+
         # create zipfile and write output inside
-        if self.stage_io_dict.get("out", {}).get("output_zip_path") is not None:
-            zf = zipfile.ZipFile(
-                Path(self.stage_io_dict["out"]["output_zip_path"]),
-                "w")
-            for curves_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("curves_output*"):
+        # if self.stage_io_dict.get("out", {}).get("output_zip_path") is not None:
+        #     zf = zipfile.ZipFile(
+        #         Path(self.stage_io_dict["out"]["output_zip_path"]),
+        #         "w")
+        #     for curves_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("curves_output*"):
+        #         if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
+        #             zf.write(
+        #                 curves_outfile,
+        #                 arcname=curves_outfile.name)
+        #     zf.close()
+
+        # create zipfile and write output inside
+        with zipfile.ZipFile(zip_host_path, "w") as zf:
+            for curves_outfile in Path(workdir).glob("curves_output*"):
+                fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
                 if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
                     zf.write(
                         curves_outfile,
                         arcname=curves_outfile.name)
-            zf.close()
 
         # rename cda and lis files
-        (Path(self.stage_io_dict.get("unique_dir", "")) / "curves_output.cda").rename(
-            self.stage_io_dict["out"]["output_cda_path"])
-        (Path(self.stage_io_dict.get("unique_dir", "")) / "curves_output.lis").rename(
-            self.stage_io_dict["out"]["output_lis_path"])
+        # In container mode stage_io_dict["out"] paths are container-internal
+        # (e.g. /data/file.cda), not host paths. Always rename within unique_dir
+        # so that copy_to_host() can find them by filename.
+        unique_dir = Path(self.stage_io_dict.get("unique_dir", ""))
+        (unique_dir / "curves_output.cda").rename(
+            unique_dir / Path(self.stage_io_dict["out"]["output_cda_path"]).name)
+        (unique_dir / "curves_output.lis").rename(
+            unique_dir / Path(self.stage_io_dict["out"]["output_lis_path"]).name)
 
         # Copy files to host
         self.copy_to_host()

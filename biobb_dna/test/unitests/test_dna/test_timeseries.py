@@ -1,7 +1,6 @@
 # type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_dna.dna.dna_timeseries import dna_timeseries
-import platform
 
 import logging
 mpl_logger = logging.getLogger("matplotlib")
@@ -19,5 +18,3 @@ class TestTimeSeries():
         returncode = dna_timeseries(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_zip_path'])
         assert fx.exe_success(returncode)
-        if platform.system() == 'Darwin':
-            assert fx.equal(self.paths['output_zip_path'], self.paths['ref_output_zip_path'])

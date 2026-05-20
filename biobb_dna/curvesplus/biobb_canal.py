@@ -38,6 +38,12 @@ class Canal(BiobbObject):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
+            * **container_path** (*str*) - (None)  Path to the binary executable of your container.
+            * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
+            * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
+            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
+            * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
+            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
         This is a use example of how to use the building block from Python::
 
@@ -126,11 +132,18 @@ class Canal(BiobbObject):
                         self.out_log)
 
         # define temporary file name
-        tmp_cda_path = Path(self.stage_io_dict['in']['input_cda_file']).name
+        if self.container_path:
+            tmp_cda_path = Path(self.container_working_dir).joinpath(Path(self.stage_io_dict['in']['input_cda_file']).name)
+        else:
+            tmp_cda_path = Path(self.stage_io_dict['in']['input_cda_file']).name
 
         # change directory to temporary folder
         original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+
+        if self.container_path:
+            os.chdir(self.container_working_dir)
+        else:
+            os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # create intructions
         instructions = [
@@ -169,15 +182,17 @@ class Canal(BiobbObject):
         # change back to original directory
         os.chdir(original_directory)
 
+        workdir = self.stage_io_dict.get("unique_dir", "")
+        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
+
         # create zipfile and write output inside
-        zf = zipfile.ZipFile(
-            Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
-        for canal_outfile in Path(self.stage_io_dict.get("unique_dir", "")).glob("canal_output*"):
-            if canal_outfile.suffix not in (".zip"):
-                zf.write(
-                    canal_outfile,
-                    arcname=canal_outfile.name)
-        zf.close()
+        with zipfile.ZipFile(zip_host_path, "w") as zf:
+            for canal_outfile in Path(workdir).glob("canal_output*"):
+                fu.log(f"Adding {canal_outfile} to zip file", self.out_log, self.global_log)
+                if canal_outfile.suffix != ".zip":
+                    zf.write(
+                        canal_outfile,
+                        arcname=canal_outfile.name)
 
         # Copy files to host
         self.copy_to_host()

@@ -14,13 +14,14 @@ on:
       - 'references.jsonld'
       - '**/docs/**'
       - '**/json_schemas/**'
+      - '.github/workflows/test_containers.yml'
 
 jobs:
   # Name of the Job
   lint_and_test:
     strategy:
       matrix:
-        os: [self-hosted]
+        os: [mmbswarm]
         python-version: ["3.10", "3.11", "3.12"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -86,17 +87,11 @@ jobs:
         run: |
           genbadge flake8 --name "Flake8" --input-file ./reports/flake8/flake8stats.txt  --output-file ./reports/flake8/flake8badge.svg
 
-      - name: Checkout biobb_common
-        uses: actions/checkout@v4
-        with:
-          repository: bioexcel/biobb_common
-          path: './biobb_common'
-
       - name: Run tests
         shell: bash -l {0}
         run: |
           # Ignoring docker and singularity tests
-          export PYTHONPATH=.:./biobb_common:$PYTHONPATH
+          export PYTHONPATH=.:$PYTHONPATH
 
           # copying .curvesplus data
           mkdir -p $CONDA_PREFIX/.curvesplus
@@ -131,8 +126,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ./reports
-
-      # - name: Restore .bash_profile
-      #   run: cp ~/.bash_profile_orig ~/.bash_profile
 
 
