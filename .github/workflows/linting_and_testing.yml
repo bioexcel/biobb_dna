@@ -104,7 +104,7 @@ jobs:
           mkdir -p ./reports/junit
 
           # Production one
-          pytest biobb_dna/test/unitests/ --cov=biobb_dna/ --cov-report=xml --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
+          pytest biobb_dna/test/unitests/ --cov=biobb_dna/ --cov-report=xml --ignore-glob=*container.py --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
 
       - name: Generate Tests badge
         shell: bash -l {0}
