@@ -40,13 +40,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **KT** (*number*): (0.592186827) Value of Boltzmann temperature factor..
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)..
-* **helpar_name** (*string*): (None) helical parameter name..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **KT** (*number*): (0.592186827) Value of Boltzmann temperature factor.
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
+* **helpar_name** (*string*): (None) helical parameter name.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_average_stiffness.yml)
 ```python
@@ -121,11 +121,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **KT** (*number*): (0.592186827) Value of Boltzmann temperature factor..
-* **scaling** (*array*): ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **KT** (*number*): (0.592186827) Value of Boltzmann temperature factor.
+* **scaling** (*array*): ([1, 1, 1, 10.6, 10.6, 10.6]) Values by which to scale stiffness. Positions correspond to helical parameters in the order: shift, slide, rise, tilt, roll, twist.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_basepair_stiffness.yml)
 ```python
@@ -187,22 +187,22 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **bases** (*string*): (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence)..
-* **itst** (*integer*): (0) Iteration start index..
-* **itnd** (*integer*): (0) Iteration end index..
-* **itdel** (*integer*): (1) Iteration delimiter..
-* **lev1** (*integer*): (0) Lower base level limit (i.e. base pairs) used for analysis..
-* **lev2** (*integer*): (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels)..
-* **nastr** (*string*): (NA) character string used to indicate missing data in .ser files..
-* **cormin** (*number*): (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables..
-* **series** (*boolean*): (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories..
-* **histo** (*boolean*): (False) if True then output histogram data..
-* **corr** (*boolean*): (False) if True than output linear correlation coefficients between all variables..
-* **sequence** (*string*): (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file..
-* **binary_path** (*string*): (Canal) Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **bases** (*string*): (None) sequence of bases to be searched for in the I/P data (default is blank, meaning no specified sequence).
+* **itst** (*integer*): (0) Iteration start index.
+* **itnd** (*integer*): (0) Iteration end index.
+* **itdel** (*integer*): (1) Iteration delimiter.
+* **lev1** (*integer*): (0) Lower base level limit (i.e. base pairs) used for analysis.
+* **lev2** (*integer*): (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels).
+* **nastr** (*string*): (NA) character string used to indicate missing data in .ser files.
+* **cormin** (*number*): (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables.
+* **series** (*boolean*): (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
+* **histo** (*boolean*): (False) if True then output histogram data.
+* **corr** (*boolean*): (False) if True than output linear correlation coefficients between all variables.
+* **sequence** (*string*): (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
+* **binary_path** (*string*): (Canal) Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal.yml)
 ```python
@@ -271,23 +271,23 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **bases** (*string*): (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence)..
-* **type** (*string*): (*) Ions (or atoms) to be analyzed. Options are 'Na+', 'K', 'K+', 'Cl', 'Cl-', 'CL', 'P', 'C1*', 'NH1', 'NH2', 'NZ', '1' for all cations, '-1' for all anions, '0' for neutral species or '*' for all available data..
-* **dlow** (*number*): (0.0) Select starting segment of the oglimer to analyze. If both dhig and dlow are 0, entire oglimer is analyzed..
-* **dhig** (*number*): (0.0) Select ending segment of the oglimer to analyze, being the maximum value the total number of base pairs in the oligomer. If both dhig and dlow are 0, entire oglimer is analyzed..
-* **rlow** (*number*): (0.0) Minimal distances from the helical axis taken into account in the analysis..
-* **rhig** (*number*): (0.0) Maximal distances from the helical axis taken into account in the analysis..
-* **alow** (*number*): (0.0) Minimal angle range to analyze..
-* **ahig** (*number*): (360.0) Maximal angle range to analyze..
-* **itst** (*integer*): (0) Number of first snapshot to be analyzed..
-* **itnd** (*integer*): (0) Number of last snapshot to be analyzed..
-* **itdel** (*integer*): (1) Spacing between analyzed snapshots..
-* **rmsf** (*boolean*): (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions..
-* **circ** (*boolean*): (False) If set to True, minicircles are analyzed..
-* **binary_path** (*string*): (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **bases** (*string*): (None) Sequence of bases to be analyzed (default is blank, meaning no specified sequence).
+* **type** (*string*): (*) Ions (or atoms) to be analyzed. Options are 'Na+', 'K', 'K+', 'Cl', 'Cl-', 'CL', 'P', 'C1*', 'NH1', 'NH2', 'NZ', '1' for all cations, '-1' for all anions, '0' for neutral species or '*' for all available data.
+* **dlow** (*number*): (0.0) Select starting segment of the oglimer to analyze. If both dhig and dlow are 0, entire oglimer is analyzed.
+* **dhig** (*number*): (0.0) Select ending segment of the oglimer to analyze, being the maximum value the total number of base pairs in the oligomer. If both dhig and dlow are 0, entire oglimer is analyzed.
+* **rlow** (*number*): (0.0) Minimal distances from the helical axis taken into account in the analysis.
+* **rhig** (*number*): (0.0) Maximal distances from the helical axis taken into account in the analysis.
+* **alow** (*number*): (0.0) Minimal angle range to analyze.
+* **ahig** (*number*): (360.0) Maximal angle range to analyze.
+* **itst** (*integer*): (0) Number of first snapshot to be analyzed.
+* **itnd** (*integer*): (0) Number of last snapshot to be analyzed.
+* **itdel** (*integer*): (1) Spacing between analyzed snapshots.
+* **rmsf** (*boolean*): (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions.
+* **circ** (*boolean*): (False) If set to True, minicircles are analyzed.
+* **binary_path** (*string*): (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion.yml)
 ```python
@@ -363,21 +363,21 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **s1range** (*string*): (None) Range of first strand. Must be specified in the form "start:end"..
-* **s2range** (*string*): (None) Range of second strand. Must be specified in the form "start:end"..
-* **stdlib_path** (*string*): (standard) Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory..
-* **itst** (*integer*): (0) Iteration start index..
-* **itnd** (*integer*): (0) Iteration end index..
-* **itdel** (*integer*): (1) Iteration delimiter..
-* **ions** (*boolean*): (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out..
-* **test** (*boolean*): (False) If True, provide addition output in .lis file on fitting and axis generation..
-* **line** (*boolean*): (False) if True, find the best linear helical axis..
-* **fit** (*boolean*): (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters)..
-* **axfrm** (*boolean*): (False) if True, generates closely spaced helical axis frames as input for Canal and Canion..
-* **binary_path** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **s1range** (*string*): (None) Range of first strand. Must be specified in the form "start:end".
+* **s2range** (*string*): (None) Range of second strand. Must be specified in the form "start:end".
+* **stdlib_path** (*string*): (standard) Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
+* **itst** (*integer*): (0) Iteration start index.
+* **itnd** (*integer*): (0) Iteration end index.
+* **itdel** (*integer*): (1) Iteration delimiter.
+* **ions** (*boolean*): (False) If True, helicoidal analysis of ions (or solvent molecules) around solute is carried out.
+* **test** (*boolean*): (False) If True, provide addition output in .lis file on fitting and axis generation.
+* **line** (*boolean*): (False) if True, find the best linear helical axis.
+* **fit** (*boolean*): (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
+* **axfrm** (*boolean*): (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
+* **binary_path** (*string*): (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.yml)
 ```python
@@ -448,11 +448,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_bipopulations.yml)
 ```python
@@ -514,12 +514,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **type** (*string*): (None) Type of file. .
-* **helpar_name** (*string*): (None) Helical parameter name, only for 'series' and 'histo' types. .
-* **correlation** (*string*): (None) Correlation indexes separated by underscore (ie '98_165'), only for 'corr' type..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **type** (*string*): (None) Type of file. 
+* **helpar_name** (*string*): (None) Helical parameter name, only for 'series' and 'histo' types. 
+* **correlation** (*string*): (None) Correlation indexes separated by underscore (ie '98_165'), only for 'corr' type.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_canal_unzip.yml)
 ```python
@@ -590,11 +590,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_canonicalag.yml)
 ```python
@@ -654,13 +654,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **helpar_name** (*string*): (Optional) helical parameter name..
-* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **helpar_name** (*string*): (Optional) helical parameter name.
+* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_averages.yml)
 ```python
@@ -736,13 +736,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **helpar_name** (*string*): (Optional) helical parameter name..
-* **confidence_level** (*number*): (5.0) Confidence level for Byes Factor test (in percentage)..
-* **max_iter** (*integer*): (400) Number of maximum iterations for EM algorithm..
-* **tol** (*number*): (1e-05) Tolerance value for EM algorithm..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.1.
+* **helpar_name** (*string*): (Optional) helical parameter name.
+* **confidence_level** (*number*): (5.0) Confidence level for Byes Factor test (in percentage).
+* **max_iter** (*integer*): (400) Number of maximum iterations for EM algorithm.
+* **tol** (*number*): (1e-05) Tolerance value for EM algorithm.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.1
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_bimodality.yml)
 ```python
@@ -805,14 +805,14 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)..
-* **bins** (*integer*): (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist..
-* **helpar_name** (*string*): (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. .
-* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
+* **bins** (*integer*): (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
+* **helpar_name** (*string*): (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. 
+* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_timeseries.yml)
 ```python
@@ -884,13 +884,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **type** (*string*): (None) Type of analysis, series or histogram. .
-* **parameter** (*string*): (None) Type of parameter. .
-* **sequence** (*string*): (None) Nucleic acid sequence used for generating dna_timeseries output file..
-* **index** (*integer*): (1) Base pair index in the parameter 'sequence', starting from 1..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **type** (*string*): (None) Type of analysis, series or histogram. 
+* **parameter** (*string*): (None) Type of parameter. 
+* **sequence** (*string*): (None) Nucleic acid sequence used for generating dna_timeseries output file.
+* **index** (*integer*): (1) Base pair index in the parameter 'sequence', starting from 1.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_dna_timeseries_unzip.yml)
 ```python
@@ -971,11 +971,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interbpcorr.yml)
 ```python
@@ -1050,10 +1050,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **basepair** (*string*): (None) Name of basepair analyzed..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **basepair** (*string*): (None) Name of basepair analyzed.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interhpcorr.yml)
 ```python
@@ -1113,12 +1113,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **helpar_name** (*string*): (None) helical parameter name to add to plot title..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **helpar_name** (*string*): (None) helical parameter name to add to plot title.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_interseqcorr.yml)
 ```python
@@ -1193,11 +1193,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intrabpcorr.yml)
 ```python
@@ -1272,10 +1272,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **base** (*string*): (None) Name of base analyzed..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **base** (*string*): (None) Name of base analyzed.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intrahpcorr.yml)
 ```python
@@ -1335,12 +1335,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **helpar_name** (*string*): (None) helical parameter name to add to plot title..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence for the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **helpar_name** (*string*): (None) helical parameter name to add to plot title.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_intraseqcorr.yml)
 ```python
@@ -1403,12 +1403,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option)..
-* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series..
-* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
+* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series.
+* **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_puckering.yml)
 ```python
