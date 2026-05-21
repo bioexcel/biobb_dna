@@ -7,7 +7,7 @@ import sys
 
 class TestCurvesDocker():
     def setup_class(self):
-        fx.test_setup(self, 'biobb_curves')
+        fx.test_setup(self, 'biobb_curves_docker')
 
     def teardown_class(self):
         fx.test_teardown(self)
@@ -27,7 +27,7 @@ class TestCurvesDocker():
 @pytest.mark.skipif(sys.platform == 'darwin', reason="singularity not available on macOS")
 class TestCurvesSingularity():
     def setup_class(self):
-        fx.test_setup(self, 'biobb_curves')
+        fx.test_setup(self, 'biobb_curves_singularity')
 
     def teardown_class(self):
         fx.test_teardown(self)
