@@ -98,7 +98,7 @@ jobs:
           cp biobb_dna/curvesplus/.curvesplus/* $CONDA_PREFIX/.curvesplus
 
           # Copying .cdi file for canion
-          wget https://mmb.irbbarcelona.org/biobb-api/rest/v1/sample/biobb_dna/biobb_canion/input_cdi_path -O biobb_dna/test/data/curvesplus/THGA_K.cdi
+          wget https://github.com/bioexcel/biobb_dna/releases/download/assets/THGA_K.cdi -O biobb_dna/test/data/curvesplus/THGA_K.cdi
 
           # Create directory for tests reports
           mkdir -p ./reports/junit

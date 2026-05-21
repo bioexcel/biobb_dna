@@ -104,7 +104,7 @@ jobs:
           export PYTHONPATH=.:$PYTHONPATH
 
           # Copying .cdi file for canion
-          wget https://mmb.irbbarcelona.org/biobb-api/rest/v1/sample/biobb_dna/biobb_canion/input_cdi_path -O biobb_dna/test/data/curvesplus/THGA_K.cdi
+          wget https://github.com/bioexcel/biobb_dna/releases/download/assets/THGA_K.cdi -O biobb_dna/test/data/curvesplus/THGA_K.cdi
 
           pytest ${{ github.event.repository.name }}/test/unitests/ -k "container" -v 
 
