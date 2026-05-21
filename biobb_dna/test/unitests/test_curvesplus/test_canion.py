@@ -3,7 +3,7 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_dna.curvesplus.biobb_canion import biobb_canion
 
 
-class TestCanal():
+class TestCanion():
     def setup_class(self):
         fx.test_setup(self, 'biobb_canion')
 

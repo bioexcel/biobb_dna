@@ -5,7 +5,7 @@ import pytest
 import sys
 
 
-class TestCanalDocker():
+class TestCanionDocker():
     def setup_class(self):
         fx.test_setup(self, 'biobb_canion_docker')
 
@@ -21,7 +21,7 @@ class TestCanalDocker():
 
 
 @pytest.mark.skipif(sys.platform == 'darwin', reason="singularity not available on macOS")
-class TestCanalSingularity():
+class TestCanionSingularity():
     def setup_class(self):
         fx.test_setup(self, 'biobb_canion_singularity')
 

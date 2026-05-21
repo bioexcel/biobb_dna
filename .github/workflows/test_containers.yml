@@ -93,10 +93,19 @@ jobs:
           singularity pull --name ${{ github.event.repository.name }}:${VERSION}.sif ${SINGULARITY_URL}
           ls -lh ${{ github.event.repository.name }}:${VERSION}.sif
 
+      - name: Set absolute paths in conf.yml
+        run: |
+          sed -i "s|path_to_stdlib|${{ github.workspace }}/${{ github.event.repository.name }}/curvesplus/.curvesplus|g" ${{ github.workspace }}/${{ github.event.repository.name }}/test/conf.yml
+          more ${{ github.workspace }}/${{ github.event.repository.name }}/test/conf.yml
+
       - name: Run container tests
         shell: bash -l {0}
         run: |
           export PYTHONPATH=.:$PYTHONPATH
+
+          # Copying .cdi file for canion
+          wget https://mmb.irbbarcelona.org/biobb-api/rest/v1/sample/biobb_dna/biobb_canion/input_cdi_path -O biobb_dna/test/data/curvesplus/THGA_K.cdi
+
           pytest ${{ github.event.repository.name }}/test/unitests/ -k "container" -v 
 
 

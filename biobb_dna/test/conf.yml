@@ -19,15 +19,16 @@ biobb_curves_docker:
   paths:
     input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
     input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
-    output_cda_path: curves_output.cda
-    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
-    output_lis_path: curves_output.lis
-    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
-    output_zip_path: curves_output.zip
-    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.zip
+    output_cda_path: curves_output.container.cda
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.container.cda
+    output_lis_path: curves_output.container.lis
+    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.container.lis
+    output_zip_path: curves_output.container.zip
+    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.container.zip
   properties:
     s1range: "1:12"
     ions: True
+    stdlib_path: path_to_stdlib
     container_path: docker
     container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
@@ -37,15 +38,16 @@ biobb_curves_singularity:
   paths:
     input_struc_path: file:test_data_dir/curvesplus/structure.stripped.trj
     input_top_path: file:test_data_dir/curvesplus/structure.stripped.top
-    output_cda_path: curves_output.cda
-    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.cda
-    output_lis_path: curves_output.lis
-    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.lis
-    output_zip_path: curves_output.zip
-    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.zip
+    output_cda_path: curves_output.container.cda
+    ref_cda_output: file:test_reference_dir/curvesplus/curves_trj_output.container.cda
+    output_lis_path: curves_output.container.lis
+    ref_lis_output: file:test_reference_dir/curvesplus/curves_trj_output.container.lis
+    output_zip_path: curves_output.container.zip
+    ref_zip_output: file:test_reference_dir/curvesplus/curves_trj_output.container.zip
   properties:
     s1range: "1:12"
     ions: True
+    stdlib_path: path_to_stdlib
     container_path: singularity
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
@@ -65,8 +67,8 @@ biobb_canal:
 biobb_canal_docker:
   paths:
     input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
-    output_zip_path: canal_output.zip
-    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
+    output_zip_path: canal_output.container.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.container.zip
   properties:
     series: true
     histo: true
@@ -80,8 +82,8 @@ biobb_canal_docker:
 biobb_canal_singularity:
   paths:
     input_cda_file: file:test_data_dir/curvesplus/curves_output.cda
-    output_zip_path: canal_output.zip
-    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.zip
+    output_zip_path: canal_output.container.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canal_output.container.zip
   properties:
     series: true
     histo: true
@@ -122,8 +124,8 @@ biobb_canion_docker:
     input_cdi_path: file:test_data_dir/curvesplus/THGA_K.cdi
     input_afr_path: file:test_data_dir/curvesplus/THGA.afr
     input_avg_struc_path: file:test_data_dir/curvesplus/THGA_avg.pdb
-    output_zip_path: canion_output.zip
-    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.zip
+    output_zip_path: canion_output.container.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.container.zip
   properties:
     dlow: 5.8
     dhig: 7.2
@@ -140,8 +142,8 @@ biobb_canion_singularity:
     input_cdi_path: file:test_data_dir/curvesplus/THGA_K.cdi
     input_afr_path: file:test_data_dir/curvesplus/THGA.afr
     input_avg_struc_path: file:test_data_dir/curvesplus/THGA_avg.pdb
-    output_zip_path: canion_output.zip
-    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.zip
+    output_zip_path: canion_output.container.zip
+    ref_output_zip_path: file:test_reference_dir/curvesplus/canion_output.container.zip
   properties:
     dlow: 5.8
     dhig: 7.2
