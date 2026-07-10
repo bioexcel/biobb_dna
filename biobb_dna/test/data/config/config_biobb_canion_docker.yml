@@ -1,0 +1,10 @@
+properties:
+  container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: docker
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  dhig: 7.2
+  dlow: 5.8
+  rhig: 18
+  rlow: 0
+  type: K+

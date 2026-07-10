@@ -1,0 +1,8 @@
+properties:
+  container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: docker
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  ions: true
+  s1range: '1:12'
+  stdlib_path: path_to_stdlib

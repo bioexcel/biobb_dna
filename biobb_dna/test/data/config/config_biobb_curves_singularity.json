@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "s1range": "1:12",
+    "ions": true,
+    "stdlib_path": "path_to_stdlib",
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
+  }
+}

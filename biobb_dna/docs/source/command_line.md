@@ -203,10 +203,42 @@ Config parameters for this building block:
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
+* **container_path** (*string*): (None) Path to the binary executable of your container.
+* **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
+* **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
+* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
+* **container_user_id** (*string*): (None) User number id to be mapped inside the container.
+* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal.yml)
 ```python
 properties:
+  corr: true
+  histo: true
+  sequence: CGCGAATTCGCG
+  series: true
+
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal_docker.yml)
+```python
+properties:
+  container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: docker
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  corr: true
+  histo: true
+  sequence: CGCGAATTCGCG
+  series: true
+
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal_singularity.yml)
+```python
+properties:
+  container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: singularity
+  container_volume_path: /tmp
+  container_working_dir: /tmp
   corr: true
   histo: true
   sequence: CGCGAATTCGCG
@@ -226,6 +258,36 @@ biobb_canal --config config_biobb_canal.yml --input_cda_file curves_output.cda -
     "histo": true,
     "corr": true,
     "sequence": "CGCGAATTCGCG"
+  }
+}
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal_docker.json)
+```python
+{
+  "properties": {
+    "series": true,
+    "histo": true,
+    "corr": true,
+    "sequence": "CGCGAATTCGCG",
+    "container_path": "docker",
+    "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
+  }
+}
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canal_singularity.json)
+```python
+{
+  "properties": {
+    "series": true,
+    "histo": true,
+    "corr": true,
+    "sequence": "CGCGAATTCGCG",
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
   }
 }
 ```
@@ -288,10 +350,44 @@ Config parameters for this building block:
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
+* **container_path** (*string*): (None) Path to the binary executable of your container.
+* **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
+* **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
+* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
+* **container_user_id** (*string*): (None) User number id to be mapped inside the container.
+* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion.yml)
 ```python
 properties:
+  dhig: 7.2
+  dlow: 5.8
+  rhig: 18
+  rlow: 0
+  type: K+
+
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion_docker.yml)
+```python
+properties:
+  container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: docker
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  dhig: 7.2
+  dlow: 5.8
+  rhig: 18
+  rlow: 0
+  type: K+
+
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion_singularity.yml)
+```python
+properties:
+  container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: singularity
+  container_volume_path: /tmp
+  container_working_dir: /tmp
   dhig: 7.2
   dlow: 5.8
   rhig: 18
@@ -313,6 +409,38 @@ biobb_canion --config config_biobb_canion.yml --input_cdi_path THGA_K.cdi --inpu
     "type": "K+",
     "rlow": 0,
     "rhig": 18
+  }
+}
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion_docker.json)
+```python
+{
+  "properties": {
+    "dlow": 5.8,
+    "dhig": 7.2,
+    "type": "K+",
+    "rlow": 0,
+    "rhig": 18,
+    "container_path": "docker",
+    "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
+  }
+}
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_canion_singularity.json)
+```python
+{
+  "properties": {
+    "dlow": 5.8,
+    "dhig": 7.2,
+    "type": "K+",
+    "rlow": 0,
+    "rhig": 18,
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
   }
 }
 ```
@@ -378,12 +506,42 @@ Config parameters for this building block:
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.
 * **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
+* **container_path** (*string*): (None) Path to the binary executable of your container.
+* **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
+* **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
+* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
+* **container_user_id** (*string*): (None) User number id to be mapped inside the container.
+* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves.yml)
 ```python
 properties:
   ions: true
   s1range: '1:12'
+
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves_docker.yml)
+```python
+properties:
+  container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: docker
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  ions: true
+  s1range: '1:12'
+  stdlib_path: path_to_stdlib
+
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves_singularity.yml)
+```python
+properties:
+  container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
+  container_path: singularity
+  container_volume_path: /tmp
+  container_working_dir: /tmp
+  ions: true
+  s1range: '1:12'
+  stdlib_path: path_to_stdlib
 
 ```
 #### Command line
@@ -397,6 +555,34 @@ biobb_curves --config config_biobb_curves.yml --input_struc_path structure.strip
   "properties": {
     "s1range": "1:12",
     "ions": true
+  }
+}
+```
+#### [Docker config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves_docker.json)
+```python
+{
+  "properties": {
+    "s1range": "1:12",
+    "ions": true,
+    "stdlib_path": "path_to_stdlib",
+    "container_path": "docker",
+    "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
+  }
+}
+```
+#### [Singularity config file](https://github.com/bioexcel/biobb_dna/blob/master/biobb_dna/test/data/config/config_biobb_curves_singularity.json)
+```python
+{
+  "properties": {
+    "s1range": "1:12",
+    "ions": true,
+    "stdlib_path": "path_to_stdlib",
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
   }
 }
 ```

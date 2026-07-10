@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "dlow": 5.8,
+    "dhig": 7.2,
+    "type": "K+",
+    "rlow": 0,
+    "rhig": 18,
+    "container_path": "singularity",
+    "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
+    "container_volume_path": "/tmp",
+    "container_working_dir": "/tmp"
+  }
+}
