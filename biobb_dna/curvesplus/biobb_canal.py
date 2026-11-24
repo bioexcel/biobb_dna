@@ -8,7 +8,6 @@ from pathlib import Path
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class Canal(BiobbObject):
@@ -102,18 +101,8 @@ class Canal(BiobbObject):
         self.binary_path = properties.get('binary_path', 'Canal')
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.sequence is None:
             if self.stage_io_dict['in']['input_lis_file'] is None:

@@ -9,7 +9,6 @@ from typing import Optional
 from biobb_dna.utils import constants
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class DnaTimeseriesUnzip(BiobbObject):
@@ -82,18 +81,8 @@ class DnaTimeseriesUnzip(BiobbObject):
         self.index = properties.get('index', 1)
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Check that both properties are set
         if self.type is None or self.parameter is None or self.sequence is None:

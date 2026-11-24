@@ -8,7 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 from biobb_dna.utils.loader import load_data
 
 
@@ -92,18 +91,8 @@ class IntraHelParCorrelation(BiobbObject):
         self.properties = properties
         self.base = properties.get("base", None)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # read input
         shear = load_data(self.stage_io_dict["in"]["input_filename_shear"])

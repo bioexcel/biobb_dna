@@ -8,7 +8,6 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -87,18 +86,8 @@ class InterSequenceCorrelation(BiobbObject):
         ]
         self.helpar_name = properties.get("helpar_name", None)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:

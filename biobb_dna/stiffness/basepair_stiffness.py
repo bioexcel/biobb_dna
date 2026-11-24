@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import load_data
@@ -110,18 +109,8 @@ class BPStiffness(BiobbObject):
             )
         ]
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # read input
         shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])

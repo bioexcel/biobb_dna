@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -115,18 +114,8 @@ class HelParTimeSeries(BiobbObject):
         else:
             self.hp_unit = "Angstroms"
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:

@@ -8,7 +8,6 @@ import shutil
 from pathlib import Path
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class Curves(BiobbObject):
@@ -107,10 +106,6 @@ class Curves(BiobbObject):
         self.axfrm = ".t." if properties.get('axfrm', False) else ".f."
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
     def create_curvesplus_folder(self):
         """Create .curvesplus folder in the current temporal folder and copy the lib files inside."""
         # Create .curvesplus directory in temporary folder
@@ -122,14 +117,8 @@ class Curves(BiobbObject):
         for file in lib_files:
             shutil.copy(file, dst_dir)
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
