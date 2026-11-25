@@ -219,16 +219,17 @@ class Curves(BiobbObject):
         os.chdir(original_directory)
 
         workdir = self.stage_io_dict.get("unique_dir", "")
-        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
 
         # create zipfile and write output inside
-        with zipfile.ZipFile(zip_host_path, "w") as zf:
-            for curves_outfile in Path(workdir).glob("curves_output*"):
-                fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
-                if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
-                    zf.write(
-                        curves_outfile,
-                        arcname=curves_outfile.name)
+        if self.io_dict["out"]["output_zip_path"]:
+            zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
+            with zipfile.ZipFile(zip_host_path, "w") as zf:
+                for curves_outfile in Path(workdir).glob("curves_output*"):
+                    fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
+                    if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
+                        zf.write(
+                            curves_outfile,
+                            arcname=curves_outfile.name)
 
         # rename cda and lis files
         # In container mode stage_io_dict["out"] paths are container-internal
