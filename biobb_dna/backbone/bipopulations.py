@@ -96,8 +96,6 @@ class BIPopulations(BiobbObject):
         self.seqpos = [
             int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
         ]
-        print("seqpos::::::::")
-        print(self.seqpos)
 
     def run(self) -> int:
         """Execute the :class:`BIPopulations <backbone.bipopulations.BIPopulations>` object."""
