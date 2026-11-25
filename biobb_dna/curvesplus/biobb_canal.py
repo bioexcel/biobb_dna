@@ -169,10 +169,9 @@ class Canal(BiobbObject):
         os.chdir(original_directory)
 
         workdir = self.stage_io_dict.get("unique_dir", "")
-        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
 
         # create zipfile and write output inside
-        with zipfile.ZipFile(zip_host_path, "w") as zf:
+        with zipfile.ZipFile(self.sandbox_file("output_zip_path"), "w") as zf:
             for canal_outfile in Path(workdir).glob("canal_output*"):
                 fu.log(f"Adding {canal_outfile} to zip file", self.out_log, self.global_log)
                 if canal_outfile.suffix != ".zip":
