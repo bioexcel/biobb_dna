@@ -70,31 +70,10 @@ class BIPopulations(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_epsilC_path": input_epsilC_path,
-                "input_epsilW_path": input_epsilW_path,
-                "input_zetaC_path": input_zetaC_path,
-                "input_zetaW_path": input_zetaW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        # self.seqpos = properties.get("seqpos", None)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
 
     def run(self) -> None:

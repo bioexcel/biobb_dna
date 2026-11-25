@@ -75,32 +75,10 @@ class IntraBasePairCorrelation(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_filename_shear": input_filename_shear,
-                "input_filename_stretch": input_filename_stretch,
-                "input_filename_stagger": input_filename_stagger,
-                "input_filename_buckle": input_filename_buckle,
-                "input_filename_propel": input_filename_propel,
-                "input_filename_opening": input_filename_opening,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence", None)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
 
     def run(self) -> None:

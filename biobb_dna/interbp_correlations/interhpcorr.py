@@ -66,30 +66,7 @@ class InterHelParCorrelation(BiobbObject):
             input_filename_roll, input_filename_twist,
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_filename_shift': input_filename_shift,
-                'input_filename_slide': input_filename_slide,
-                'input_filename_rise': input_filename_rise,
-                'input_filename_tilt': input_filename_tilt,
-                'input_filename_roll': input_filename_roll,
-                'input_filename_twist': input_filename_twist
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        self.properties = properties
-        self.basepair = properties.get("basepair", None)
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""

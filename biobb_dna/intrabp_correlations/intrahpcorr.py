@@ -66,30 +66,7 @@ class IntraHelParCorrelation(BiobbObject):
             input_filename_propel, input_filename_opening,
             output_csv_path, output_jpg_path,
             properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_filename_shear': input_filename_shear,
-                'input_filename_stretch': input_filename_stretch,
-                'input_filename_stagger': input_filename_stagger,
-                'input_filename_buckle': input_filename_buckle,
-                'input_filename_propel': input_filename_propel,
-                'input_filename_opening': input_filename_opening
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        self.properties = properties
-        self.base = properties.get("base", None)
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""

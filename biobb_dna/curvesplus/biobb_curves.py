@@ -25,7 +25,7 @@ class Curves(BiobbObject):
         properties (dict):
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end".
             * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
-            * **stdlib_path** (*str*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
+            * **stdlib_path** (*str*) - (None) Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
             * **itst** (*int*) - (0) Iteration start index.
             * **itnd** (*int*) - (0) Iteration end index.
             * **itdel** (*int*) - (1) Iteration delimiter.
@@ -34,7 +34,7 @@ class Curves(BiobbObject):
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
             * **fit** (*bool*) - (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
             * **axfrm** (*bool*) - (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
-            * **binary_path** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **binary_path** (*str*) - ("Cur+") Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
@@ -72,39 +72,14 @@ class Curves(BiobbObject):
             self, input_struc_path, output_lis_path,
             output_cda_path, output_zip_path=None,
             input_top_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_struc_path': input_struc_path,
-                'input_top_path': input_top_path
-            },
-            'out': {
-                'output_lis_path': output_lis_path,
-                'output_cda_path': output_cda_path,
-                'output_zip_path': output_zip_path
-            }
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.s1range = properties.get('s1range', None)
-        self.binary_path = properties.get('binary_path', 'Cur+')
-        self.stdlib_path = properties.get('stdlib_path', None)
-        self.s2range = properties.get('s2range', None)
-        self.itst = properties.get('itst', 0)
-        self.itnd = properties.get('itnd', 0)
-        self.itdel = properties.get('itdel', 1)
-        self.ions = ".t." if properties.get('ions', False) else ".f."
-        self.test = ".t." if properties.get('test', False) else ".f."
-        self.line = ".t." if properties.get('line', False) else ".f."
-        self.fit = ".t." if properties.get('fit', True) else ".f."
-        self.axfrm = ".t." if properties.get('axfrm', False) else ".f."
-        self.properties = properties
+        self.ions = ".t." if self.ions else ".f."
+        self.test = ".t." if self.test else ".f."
+        self.line = ".t." if self.line else ".f."
+        self.fit = ".t." if self.fit else ".f."
+        self.axfrm = ".t." if self.axfrm else ".f."
 
     def create_curvesplus_folder(self):
         """Create .curvesplus folder in the current temporal folder and copy the lib files inside."""

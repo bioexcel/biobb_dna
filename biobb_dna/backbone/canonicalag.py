@@ -71,31 +71,11 @@ class CanonicalAG(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_alphaC_path": input_alphaC_path,
-                "input_alphaW_path": input_alphaW_path,
-                "input_gammaC_path": input_gammaC_path,
-                "input_gammaW_path": input_gammaW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        self.stride = properties.get("stride", 1000)
+        self.stride = self.properties.get("stride", 1000)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
 
     def run(self) -> None:

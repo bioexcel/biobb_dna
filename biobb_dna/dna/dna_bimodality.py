@@ -27,7 +27,7 @@ class HelParBimodality(BiobbObject):
         output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **helpar_name** (*str*) - (Optional) helical parameter name.
+            * **helpar_name** (*str*) - (None) helical parameter name.
             * **confidence_level** (*float*) - (5.0) Confidence level for Byes Factor test (in percentage).
             * **max_iter** (*int*) - (400) Number of maximum iterations for EM algorithm.
             * **tol** (*float*) - (1e-5) Tolerance value for EM algorithm.
@@ -62,33 +62,7 @@ class HelParBimodality(BiobbObject):
     def __init__(self, input_csv_file, output_csv_path,
                  output_jpg_path, input_zip_file=None,
                  properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_csv_file': input_csv_file,
-                'input_zip_file': input_zip_file
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        # Properties specific for BB
-        self.confidence_level = properties.get(
-            "confidence_level", 5.0)
-        self.max_iter = properties.get(
-            "max_iter", 400)
-        self.tol = properties.get(
-            "tol", 1e-5)
-        self.helpar_name = properties.get("helpar_name", None)
-        self.properties = properties
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` object."""

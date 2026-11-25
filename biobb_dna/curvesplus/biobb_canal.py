@@ -27,12 +27,12 @@ class Canal(BiobbObject):
             * **itdel** (*int*) - (1) Iteration delimiter.
             * **lev1** (*int*) - (0) Lower base level limit (i.e. base pairs) used for analysis.
             * **lev2** (*int*) - (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels).
-            * **nastr** (*str*) - ('NA') character string used to indicate missing data in .ser files.
+            * **nastr** (*str*) - (None) character string used to indicate missing data in .ser files. If not set, the tool uses its own default.
             * **cormin** (*float*) - (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables.
             * **series** (*bool*) - (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
             * **histo** (*bool*) - (False) if True then output histogram data.
             * **corr** (*bool*) - (False) if True than output linear correlation coefficients between all variables.
-            * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
+            * **sequence** (*str*) - (None) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
             * **binary_path** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -68,38 +68,12 @@ class Canal(BiobbObject):
 
     def __init__(self, input_cda_file, input_lis_file=None,
                  output_zip_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_cda_file': input_cda_file,
-                'input_lis_file': input_lis_file,
-            },
-            'out': {
-                'output_zip_path': output_zip_path
-            }
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.bases = properties.get('bases', None)
-        self.nastr = properties.get('nastr', None)
-        self.cormin = properties.get('cormin', 0.6)
-        self.lev1 = properties.get('lev1', 0)
-        self.lev2 = properties.get('lev2', 0)
-        self.itst = properties.get('itst', 0)
-        self.itnd = properties.get('itnd', 0)
-        self.itdel = properties.get('itdel', 1)
-        self.series = ".t." if properties.get('series', False) else ".f."
-        self.histo = ".t." if properties.get('histo', False) else ".f."
-        self.corr = ".t." if properties.get('corr', False) else ".f."
-        self.sequence = properties.get('sequence', None)
-        self.binary_path = properties.get('binary_path', 'Canal')
-        self.properties = properties
+        self.series = ".t." if self.series else ".f."
+        self.histo = ".t." if self.histo else ".f."
+        self.corr = ".t." if self.corr else ".f."
 
     def run(self) -> None:
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""

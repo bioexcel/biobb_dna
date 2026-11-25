@@ -62,10 +62,10 @@
                     "description": "Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option)."
                 },
                 "bins": {
-                    "type": "integer",
-                    "default": null,
+                    "type": "string",
+                    "default": "auto",
                     "wf_prop": false,
-                    "description": "Bins for histogram. Parameter has same options as matplotlib.pyplot.hist."
+                    "description": "Bins for histogram: a number of bins or a binning method. Parameter has same options as matplotlib.pyplot.hist."
                 },
                 "helpar_name": {
                     "type": "string",

@@ -60,27 +60,11 @@ class IntraSequenceCorrelation(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_ser_path": input_ser_path},
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence", None)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
-        self.helpar_name = properties.get("helpar_name", None)
 
     def run(self) -> None:
         """Execute the :class:`HelParCorrelation <intrabp_correlations.intraseqcorr.IntraSequenceCorrelation>` object."""

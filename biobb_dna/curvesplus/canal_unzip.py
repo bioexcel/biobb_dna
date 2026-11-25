@@ -51,28 +51,7 @@ class CanalUnzip(BiobbObject):
 
     def __init__(self, input_zip_file,
                  output_path, output_list_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_zip_file': input_zip_file
-            },
-            'out': {
-                'output_path': output_path,
-                'output_list_path': output_list_path
-            }
-        }
-
-        # Properties specific for BB
-        self.type = properties.get('type', None)
-        self.helpar_name = properties.get('helpar_name', None)
-        self.correlation = properties.get('correlation', None)
-        self.properties = properties
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`CanalUnzip <biobb_dna.curvesplus.canal_unzip.CanalUnzip>` object."""

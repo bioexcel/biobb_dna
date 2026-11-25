@@ -28,7 +28,7 @@ class HelParTimeSeries(BiobbObject):
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/timeseries_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **bins** (*int*) - (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
+            * **bins** (*str*) - ("auto") Bins for histogram: a number of bins or a binning method. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. Values: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.
             * **stride** (*int*) - (10) granularity of the number of snapshots for plotting time series.
             * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
@@ -63,28 +63,11 @@ class HelParTimeSeries(BiobbObject):
     def __init__(
         self, input_ser_path, output_zip_path, properties=None, **kwargs
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ser_path": input_ser_path,
-            },
-            "out": {"output_zip_path": output_zip_path},
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence", None)
-        self.bins = properties.get("bins", "auto")
-        self.stride = properties.get("stride", 10)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
-        self.helpar_name = properties.get("helpar_name", None)
 
         # get helical parameter from filename if not specified
         if self.helpar_name is None:

@@ -56,30 +56,7 @@ class DnaTimeseriesUnzip(BiobbObject):
 
     def __init__(self, input_zip_file,
                  output_path_csv, output_path_jpg, output_list_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_zip_file': input_zip_file
-            },
-            'out': {
-                'output_path_csv': output_path_csv,
-                'output_path_jpg': output_path_jpg,
-                'output_list_path': output_list_path
-            }
-        }
-
-        # Properties specific for BB
-        self.type = properties.get('type', None)
-        self.parameter = properties.get('parameter', None)
-        self.sequence = properties.get('sequence', None)
-        self.index = properties.get('index', 1)
-        self.properties = properties
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` object."""

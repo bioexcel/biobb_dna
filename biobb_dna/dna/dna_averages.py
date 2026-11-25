@@ -26,7 +26,7 @@ class HelParAverages(BiobbObject):
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/shift_avg.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *seqpos* option).
-            * **helpar_name** (*str*) - (Optional) helical parameter name.
+            * **helpar_name** (*str*) - (None) helical parameter name.
             * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
             * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 0) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -66,31 +66,12 @@ class HelParAverages(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ser_path": input_ser_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.properties = properties
-        self.sequence = properties.get("sequence", None)
-        self.stride = properties.get("stride", 1000)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
-        self.helpar_name = properties.get("helpar_name", None)
 
     def run(self) -> None:
         """Execute the :class:`HelParAverages <dna.averages.HelParAverages>` object."""

@@ -65,29 +65,10 @@ class Puckering(BiobbObject):
         properties=None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_phaseC_path": input_phaseC_path,
-                "input_phaseW_path": input_phaseW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        self.stride = properties.get("stride", 1000)
         self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
+            int(elem) for elem in _from_string_to_list(self.seqpos)
         ]
 
     def run(self) -> None:
