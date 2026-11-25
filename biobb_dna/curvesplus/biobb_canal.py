@@ -129,10 +129,7 @@ class Canal(BiobbObject):
         # change directory to temporary folder
         original_directory = os.getcwd()
 
-        if self.container_path:
-            os.chdir(self.container_working_dir)
-        else:
-            os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # create intructions
         instructions = [

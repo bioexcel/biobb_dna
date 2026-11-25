@@ -170,10 +170,7 @@ class Curves(BiobbObject):
         # change directory to temporary folder
         original_directory = os.getcwd()
 
-        if self.container_path:
-            os.chdir(self.container_working_dir)
-        else:
-            os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        os.chdir(self.stage_io_dict.get("unique_dir", ""))
 
         # define temporary file names
         tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
