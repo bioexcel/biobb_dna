@@ -81,19 +81,19 @@ class CanalUnzip(BiobbObject):
         if self.type is None:
             fu.log("Property 'type' is mandatory to run CanalUnzip. Please set it.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that helpar_name is set if type is series or histo
         if self.type in ["series", "histo"] and self.helpar_name is None:
             fu.log("Property 'helpar_name' is mandatory to run CanalUnzip with type 'series' or 'histo'. Please set it.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that correlation is set if type is corr
         if self.type == "corr" and self.correlation is None:
             fu.log("Property 'correlation' is mandatory to run CanalUnzip with type 'corr'. Please set it.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         extensions = {
             "series": "ser",
@@ -104,7 +104,7 @@ class CanalUnzip(BiobbObject):
         if self.type not in extensions:
             fu.log(f"Type {self.type} not valid. Valid types are: {', '.join(extensions.keys())}.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # generate sufix
         sufix = ""
@@ -114,7 +114,7 @@ class CanalUnzip(BiobbObject):
             if not re.match(pattern, self.correlation):
                 fu.log(f"Correlation {self.correlation} not valid. It should match the pattern <number_number>.",
                        self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
             sufix = self.correlation
         else:
             # Check that the helpar_name is valid
@@ -126,7 +126,7 @@ class CanalUnzip(BiobbObject):
                                         "xdisp", "ydisp", "zetaC", "zetaW"]:
                 fu.log(f"Parameter {self.helpar_name} not valid. Valid parameters are: alphaC, alphaW, ampC, ampW, ax-bend, betaC, betaW, buckle, chiC, chiW, curv, deltaC, deltaW, epsilC, epsilW, gammaC, gammaW, h-ris, h-twi, inclin, majd, majw, mind, minw, opening, phaseC, phaseW, propel, reg, rise, roll, shear, shift, slide, stagger, stretch, tbend, tilt, tip, twist, xdisp, ydisp, zetaC, zetaW.",
                        self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
             sufix = self.helpar_name
 
         # Generate the filename
@@ -143,7 +143,7 @@ class CanalUnzip(BiobbObject):
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {filename} not found in the zip file.", self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
 
             # Write the list of files
             if self.stage_io_dict["out"]["output_list_path"]:

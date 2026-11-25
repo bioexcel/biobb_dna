@@ -88,32 +88,32 @@ class DnaTimeseriesUnzip(BiobbObject):
         if self.type is None or self.parameter is None or self.sequence is None:
             fu.log("Properties 'type', 'parameter' and 'sequence' are mandatory to run DnaTimeseriesUnzip. Please set them.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the type is valid
         if self.type not in ["series", "hist"]:
             fu.log(f"Type {self.type} not valid. Valid types are: series, hist.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the parameter is valid
         if self.parameter not in constants.helical_parameters:
             fu.log(f"Parameter {self.parameter} not valid. Valid parameters are: {constants.helical_parameters}.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the sequence is valid
         pattern = r'^[ACGT]+$'
         if not re.match(pattern, self.sequence):
             fu.log(f"Sequence {self.sequence} not valid. Only 'A', 'C', 'G' or 'T' bases allowed.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the index is valid
         if self.index < 1 or self.index >= len(self.sequence) - 1:
             fu.log(f"Index {self.index} not valid. It should be between 0 and {len(self.sequence) - 2}.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Get index sequence base and next base
         bp = self.sequence[self.index-1] + self.sequence[self.index]
@@ -134,7 +134,7 @@ class DnaTimeseriesUnzip(BiobbObject):
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {csv_file} not found in the zip file.", self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
 
             # Check if the jpg file exists in the zip file
             if jpg_file in zip_ref.namelist():
@@ -145,7 +145,7 @@ class DnaTimeseriesUnzip(BiobbObject):
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {jpg_file} not found in the zip file.", self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
 
             # Write the list of files
             if self.stage_io_dict["out"]["output_list_path"]:
