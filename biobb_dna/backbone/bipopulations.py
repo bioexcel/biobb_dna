@@ -97,7 +97,7 @@ class BIPopulations(BiobbObject):
             int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
         ]
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BIPopulations <backbone.bipopulations.BIPopulations>` object."""
 
         # check sequence
@@ -159,16 +159,6 @@ class BIPopulations(BiobbObject):
         axs.set_title("Nucleotide parameter: BI/BII Population")
         fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases

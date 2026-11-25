@@ -81,7 +81,7 @@ class DnaTimeseriesUnzip(BiobbObject):
         self.index = properties.get('index', 1)
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` object."""
 
         # Check that both properties are set
@@ -155,16 +155,6 @@ class DnaTimeseriesUnzip(BiobbObject):
 
         # Run Biobb block
         # self.run_biobb()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def dna_timeseries_unzip(

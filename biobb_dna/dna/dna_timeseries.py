@@ -114,7 +114,7 @@ class HelParTimeSeries(BiobbObject):
         else:
             self.hp_unit = "Angstroms"
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
 
         # check sequence
@@ -259,16 +259,6 @@ class HelParTimeSeries(BiobbObject):
             )
             plt.close()
         zf.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
 
 def dna_timeseries(

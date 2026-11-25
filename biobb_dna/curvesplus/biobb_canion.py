@@ -106,7 +106,7 @@ class Canion(BiobbObject):
         self.circ = ".t." if properties.get('circ', False) else ".f."
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` object."""
 
         ion_type_options = [
@@ -188,16 +188,6 @@ class Canion(BiobbObject):
                     zf.write(
                         curves_outfile,
                         arcname=curves_outfile.name)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def biobb_canion(

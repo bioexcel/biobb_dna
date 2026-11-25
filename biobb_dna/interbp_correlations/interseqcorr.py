@@ -86,7 +86,7 @@ class InterSequenceCorrelation(BiobbObject):
         ]
         self.helpar_name = properties.get("helpar_name", None)
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` object."""
 
         # check sequence
@@ -169,16 +169,6 @@ class InterSequenceCorrelation(BiobbObject):
         fig.tight_layout()
         fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     @staticmethod
     def circular(x1, x2):

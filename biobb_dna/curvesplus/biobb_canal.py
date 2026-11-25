@@ -101,7 +101,7 @@ class Canal(BiobbObject):
         self.binary_path = properties.get('binary_path', 'Canal')
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
 
         if self.sequence is None:
@@ -179,16 +179,6 @@ class Canal(BiobbObject):
                     zf.write(
                         canal_outfile,
                         arcname=canal_outfile.name)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def biobb_canal(

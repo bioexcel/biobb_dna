@@ -117,7 +117,7 @@ class Curves(BiobbObject):
         for file in lib_files:
             shutil.copy(file, dst_dir)
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
 
         if self.s1range is None:
@@ -237,16 +237,6 @@ class Curves(BiobbObject):
             unique_dir / Path(self.stage_io_dict["out"]["output_cda_path"]).name)
         (unique_dir / "curves_output.lis").rename(
             unique_dir / Path(self.stage_io_dict["out"]["output_lis_path"]).name)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def biobb_curves(

@@ -91,7 +91,7 @@ class InterHelParCorrelation(BiobbObject):
         self.properties = properties
         self.basepair = properties.get("basepair", None)
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
         # read input
@@ -214,16 +214,6 @@ class InterHelParCorrelation(BiobbObject):
             self.stage_io_dict['out']['output_jpg_path'],
             format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_corr_method(self, corrtype1, corrtype2):
         if corrtype1 == "circular" and corrtype2 == "linear":
