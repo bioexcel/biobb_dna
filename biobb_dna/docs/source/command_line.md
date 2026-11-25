@@ -994,7 +994,7 @@ Config parameters for this building block:
 * **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
 * **bins** (*integer*): (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
 * **helpar_name** (*string*): (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. 
-* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series.
+* **stride** (*integer*): (10) granularity of the number of snapshots for plotting time series.
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.

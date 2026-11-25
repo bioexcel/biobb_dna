@@ -259,7 +259,7 @@
                 },
                 "stride": {
                     "type": "integer",
-                    "default": 1000,
+                    "default": 10,
                     "wf_prop": false,
                     "description": "granularity of the number of snapshots for plotting time series."
                 },
