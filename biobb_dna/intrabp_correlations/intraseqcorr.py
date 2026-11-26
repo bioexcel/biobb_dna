@@ -95,9 +95,9 @@ class IntraSequenceCorrelation(BiobbObject):
 
         # get base length and unit from helical parameter name
         if self.helpar_name in constants.hp_angular:
-            self.method = "pearson"
-        else:
             self.method = self.circular  # type: ignore
+        else:
+            self.method = "pearson"
 
         # check seqpos
         if self.seqpos:
