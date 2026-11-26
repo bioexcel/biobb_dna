@@ -32,7 +32,6 @@ biobb_curves_docker:
     container_path: docker
     container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 biobb_curves_singularity:
   paths:
@@ -51,7 +50,6 @@ biobb_curves_singularity:
     container_path: singularity
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 biobb_canal:
   paths:
@@ -77,7 +75,6 @@ biobb_canal_docker:
     container_path: docker
     container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 biobb_canal_singularity:
   paths:
@@ -92,7 +89,6 @@ biobb_canal_singularity:
     container_path: singularity
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 canal_unzip:
   paths:
@@ -135,7 +131,6 @@ biobb_canion_docker:
     container_path: docker
     container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 biobb_canion_singularity:
   paths:
@@ -153,7 +148,6 @@ biobb_canion_singularity:
     container_path: singularity
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
     container_volume_path: /tmp
-    container_working_dir: /tmp
 
 dna_timeseries:
   paths:

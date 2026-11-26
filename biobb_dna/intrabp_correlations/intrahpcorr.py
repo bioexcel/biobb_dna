@@ -72,12 +72,12 @@ class IntraHelParCorrelation(BiobbObject):
         """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""
 
         # read input
-        shear = load_data(self.stage_io_dict["in"]["input_filename_shear"])
-        stretch = load_data(self.stage_io_dict["in"]["input_filename_stretch"])
-        stagger = load_data(self.stage_io_dict["in"]["input_filename_stagger"])
-        buckle = load_data(self.stage_io_dict["in"]["input_filename_buckle"])
-        propel = load_data(self.stage_io_dict["in"]["input_filename_propel"])
-        opening = load_data(self.stage_io_dict["in"]["input_filename_opening"])
+        shear = load_data(self.sandbox_file("input_filename_shear"))
+        stretch = load_data(self.sandbox_file("input_filename_stretch"))
+        stagger = load_data(self.sandbox_file("input_filename_stagger"))
+        buckle = load_data(self.sandbox_file("input_filename_buckle"))
+        propel = load_data(self.sandbox_file("input_filename_propel"))
+        opening = load_data(self.sandbox_file("input_filename_opening"))
 
         # get base
         if self.base is None:
@@ -166,7 +166,7 @@ class IntraHelParCorrelation(BiobbObject):
         corr_matrix.loc["propel", "opening"] = corr_matrix.loc["opening", "propel"]
 
         # save csv data
-        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -190,7 +190,7 @@ class IntraHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.base}\'")
         fig.tight_layout()
         fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
+            self.sandbox_file("output_jpg_path"),
             format="jpg")
         plt.close()
 

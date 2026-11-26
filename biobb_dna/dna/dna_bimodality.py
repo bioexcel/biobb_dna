@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParBimodality class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
@@ -72,11 +71,10 @@ class HelParBimodality(BiobbObject):
             for hp in constants.helical_parameters:
                 if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
                     condition_2 = (
-                        hp.lower() in Path(self.stage_io_dict['in']['input_zip_file']).name.lower())
+                        hp.lower() in self.stage_io_dict['in']['input_zip_file'].lower())
                 else:
                     condition_2 = False
-                condition_1 = hp.lower() in Path(
-                    self.stage_io_dict['in']['input_csv_file']).name.lower()
+                condition_1 = hp.lower() in self.stage_io_dict['in']['input_csv_file'].lower()
                 if (condition_1 or condition_2):
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -97,23 +95,20 @@ class HelParBimodality(BiobbObject):
 
         # resolve output
         output_csv_path = Path(
-            self.stage_io_dict['out']['output_csv_path']).resolve()
+            self.sandbox_file("output_csv_path")).resolve()
         output_jpg_path = Path(
-            self.stage_io_dict['out']['output_jpg_path']).resolve()
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+            self.sandbox_file("output_jpg_path")).resolve()
 
         # read input
         if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
             # if zipfile is specified, extract to temporary folder
             with zipfile.ZipFile(
-                    self.stage_io_dict['in']['input_zip_file'],
+                    self.sandbox_file("input_zip_file"),
                     'r') as zip_ref:
                 zip_ref.extractall(self.stage_io_dict.get("unique_dir", ""))
 
-        data = load_data(Path(self.stage_io_dict['in']['input_csv_file']).name)
+        # the csv file, or the one extracted from the zip file, in the sandbox
+        data = load_data(self.sandbox_file("input_csv_file"))
 
         means, variances, bics, weights = self.fit_to_model(data)
         uninormal, binormal, insuf_ev = self.bayes_factor_criteria(
@@ -183,9 +178,6 @@ class HelParBimodality(BiobbObject):
         plt.title(f"Distribution of {self.helpar_name} states")
         plt.savefig(output_jpg_path, format="jpg")
         plt.close()
-
-        # change back to original directory
-        os.chdir(original_directory)
 
     def fit_to_model(self, data):
         """

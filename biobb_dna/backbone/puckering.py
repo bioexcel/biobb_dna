@@ -91,10 +91,10 @@ class Puckering(BiobbObject):
 
         # read input files
         phaseC = read_series(
-            self.stage_io_dict["in"]["input_phaseC_path"], usecols=self.seqpos
+            self.sandbox_file("input_phaseC_path"), usecols=self.seqpos
         )
         phaseW = read_series(
-            self.stage_io_dict["in"]["input_phaseW_path"], usecols=self.seqpos
+            self.sandbox_file("input_phaseW_path"), usecols=self.seqpos
         )
 
         # fix angle range so its not negative
@@ -119,7 +119,7 @@ class Puckering(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Puckering (%)")
         axs.set_title("Nucleotide parameter: Puckering")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
 
         # save table
         populations = pd.DataFrame(
@@ -131,7 +131,7 @@ class Puckering(BiobbObject):
                 "South": Spop,
             }
         )
-        populations.to_csv(self.stage_io_dict["out"]["output_csv_path"], index=False)
+        populations.to_csv(self.sandbox_file("output_csv_path"), index=False)
 
         plt.close()
 

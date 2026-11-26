@@ -41,7 +41,6 @@ class Curves(BiobbObject):
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -142,15 +141,10 @@ class Curves(BiobbObject):
             path_parts = str(self.stdlib_path).split(os.sep)
             relative_lib_path = '.curvesplus/' + os.sep.join(path_parts[-1:])
 
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
-
         # define temporary file names
-        tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
+        tmp_struc_input = self.stage_io_dict['in']['input_struc_path']
         if self.stage_io_dict['in']['input_top_path'] is not None:
-            tmp_top_input = Path(self.stage_io_dict['in']['input_top_path']).name
+            tmp_top_input = self.stage_io_dict['in']['input_top_path']
 
         # create intructions
         instructions = [
@@ -186,9 +180,6 @@ class Curves(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
-
-        # change back to original directory
-        os.chdir(original_directory)
 
         workdir = self.stage_io_dict.get("unique_dir", "")
 

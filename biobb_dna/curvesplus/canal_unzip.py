@@ -112,13 +112,13 @@ class CanalUnzip(BiobbObject):
         filename = f"canal_output_{sufix}.{extensions[self.type]}"
 
         # Unzip the file
-        with zipfile.ZipFile(self.stage_io_dict["in"]["input_zip_file"], 'r') as zip_ref:
+        with zipfile.ZipFile(self.sandbox_file("input_zip_file"), 'r') as zip_ref:
             # Check if the file exists in the zip file
             if filename in zip_ref.namelist():
                 # Extract the file
                 fu.log(f'{filename} exists, copying into {self.stage_io_dict["out"]["output_path"]}.',
                        self.out_log, self.global_log)
-                with zip_ref.open(filename) as source, open(self.stage_io_dict["out"]["output_path"], "wb") as target:
+                with zip_ref.open(filename) as source, open(self.sandbox_file("output_path"), "wb") as target:
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {filename} not found in the zip file.", self.out_log, self.global_log)
@@ -126,7 +126,7 @@ class CanalUnzip(BiobbObject):
 
             # Write the list of files
             if self.stage_io_dict["out"]["output_list_path"]:
-                with open(self.stage_io_dict["out"]["output_list_path"], "w") as f:
+                with open(self.sandbox_file("output_list_path"), "w") as f:
                     for name in zip_ref.namelist():
                         f.write(f"{name}\n")
 

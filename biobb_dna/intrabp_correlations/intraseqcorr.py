@@ -2,7 +2,6 @@
 
 """Module containing the IntraSequenceCorrelation class and the command line interface."""
 
-from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -78,7 +77,7 @@ class IntraSequenceCorrelation(BiobbObject):
             for hp in constants.helical_parameters:
                 if (
                     hp.lower()
-                    in Path(self.stage_io_dict["in"]["input_ser_path"]).name.lower()
+                    in self.stage_io_dict["in"]["input_ser_path"].lower()
                 ):
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -108,7 +107,7 @@ class IntraSequenceCorrelation(BiobbObject):
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict["in"]["input_ser_path"], usecols=self.seqpos
+            self.sandbox_file("input_ser_path"), usecols=self.seqpos
         )
         if not self.seqpos:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -123,7 +122,7 @@ class IntraSequenceCorrelation(BiobbObject):
         corr_data = ser_data.corr(method=self.method)
 
         # save csv data
-        corr_data.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        corr_data.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -147,7 +146,7 @@ class IntraSequenceCorrelation(BiobbObject):
             "Base Pair Correlation " f"for Helical Parameter '{self.helpar_name}'"
         )
         fig.tight_layout()
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
     @staticmethod

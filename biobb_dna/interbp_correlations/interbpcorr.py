@@ -97,22 +97,22 @@ class InterBasePairCorrelation(BiobbObject):
 
         # read input
         shift = read_series(
-            self.stage_io_dict["in"]["input_filename_shift"], usecols=self.seqpos
+            self.sandbox_file("input_filename_shift"), usecols=self.seqpos
         )
         slide = read_series(
-            self.stage_io_dict["in"]["input_filename_slide"], usecols=self.seqpos
+            self.sandbox_file("input_filename_slide"), usecols=self.seqpos
         )
         rise = read_series(
-            self.stage_io_dict["in"]["input_filename_rise"], usecols=self.seqpos
+            self.sandbox_file("input_filename_rise"), usecols=self.seqpos
         )
         tilt = read_series(
-            self.stage_io_dict["in"]["input_filename_tilt"], usecols=self.seqpos
+            self.sandbox_file("input_filename_tilt"), usecols=self.seqpos
         )
         roll = read_series(
-            self.stage_io_dict["in"]["input_filename_roll"], usecols=self.seqpos
+            self.sandbox_file("input_filename_roll"), usecols=self.seqpos
         )
         twist = read_series(
-            self.stage_io_dict["in"]["input_filename_twist"], usecols=self.seqpos
+            self.sandbox_file("input_filename_twist"), usecols=self.seqpos
         )
 
         if not self.seqpos:
@@ -173,7 +173,7 @@ class InterBasePairCorrelation(BiobbObject):
         result_df.index = corr_index  # type: ignore
 
         # save csv data
-        result_df.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        result_df.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         cmap = plt.get_cmap("bwr").copy()
@@ -199,7 +199,7 @@ class InterBasePairCorrelation(BiobbObject):
         )
 
         fig.tight_layout()
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
     @staticmethod

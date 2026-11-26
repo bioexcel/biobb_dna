@@ -97,22 +97,22 @@ class IntraBasePairCorrelation(BiobbObject):
 
         # read input
         shear = read_series(
-            self.stage_io_dict["in"]["input_filename_shear"], usecols=self.seqpos
+            self.sandbox_file("input_filename_shear"), usecols=self.seqpos
         )
         stretch = read_series(
-            self.stage_io_dict["in"]["input_filename_stretch"], usecols=self.seqpos
+            self.sandbox_file("input_filename_stretch"), usecols=self.seqpos
         )
         stagger = read_series(
-            self.stage_io_dict["in"]["input_filename_stagger"], usecols=self.seqpos
+            self.sandbox_file("input_filename_stagger"), usecols=self.seqpos
         )
         buckle = read_series(
-            self.stage_io_dict["in"]["input_filename_buckle"], usecols=self.seqpos
+            self.sandbox_file("input_filename_buckle"), usecols=self.seqpos
         )
         propel = read_series(
-            self.stage_io_dict["in"]["input_filename_propel"], usecols=self.seqpos
+            self.sandbox_file("input_filename_propel"), usecols=self.seqpos
         )
         opening = read_series(
-            self.stage_io_dict["in"]["input_filename_opening"], usecols=self.seqpos
+            self.sandbox_file("input_filename_opening"), usecols=self.seqpos
         )
 
         if not self.seqpos:
@@ -173,7 +173,7 @@ class IntraBasePairCorrelation(BiobbObject):
         result_df.index = corr_index  # type: ignore
 
         # save csv data
-        result_df.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        result_df.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         cmap = plt.get_cmap("bwr").copy()
@@ -199,7 +199,7 @@ class IntraBasePairCorrelation(BiobbObject):
         )
 
         fig.tight_layout()
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
     @staticmethod

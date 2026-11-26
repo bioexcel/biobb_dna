@@ -98,16 +98,16 @@ class CanonicalAG(BiobbObject):
 
         # read input files
         alphaC = read_series(
-            self.stage_io_dict["in"]["input_alphaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_alphaC_path"), usecols=self.seqpos
         )
         alphaW = read_series(
-            self.stage_io_dict["in"]["input_alphaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_alphaW_path"), usecols=self.seqpos
         )
         gammaC = read_series(
-            self.stage_io_dict["in"]["input_gammaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_gammaC_path"), usecols=self.seqpos
         )
         gammaW = read_series(
-            self.stage_io_dict["in"]["input_gammaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_gammaW_path"), usecols=self.seqpos
         )
 
         # fix angle range so its not negative
@@ -126,7 +126,7 @@ class CanonicalAG(BiobbObject):
             {"Nucleotide": xlabels, "Canonical alpha/gamma": canonical_populations}
         )
         ag_populations_df.to_csv(
-            self.stage_io_dict["out"]["output_csv_path"], index=False
+            self.sandbox_file("output_csv_path"), index=False
         )
 
         # save plot
@@ -148,7 +148,7 @@ class CanonicalAG(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Canonical Alpha-Gamma (%)")
         axs.set_title("Nucleotide parameter: Canonical Alpha-Gamma")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
     def get_xlabels(self, strand1, strand2):

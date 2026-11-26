@@ -96,16 +96,16 @@ class BIPopulations(BiobbObject):
 
         # read input files
         epsilC = read_series(
-            self.stage_io_dict["in"]["input_epsilC_path"], usecols=self.seqpos
+            self.sandbox_file("input_epsilC_path"), usecols=self.seqpos
         )
         epsilW = read_series(
-            self.stage_io_dict["in"]["input_epsilW_path"], usecols=self.seqpos
+            self.sandbox_file("input_epsilW_path"), usecols=self.seqpos
         )
         zetaC = read_series(
-            self.stage_io_dict["in"]["input_zetaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_zetaC_path"), usecols=self.seqpos
         )
         zetaW = read_series(
-            self.stage_io_dict["in"]["input_zetaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_zetaW_path"), usecols=self.seqpos
         )
 
         # calculate difference between epsil and zeta parameters
@@ -121,7 +121,7 @@ class BIPopulations(BiobbObject):
             {"Nucleotide": xlabels, "BI population": BI, "BII population": BII}
         )
         Bpopulations_df.to_csv(
-            self.stage_io_dict["out"]["output_csv_path"], index=False
+            self.sandbox_file("output_csv_path"), index=False
         )
 
         # save plot
@@ -136,7 +136,7 @@ class BIPopulations(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("BI/BII Population (%)")
         axs.set_title("Nucleotide parameter: BI/BII Population")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
     def get_xlabels(self, strand1, strand2):

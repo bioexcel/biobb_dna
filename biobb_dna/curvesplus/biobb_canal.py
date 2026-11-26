@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the Canal class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
@@ -40,7 +39,6 @@ class Canal(BiobbObject):
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -85,7 +83,7 @@ class Canal(BiobbObject):
                     "you must at least specify `input_lis_file` "
                     "so sequence can be parsed from there")
             lis_lines = Path(
-                self.stage_io_dict['in']['input_lis_file']).read_text().splitlines()
+                self.sandbox_file("input_lis_file")).read_text().splitlines()
             for line in lis_lines:
                 if line.strip().startswith("Strand  1"):
                     self.sequence = line.split(" ")[-1]
@@ -95,15 +93,7 @@ class Canal(BiobbObject):
                         self.out_log)
 
         # define temporary file name
-        if self.container_path:
-            tmp_cda_path = Path(self.container_working_dir).joinpath(Path(self.stage_io_dict['in']['input_cda_file']).name)
-        else:
-            tmp_cda_path = Path(self.stage_io_dict['in']['input_cda_file']).name
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        tmp_cda_path = self.stage_io_dict['in']['input_cda_file']
 
         # create intructions
         instructions = [
@@ -138,9 +128,6 @@ class Canal(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
-
-        # change back to original directory
-        os.chdir(original_directory)
 
         workdir = self.stage_io_dict.get("unique_dir", "")
 

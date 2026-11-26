@@ -91,12 +91,12 @@ class BPStiffness(BiobbObject):
         """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""
 
         # read input
-        shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])
-        slide = load_data(self.stage_io_dict["in"]["input_filename_slide"])
-        rise = load_data(self.stage_io_dict["in"]["input_filename_rise"])
-        tilt = load_data(self.stage_io_dict["in"]["input_filename_tilt"])
-        roll = load_data(self.stage_io_dict["in"]["input_filename_roll"])
-        twist = load_data(self.stage_io_dict["in"]["input_filename_twist"])
+        shift = load_data(self.sandbox_file("input_filename_shift"))
+        slide = load_data(self.sandbox_file("input_filename_slide"))
+        rise = load_data(self.sandbox_file("input_filename_rise"))
+        tilt = load_data(self.sandbox_file("input_filename_tilt"))
+        roll = load_data(self.sandbox_file("input_filename_roll"))
+        twist = load_data(self.sandbox_file("input_filename_twist"))
 
         # build matrix cols_arr from helpar input data files
         coordinates = ["shift", "slide", "rise", "tilt", "roll", "twist"]
@@ -112,7 +112,7 @@ class BPStiffness(BiobbObject):
         stiff_df.index.name = basepairname
 
         # save csv data
-        stiff_df.to_csv(Path(self.stage_io_dict["out"]["output_csv_path"]))
+        stiff_df.to_csv(Path(self.sandbox_file("output_csv_path")))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -142,7 +142,7 @@ class BPStiffness(BiobbObject):
         axs.set_yticklabels(stiff_df.index)
         axs.set_title(f"Stiffness Constants for Base Pair Step '{basepairname}'")
         fig.tight_layout()
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
 
 

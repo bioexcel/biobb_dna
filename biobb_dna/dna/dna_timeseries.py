@@ -169,14 +169,14 @@ class HelParTimeSeries(BiobbObject):
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict["in"]["input_ser_path"], usecols=indices
+            self.sandbox_file("input_ser_path"), usecols=indices
         )
 
         # get columns for selected bases
         ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)
-        zf = zipfile.ZipFile(Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
+        zf = zipfile.ZipFile(Path(self.sandbox_file("output_zip_path")), "w")
         for col in ser_data.columns:
             # unstack columns to prevent errors from repeated base pairs
             column_data = ser_data[[col]].unstack().dropna().reset_index(drop=True)

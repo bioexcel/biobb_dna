@@ -72,12 +72,12 @@ class InterHelParCorrelation(BiobbObject):
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
         # read input
-        shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])
-        slide = load_data(self.stage_io_dict["in"]["input_filename_slide"])
-        rise = load_data(self.stage_io_dict["in"]["input_filename_rise"])
-        tilt = load_data(self.stage_io_dict["in"]["input_filename_tilt"])
-        roll = load_data(self.stage_io_dict["in"]["input_filename_roll"])
-        twist = load_data(self.stage_io_dict["in"]["input_filename_twist"])
+        shift = load_data(self.sandbox_file("input_filename_shift"))
+        slide = load_data(self.sandbox_file("input_filename_slide"))
+        rise = load_data(self.sandbox_file("input_filename_rise"))
+        tilt = load_data(self.sandbox_file("input_filename_tilt"))
+        roll = load_data(self.sandbox_file("input_filename_roll"))
+        twist = load_data(self.sandbox_file("input_filename_twist"))
 
         # get basepair
         if self.basepair is None:
@@ -164,7 +164,7 @@ class InterHelParCorrelation(BiobbObject):
         corr_matrix.loc["roll", "twist"] = corr_matrix.loc["twist", "roll"]
 
         # save csv data
-        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -188,7 +188,7 @@ class InterHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.basepair}\'")
         fig.tight_layout()
         fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
+            self.sandbox_file("output_jpg_path"),
             format="jpg")
         plt.close()
 

@@ -101,13 +101,13 @@ class DnaTimeseriesUnzip(BiobbObject):
         jpg_file = f"{filename}.jpg"
 
         # Unzip the file
-        with zipfile.ZipFile(self.stage_io_dict["in"]["input_zip_file"], 'r') as zip_ref:
+        with zipfile.ZipFile(self.sandbox_file("input_zip_file"), 'r') as zip_ref:
             # Check if the csv file exists in the zip file
             if csv_file in zip_ref.namelist():
                 # Extract the file
                 fu.log(f'{csv_file} exists, copying into {self.stage_io_dict["out"]["output_path_csv"]}.',
                        self.out_log, self.global_log)
-                with zip_ref.open(csv_file) as source, open(self.stage_io_dict["out"]["output_path_csv"], "wb") as target:
+                with zip_ref.open(csv_file) as source, open(self.sandbox_file("output_path_csv"), "wb") as target:
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {csv_file} not found in the zip file.", self.out_log, self.global_log)
@@ -118,7 +118,7 @@ class DnaTimeseriesUnzip(BiobbObject):
                 # Extract the file
                 fu.log(f'{jpg_file} exists, copying into {self.stage_io_dict["out"]["output_path_jpg"]}.',
                        self.out_log, self.global_log)
-                with zip_ref.open(jpg_file) as source, open(self.stage_io_dict["out"]["output_path_jpg"], "wb") as target:
+                with zip_ref.open(jpg_file) as source, open(self.sandbox_file("output_path_jpg"), "wb") as target:
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {jpg_file} not found in the zip file.", self.out_log, self.global_log)
@@ -126,7 +126,7 @@ class DnaTimeseriesUnzip(BiobbObject):
 
             # Write the list of files
             if self.stage_io_dict["out"].get("output_list_path"):
-                with open(self.stage_io_dict["out"]["output_list_path"], "w") as f:
+                with open(self.sandbox_file("output_list_path"), "w") as f:
                     for name in zip_ref.namelist():
                         f.write(f"{name}\n")
 

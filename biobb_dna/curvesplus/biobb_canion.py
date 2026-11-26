@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the Canion class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
@@ -41,7 +40,6 @@ class Canion(BiobbObject):
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -102,14 +100,9 @@ class Canion(BiobbObject):
                               f"Option include: {ion_type_options}"))
 
         # define temporary file names
-        input_cdi_file = Path(self.stage_io_dict['in']['input_cdi_path']).name
-        input_afr_file = Path(self.stage_io_dict['in']['input_afr_path']).name
-        input_avg_struc = Path(self.stage_io_dict['in']['input_avg_struc_path']).name
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        input_cdi_file = self.stage_io_dict['in']['input_cdi_path']
+        input_afr_file = self.stage_io_dict['in']['input_afr_path']
+        input_avg_struc = self.stage_io_dict['in']['input_avg_struc_path']
 
         # create intructions
         instructions = [
@@ -144,9 +137,6 @@ class Canion(BiobbObject):
                self.out_log, self.global_log)
         # Run Biobb block
         self.run_biobb()
-
-        # change back to original directory
-        os.chdir(original_directory)
 
         workdir = self.stage_io_dict.get("unique_dir", "")
 

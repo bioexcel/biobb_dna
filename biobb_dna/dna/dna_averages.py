@@ -2,7 +2,6 @@
 
 """Module containing the HelParAverages class and the command line interface."""
 
-from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -83,7 +82,7 @@ class HelParAverages(BiobbObject):
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
-                ser_name = Path(self.stage_io_dict["in"]["input_ser_path"]).name.lower()
+                ser_name = self.stage_io_dict["in"]["input_ser_path"].lower()
                 if hp.lower() in ser_name:
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -122,7 +121,7 @@ class HelParAverages(BiobbObject):
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict["in"]["input_ser_path"], usecols=self.seqpos
+            self.sandbox_file("input_ser_path"), usecols=self.seqpos
         )
         if not self.seqpos:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -163,7 +162,7 @@ class HelParAverages(BiobbObject):
             f"{'Step' if self.baselen == 1 else ''} "
             f"Helical Parameter: {self.helpar_name.capitalize()}"
         )
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
 
         # save table
         dataset = pd.DataFrame(
@@ -173,7 +172,7 @@ class HelParAverages(BiobbObject):
                 "std": stds.to_numpy(),
             }
         )
-        dataset.to_csv(self.stage_io_dict["out"]["output_csv_path"], index=False)
+        dataset.to_csv(self.sandbox_file("output_csv_path"), index=False)
 
         plt.close()
 
