@@ -6,9 +6,9 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
 from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 from numpy import nan
 
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 
@@ -72,9 +72,7 @@ class BIPopulations(BiobbObject):
     ) -> None:
         super().__init__(**locals())
 
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(self.seqpos)
-        ]
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
     def run(self) -> None:
         """Execute the :class:`BIPopulations <backbone.bipopulations.BIPopulations>` object."""

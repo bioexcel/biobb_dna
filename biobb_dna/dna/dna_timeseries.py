@@ -13,7 +13,6 @@ from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_dna.utils import constants
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 
 
@@ -65,9 +64,7 @@ class HelParTimeSeries(BiobbObject):
     ) -> None:
         super().__init__(**locals())
 
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(self.seqpos)
-        ]
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
         # get helical parameter from filename if not specified
         if self.helpar_name is None:

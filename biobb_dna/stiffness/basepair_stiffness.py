@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import load_data
 
 
@@ -80,12 +80,7 @@ class BPStiffness(BiobbObject):
     ) -> None:
         super().__init__(**locals())
 
-        self.scaling = [
-            float(elem)
-            for elem in _from_string_to_list(
-                self.scaling
-            )
-        ]
+        self.scaling = fu.str_to_list(self.scaling, float)
 
     def run(self) -> None:
         """Execute the :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` object."""

@@ -7,9 +7,9 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
 from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
 from biobb_dna.utils import constants
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 
 
@@ -68,9 +68,7 @@ class HelParAverages(BiobbObject):
         super().__init__(**locals())
 
         # Properties specific for BB
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(self.seqpos)
-        ]
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
     def run(self) -> None:
         """Execute the :class:`HelParAverages <dna.averages.HelParAverages>` object."""
