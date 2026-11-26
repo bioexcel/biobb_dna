@@ -101,7 +101,8 @@ class HelParAverages(BiobbObject):
         # get base length and unit from helical parameter name
         if self.helpar_name.lower() in constants.hp_basepairs:
             self.baselen = 1
-        elif self.helpar_name.lower() in constants.hp_singlebases:
+        else:
+            # base parameters and backbone torsions: one value per nucleotide
             self.baselen = 0
         if self.helpar_name in constants.hp_angular:
             self.hp_unit = "Degrees"
