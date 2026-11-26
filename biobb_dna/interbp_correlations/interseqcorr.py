@@ -7,7 +7,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -58,10 +58,10 @@ class InterSequenceCorrelation(BiobbObject):
 
     def __init__(
         self,
-        input_ser_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_ser_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -165,20 +165,7 @@ class InterSequenceCorrelation(BiobbObject):
         return num / den
 
 
-def interseqcorr(
-    input_ser_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`HelParCorrelation <interbp_correlations.interseqcorr.InterSequenceCorrelation>` class and
-    execute the :meth:`launch() <interbp_correlations.interseqcorr.InterSequenceCorrelation.launch>` method."""
-    return InterSequenceCorrelation(**dict(locals())).launch()
-
-
-interseqcorr.__doc__ = InterSequenceCorrelation.__doc__
-main = InterSequenceCorrelation.get_main(interseqcorr, "Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.")
+interseqcorr = launcher(InterSequenceCorrelation)
 
 if __name__ == '__main__':
-    main()
+    InterSequenceCorrelation.main()

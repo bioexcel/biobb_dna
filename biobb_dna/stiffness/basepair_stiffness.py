@@ -8,7 +8,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import load_data
@@ -67,15 +67,15 @@ class BPStiffness(BiobbObject):
 
     def __init__(
         self,
-        input_filename_shift,
-        input_filename_slide,
-        input_filename_rise,
-        input_filename_tilt,
-        input_filename_roll,
-        input_filename_twist,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_filename_shift: str,
+        input_filename_slide: str,
+        input_filename_rise: str,
+        input_filename_tilt: str,
+        input_filename_roll: str,
+        input_filename_twist: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -146,25 +146,7 @@ class BPStiffness(BiobbObject):
         plt.close()
 
 
-def basepair_stiffness(
-    input_filename_shift: str,
-    input_filename_slide: str,
-    input_filename_rise: str,
-    input_filename_tilt: str,
-    input_filename_roll: str,
-    input_filename_twist: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`BPStiffness <stiffness.basepair_stiffness.BPStiffness>` class and
-    execute the :meth:`launch() <stiffness.basepair_stiffness.BPStiffness.BPStiffness.launch>` method."""
-    return BPStiffness(**dict(locals())).launch()
-
-
-basepair_stiffness.__doc__ = BPStiffness.__doc__
-main = BPStiffness.get_main(basepair_stiffness, "Calculate stiffness constants matrix between all six helical parameters for a single base pair step.")
+basepair_stiffness = launcher(BPStiffness)
 
 if __name__ == '__main__':
-    main()
+    BPStiffness.main()

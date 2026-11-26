@@ -6,7 +6,7 @@ import zipfile
 from typing import Optional
 import shutil
 from pathlib import Path
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -69,9 +69,9 @@ class Curves(BiobbObject):
     """
 
     def __init__(
-            self, input_struc_path, output_lis_path,
-            output_cda_path, output_zip_path=None,
-            input_top_path=None, properties=None, **kwargs) -> None:
+            self, input_struc_path: str, output_lis_path: str,
+            output_cda_path: str, output_zip_path: Optional[str] = None,
+            input_top_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
         # Properties specific for BB
@@ -207,17 +207,7 @@ class Curves(BiobbObject):
         (Path(workdir) / "curves_output.lis").rename(self.sandbox_file("output_lis_path"))
 
 
-def biobb_curves(
-        input_struc_path: str, output_lis_path: str, output_cda_path: str,
-        input_top_path: Optional[str] = None, output_zip_path: Optional[str] = None,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_curves.Curves.launch>` method."""
-    return Curves(**dict(locals())).launch()
-
-
-biobb_curves.__doc__ = Curves.__doc__
-main = Curves.get_main(biobb_curves, "Execute Cur+ form the Curves+ software suite.")
+biobb_curves = launcher(Curves)
 
 if __name__ == '__main__':
-    main()
+    Curves.main()

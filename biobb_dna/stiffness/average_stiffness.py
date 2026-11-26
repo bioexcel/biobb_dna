@@ -7,7 +7,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -59,10 +59,10 @@ class AverageStiffness(BiobbObject):
 
     def __init__(
         self,
-        input_ser_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_ser_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -156,20 +156,7 @@ class AverageStiffness(BiobbObject):
         plt.close()
 
 
-def average_stiffness(
-    input_ser_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` class and
-    execute the :meth:`launch() <stiffness.average_stiffness.AverageStiffness.launch>` method."""
-    return AverageStiffness(**dict(locals())).launch()
-
-
-average_stiffness.__doc__ = AverageStiffness.__doc__
-main = AverageStiffness.get_main(average_stiffness, "Calculate average stiffness constants for each base pair of a trajectory's series.")
+average_stiffness = launcher(AverageStiffness)
 
 if __name__ == '__main__':
-    main()
+    AverageStiffness.main()

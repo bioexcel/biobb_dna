@@ -6,7 +6,7 @@ import zipfile
 from typing import Optional
 from pathlib import Path
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -66,8 +66,8 @@ class Canal(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_cda_file, input_lis_file=None,
-                 output_zip_path=None, properties=None, **kwargs) -> None:
+    def __init__(self, input_cda_file: str, input_lis_file: Optional[str] = None,
+                 output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
         # Properties specific for BB
@@ -154,20 +154,8 @@ class Canal(BiobbObject):
                         arcname=canal_outfile.name)
 
 
-def biobb_canal(
-        input_cda_file: str,
-        output_zip_path: str,
-        input_lis_file: Optional[str] = None,
-        properties: Optional[dict] = None,
-        **kwargs) -> int:
-    """Create :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canal.Canal.launch>` method."""
-    return Canal(**dict(locals())).launch()
-
-
-biobb_canal.__doc__ = Canal.__doc__
-main = Canal.get_main(biobb_canal, "Execute Canal from the Curves+ software suite.")
+biobb_canal = launcher(Canal)
 
 
 if __name__ == '__main__':
-    main()
+    Canal.main()

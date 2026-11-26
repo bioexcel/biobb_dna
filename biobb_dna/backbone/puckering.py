@@ -6,7 +6,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
@@ -58,11 +58,11 @@ class Puckering(BiobbObject):
 
     def __init__(
         self,
-        input_phaseC_path,
-        input_phaseW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_phaseC_path: str,
+        input_phaseW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -170,21 +170,7 @@ class Puckering(BiobbObject):
         return dataset
 
 
-def puckering(
-    input_phaseC_path: str,
-    input_phaseW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`Puckering <dna.backbone.puckering.Puckering>` class and
-    execute the: meth: `launch() <dna.backbone.puckering.Puckering.launch>` method."""
-    return Puckering(**dict(locals())).launch()
-
-
-puckering.__doc__ = Puckering.__doc__
-main = Puckering.get_main(puckering, "Calculate North/East/West/South distribution of sugar puckering backbone torsions.")
+puckering = launcher(Puckering)
 
 if __name__ == "__main__":
-    main()
+    Puckering.main()

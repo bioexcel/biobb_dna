@@ -5,7 +5,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from numpy import nan
 
 from biobb_dna.utils.common import _from_string_to_list
@@ -61,13 +61,13 @@ class BIPopulations(BiobbObject):
 
     def __init__(
         self,
-        input_epsilC_path,
-        input_epsilW_path,
-        input_zetaC_path,
-        input_zetaW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_epsilC_path: str,
+        input_epsilW_path: str,
+        input_zetaC_path: str,
+        input_zetaW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -167,23 +167,7 @@ class BIPopulations(BiobbObject):
         return diff_epsil_zeta
 
 
-def bipopulations(
-    input_epsilC_path: str,
-    input_epsilW_path: str,
-    input_zetaC_path: str,
-    input_zetaW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`BIPopulations <dna.backbone.bipopulations.BIPopulations>` class and
-    execute the: meth: `launch() <dna.backbone.bipopulations.BIPopulations.launch>` method."""
-    return BIPopulations(**dict(locals())).launch()
-
-
-bipopulations.__doc__ = BIPopulations.__doc__
-main = BIPopulations.get_main(bipopulations, "Calculate BI/BII populations.")
+bipopulations = launcher(BIPopulations)
 
 if __name__ == "__main__":
-    main()
+    BIPopulations.main()

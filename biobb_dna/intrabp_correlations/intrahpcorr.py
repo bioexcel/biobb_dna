@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -61,11 +61,11 @@ class IntraHelParCorrelation(BiobbObject):
     """
 
     def __init__(
-            self, input_filename_shear, input_filename_stretch,
-            input_filename_stagger, input_filename_buckle,
-            input_filename_propel, input_filename_opening,
-            output_csv_path, output_jpg_path,
-            properties=None, **kwargs) -> None:
+            self, input_filename_shear: str, input_filename_stretch: str,
+            input_filename_stagger: str, input_filename_buckle: str,
+            input_filename_propel: str, input_filename_opening: str,
+            output_csv_path: str, output_jpg_path: str,
+            properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -229,19 +229,7 @@ class IntraHelParCorrelation(BiobbObject):
         return correlation
 
 
-def intrahpcorr(
-        input_filename_shear: str, input_filename_stretch: str,
-        input_filename_stagger: str, input_filename_buckle: str,
-        input_filename_propel: str, input_filename_opening: str,
-        output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` class and
-    execute the :meth:`launch() <intrabp_correlations.intrahpcorr.IntraHelParCorrelation.launch>` method."""
-    return IntraHelParCorrelation(**dict(locals())).launch()
-
-
-intrahpcorr.__doc__ = IntraHelParCorrelation.__doc__
-main = IntraHelParCorrelation.get_main(intrahpcorr, "Load helical parameter file and save base data individually.")
+intrahpcorr = launcher(IntraHelParCorrelation)
 
 if __name__ == '__main__':
-    main()
+    IntraHelParCorrelation.main()

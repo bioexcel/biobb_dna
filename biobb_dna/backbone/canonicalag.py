@@ -6,7 +6,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
@@ -62,13 +62,13 @@ class CanonicalAG(BiobbObject):
 
     def __init__(
         self,
-        input_alphaC_path,
-        input_alphaW_path,
-        input_gammaC_path,
-        input_gammaW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_alphaC_path: str,
+        input_alphaW_path: str,
+        input_gammaC_path: str,
+        input_gammaW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -186,23 +186,7 @@ class CanonicalAG(BiobbObject):
         return dataset
 
 
-def canonicalag(
-    input_alphaC_path: str,
-    input_alphaW_path: str,
-    input_gammaC_path: str,
-    input_gammaW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`CanonicalAG <dna.backbone.canonicalag.CanonicalAG>` class and
-    execute the: meth: `launch() <dna.backbone.canonicalag.CanonicalAG.launch>` method."""
-    return CanonicalAG(**dict(locals())).launch()
-
-
-canonicalag.__doc__ = CanonicalAG.__doc__
-main = CanonicalAG.get_main(canonicalag, "Calculate Canonical Alpha/Gamma distributions.")
+canonicalag = launcher(CanonicalAG)
 
 if __name__ == "__main__":
-    main()
+    CanonicalAG.main()

@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -61,11 +61,11 @@ class InterHelParCorrelation(BiobbObject):
     """
 
     def __init__(
-            self, input_filename_shift, input_filename_slide,
-            input_filename_rise, input_filename_tilt,
-            input_filename_roll, input_filename_twist,
-            output_csv_path, output_jpg_path,
-            properties=None, **kwargs) -> None:
+            self, input_filename_shift: str, input_filename_slide: str,
+            input_filename_rise: str, input_filename_tilt: str,
+            input_filename_roll: str, input_filename_twist: str,
+            output_csv_path: str, output_jpg_path: str,
+            properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -227,19 +227,7 @@ class InterHelParCorrelation(BiobbObject):
         return correlation
 
 
-def interhpcorr(
-        input_filename_shift: str, input_filename_slide: str,
-        input_filename_rise: str, input_filename_tilt: str,
-        input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` class and
-    execute the :meth:`launch() <interbp_correlations.interhpcorr.InterHelParCorrelation.launch>` method."""
-    return InterHelParCorrelation(**dict(locals())).launch()
-
-
-interhpcorr.__doc__ = InterHelParCorrelation.__doc__
-main = InterHelParCorrelation.get_main(interhpcorr, "Load helical parameter file and save base data individually.")
+interhpcorr = launcher(InterHelParCorrelation)
 
 if __name__ == '__main__':
-    main()
+    InterHelParCorrelation.main()

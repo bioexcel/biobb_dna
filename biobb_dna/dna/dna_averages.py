@@ -7,7 +7,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -60,10 +60,10 @@ class HelParAverages(BiobbObject):
 
     def __init__(
         self,
-        input_ser_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_ser_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -177,20 +177,7 @@ class HelParAverages(BiobbObject):
         plt.close()
 
 
-def dna_averages(
-    input_ser_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`HelParAverages <dna.dna_averages.HelParAverages>` class and
-    execute the :meth:`launch() <dna.dna_averages.HelParAverages.launch>` method."""
-    return HelParAverages(**dict(locals())).launch()
-
-
-dna_averages.__doc__ = HelParAverages.__doc__
-main = HelParAverages.get_main(dna_averages, "Load helical parameter file and calculate average values for each base pair.")
+dna_averages = launcher(HelParAverages)
 
 if __name__ == '__main__':
-    main()
+    HelParAverages.main()

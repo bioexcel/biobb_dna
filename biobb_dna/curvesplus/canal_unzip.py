@@ -6,7 +6,7 @@ import zipfile
 import shutil
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -49,8 +49,8 @@ class CanalUnzip(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_zip_file,
-                 output_path, output_list_path=None, properties=None, **kwargs) -> None:
+    def __init__(self, input_zip_file: str,
+                 output_path: str, output_list_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -134,19 +134,7 @@ class CanalUnzip(BiobbObject):
         # self.run_biobb()
 
 
-def canal_unzip(
-        input_zip_file: str,
-        output_path: str,
-        output_list_path: Optional[str] = None,
-        properties: Optional[dict] = None,
-        **kwargs) -> int:
-    """Create :class:`CanalUnzip <biobb_dna.curvesplus.canal_unzip.CanalUnzip>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.canal_unzip.CanalUnzip.launch>` method."""
-    return CanalUnzip(**dict(locals())).launch()
-
-
-canal_unzip.__doc__ = CanalUnzip.__doc__
-main = CanalUnzip.get_main(canal_unzip, "Tool for extracting biobb_canal output files.")
+canal_unzip = launcher(CanalUnzip)
 
 if __name__ == '__main__':
-    main()
+    CanalUnzip.main()

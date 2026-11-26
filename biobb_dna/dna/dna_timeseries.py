@@ -9,7 +9,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_dna.utils import constants
@@ -61,7 +61,7 @@ class HelParTimeSeries(BiobbObject):
     """
 
     def __init__(
-        self, input_ser_path, output_zip_path, properties=None, **kwargs
+        self, input_ser_path: str, output_zip_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
         super().__init__(**locals())
 
@@ -244,19 +244,7 @@ class HelParTimeSeries(BiobbObject):
         zf.close()
 
 
-def dna_timeseries(
-    input_ser_path: str,
-    output_zip_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
-    execute the :meth:`launch() <dna.dna_timeseries.HelParTimeSeries.launch>` method."""
-    return HelParTimeSeries(**dict(locals())).launch()
-
-
-dna_timeseries.__doc__ = HelParTimeSeries.__doc__
-main = HelParTimeSeries.get_main(dna_timeseries, "Created time series and histogram plots for each base pair from a helical parameter series file.")
+dna_timeseries = launcher(HelParTimeSeries)
 
 if __name__ == '__main__':
-    main()
+    HelParTimeSeries.main()

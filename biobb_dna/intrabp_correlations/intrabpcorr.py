@@ -8,7 +8,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_dna.utils import constants
 from biobb_dna.utils.common import _from_string_to_list
@@ -64,15 +64,15 @@ class IntraBasePairCorrelation(BiobbObject):
 
     def __init__(
         self,
-        input_filename_shear,
-        input_filename_stretch,
-        input_filename_stagger,
-        input_filename_buckle,
-        input_filename_propel,
-        input_filename_opening,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_filename_shear: str,
+        input_filename_stretch: str,
+        input_filename_stagger: str,
+        input_filename_buckle: str,
+        input_filename_propel: str,
+        input_filename_opening: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
         super().__init__(**locals())
@@ -226,25 +226,7 @@ class IntraBasePairCorrelation(BiobbObject):
         return correlation
 
 
-def intrabpcorr(
-    input_filename_shear: str,
-    input_filename_stretch: str,
-    input_filename_stagger: str,
-    input_filename_buckle: str,
-    input_filename_propel: str,
-    input_filename_opening: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`HelParCorrelation <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation>` class and
-    execute the :meth:`launch() <intrabp_correlations.intrabpcorr.IntraBasePairCorrelation.launch>` method."""
-    return IntraBasePairCorrelation(**dict(locals())).launch()
-
-
-intrabpcorr.__doc__ = IntraBasePairCorrelation.__doc__
-main = IntraBasePairCorrelation.get_main(intrabpcorr, "Load .ser file from Canal output and calculate correlation between base pairs of the corresponding sequence.")
+intrabpcorr = launcher(IntraBasePairCorrelation)
 
 if __name__ == '__main__':
-    main()
+    IntraBasePairCorrelation.main()

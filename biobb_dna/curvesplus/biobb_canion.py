@@ -5,7 +5,7 @@ import os
 import zipfile
 from typing import Optional
 from pathlib import Path
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -69,8 +69,8 @@ class Canion(BiobbObject):
     """
 
     def __init__(
-            self, input_cdi_path, input_afr_path, input_avg_struc_path,
-            output_zip_path=None, properties=None, **kwargs) -> None:
+            self, input_cdi_path: str, input_afr_path: str, input_avg_struc_path: str,
+            output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
         # Properties specific for BB
@@ -160,16 +160,7 @@ class Canion(BiobbObject):
                         arcname=curves_outfile.name)
 
 
-def biobb_canion(
-        input_cdi_path: str, input_afr_path: str, input_avg_struc_path: str,
-        output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canion.Canion.launch>` method."""
-    return Canion(**dict(locals())).launch()
-
-
-biobb_canion.__doc__ = Canion.__doc__
-main = Canion.get_main(biobb_canion, "Execute Canion form the Curves+ software suite.")
+biobb_canion = launcher(Canion)
 
 if __name__ == '__main__':
-    main()
+    Canion.main()

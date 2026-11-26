@@ -7,7 +7,7 @@ import shutil
 from typing import Optional
 
 from biobb_dna.utils import constants
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -54,8 +54,8 @@ class DnaTimeseriesUnzip(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_zip_file,
-                 output_path_csv, output_path_jpg, output_list_path=None, properties=None, **kwargs) -> None:
+    def __init__(self, input_zip_file: str,
+                 output_path_csv: str, output_path_jpg: str, output_list_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -134,20 +134,7 @@ class DnaTimeseriesUnzip(BiobbObject):
         # self.run_biobb()
 
 
-def dna_timeseries_unzip(
-        input_zip_file: str,
-        output_path_csv: str,
-        output_path_jpg: str,
-        output_list_path: Optional[str] = None,
-        properties: Optional[dict] = None,
-        **kwargs) -> int:
-    """Create :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` class and
-    execute the :meth:`launch() <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip.launch>` method."""
-    return DnaTimeseriesUnzip(**dict(locals())).launch()
-
-
-dna_timeseries_unzip.__doc__ = DnaTimeseriesUnzip.__doc__
-main = DnaTimeseriesUnzip.get_main(dna_timeseries_unzip, "Tool for extracting dna_timeseries output files.")
+dna_timeseries_unzip = launcher(DnaTimeseriesUnzip)
 
 if __name__ == '__main__':
-    main()
+    DnaTimeseriesUnzip.main()

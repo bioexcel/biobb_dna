@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture  # type: ignore
 from biobb_dna.utils import constants
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -60,8 +60,8 @@ class HelParBimodality(BiobbObject):
     """
 
     def __init__(self, input_csv_file, output_csv_path,
-                 output_jpg_path, input_zip_file=None,
-                 properties=None, **kwargs) -> None:
+                 output_jpg_path, input_zip_file: Optional[str] = None,
+                 properties: Optional[dict] = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -239,16 +239,7 @@ class HelParBimodality(BiobbObject):
         return bimodal
 
 
-def dna_bimodality(
-        input_csv_file, output_csv_path, output_jpg_path,
-        input_zip_file: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
-    execute the :meth:`launch() <dna.dna_bimodality.HelParBimodality.launch>` method."""
-    return HelParBimodality(**dict(locals())).launch()
-
-
-dna_bimodality.__doc__ = HelParBimodality.__doc__
-main = HelParBimodality.get_main(dna_bimodality, "Determine binormality/bimodality from a helical parameter dataset.")
+dna_bimodality = launcher(HelParBimodality)
 
 if __name__ == '__main__':
-    main()
+    HelParBimodality.main()
