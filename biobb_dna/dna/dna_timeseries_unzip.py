@@ -125,7 +125,7 @@ class DnaTimeseriesUnzip(BiobbObject):
                 raise SystemExit(1)
 
             # Write the list of files
-            if self.stage_io_dict["out"]["output_list_path"]:
+            if self.stage_io_dict["out"].get("output_list_path"):
                 with open(self.stage_io_dict["out"]["output_list_path"], "w") as f:
                     for name in zip_ref.namelist():
                         f.write(f"{name}\n")
