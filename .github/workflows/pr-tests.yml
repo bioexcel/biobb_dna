@@ -106,6 +106,10 @@ jobs:
         # With its dependencies: biobb_common master can need packages that the version of .github/env.yaml lacks
         run: python -m pip install ./biobb_common
 
+      - name: Download the canion test input
+        # THGA_K.cdi (436 MB) is not in the repository: it is an asset of the releases
+        run: wget -q https://github.com/bioexcel/biobb_dna/releases/download/assets/THGA_K.cdi -O biobb_dna/test/data/curvesplus/THGA_K.cdi
+
       - name: Run tests
         shell: bash -l {0}
         run: |
