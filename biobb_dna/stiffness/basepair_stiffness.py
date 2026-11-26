@@ -81,7 +81,7 @@ class BPStiffness(BiobbObject):
         super().__init__(**locals())
 
         self.scaling = [
-            int(elem)
+            float(elem)
             for elem in _from_string_to_list(
                 self.scaling
             )
