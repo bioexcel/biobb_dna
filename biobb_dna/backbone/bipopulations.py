@@ -5,11 +5,10 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 from numpy import nan
 
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 
@@ -62,55 +61,21 @@ class BIPopulations(BiobbObject):
 
     def __init__(
         self,
-        input_epsilC_path,
-        input_epsilW_path,
-        input_zetaC_path,
-        input_zetaW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_epsilC_path: str,
+        input_epsilW_path: str,
+        input_zetaC_path: str,
+        input_zetaW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_epsilC_path": input_epsilC_path,
-                "input_epsilW_path": input_epsilW_path,
-                "input_zetaC_path": input_zetaC_path,
-                "input_zetaW_path": input_zetaW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        # self.seqpos = properties.get("seqpos", None)
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
-        ]
-        print("seqpos::::::::")
-        print(self.seqpos)
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`BIPopulations <backbone.bipopulations.BIPopulations>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -129,16 +94,16 @@ class BIPopulations(BiobbObject):
 
         # read input files
         epsilC = read_series(
-            self.stage_io_dict["in"]["input_epsilC_path"], usecols=self.seqpos
+            self.sandbox_file("input_epsilC_path"), usecols=self.seqpos
         )
         epsilW = read_series(
-            self.stage_io_dict["in"]["input_epsilW_path"], usecols=self.seqpos
+            self.sandbox_file("input_epsilW_path"), usecols=self.seqpos
         )
         zetaC = read_series(
-            self.stage_io_dict["in"]["input_zetaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_zetaC_path"), usecols=self.seqpos
         )
         zetaW = read_series(
-            self.stage_io_dict["in"]["input_zetaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_zetaW_path"), usecols=self.seqpos
         )
 
         # calculate difference between epsil and zeta parameters
@@ -154,7 +119,7 @@ class BIPopulations(BiobbObject):
             {"Nucleotide": xlabels, "BI population": BI, "BII population": BII}
         )
         Bpopulations_df.to_csv(
-            self.stage_io_dict["out"]["output_csv_path"], index=False
+            self.sandbox_file("output_csv_path"), index=False
         )
 
         # save plot
@@ -169,18 +134,8 @@ class BIPopulations(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("BI/BII Population (%)")
         axs.set_title("Nucleotide parameter: BI/BII Population")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
@@ -210,23 +165,7 @@ class BIPopulations(BiobbObject):
         return diff_epsil_zeta
 
 
-def bipopulations(
-    input_epsilC_path: str,
-    input_epsilW_path: str,
-    input_zetaC_path: str,
-    input_zetaW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`BIPopulations <dna.backbone.bipopulations.BIPopulations>` class and
-    execute the: meth: `launch() <dna.backbone.bipopulations.BIPopulations.launch>` method."""
-    return BIPopulations(**dict(locals())).launch()
-
-
-bipopulations.__doc__ = BIPopulations.__doc__
-main = BIPopulations.get_main(bipopulations, "Calculate BI/BII populations.")
+bipopulations = launcher(BIPopulations)
 
 if __name__ == "__main__":
-    main()
+    BIPopulations.main()

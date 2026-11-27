@@ -9,12 +9,10 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_dna.utils import constants
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 
 
@@ -29,9 +27,9 @@ class HelParTimeSeries(BiobbObject):
         output_zip_path (str): Path to output .zip files where data is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/timeseries_output.zip>`_. Accepted formats: zip (edam:format_3987).
         properties (dict):
             * **sequence** (*str*) - (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
-            * **bins** (*int*) - (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
+            * **bins** (*str*) - ("auto") Bins for histogram: a number of bins or a binning method. Parameter has same options as matplotlib.pyplot.hist.
             * **helpar_name** (*str*) - (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. Values: majd, majw, mind, minw, inclin, tip, xdisp, ydisp, shear, stretch, stagger, buckle, propel, opening, rise, roll, twist, shift, slide, tilt, alphaC, alphaW, betaC, betaW, gammaC, gammaW, deltaC, deltaW, epsilC, epsilW, zetaC, zetaW, chiC, chiW, phaseC, phaseW.
-            * **stride** (*int*) - (1000) granularity of the number of snapshots for plotting time series.
+            * **stride** (*int*) - (10) granularity of the number of snapshots for plotting time series.
             * **seqpos** (*list*) - (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -62,30 +60,11 @@ class HelParTimeSeries(BiobbObject):
     """
 
     def __init__(
-        self, input_ser_path, output_zip_path, properties=None, **kwargs
+        self, input_ser_path: str, output_zip_path: str, properties: Optional[dict] = None, **kwargs
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ser_path": input_ser_path,
-            },
-            "out": {"output_zip_path": output_zip_path},
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence", None)
-        self.bins = properties.get("bins", "auto")
-        self.stride = properties.get("stride", 10)
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
-        ]
-        self.helpar_name = properties.get("helpar_name", None)
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
@@ -115,18 +94,8 @@ class HelParTimeSeries(BiobbObject):
         else:
             self.hp_unit = "Angstroms"
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -197,14 +166,14 @@ class HelParTimeSeries(BiobbObject):
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict["in"]["input_ser_path"], usecols=indices
+            self.sandbox_file("input_ser_path"), usecols=indices
         )
 
         # get columns for selected bases
         ser_data.columns = subunits
 
         # write output files for all selected bases (one per column)
-        zf = zipfile.ZipFile(Path(self.stage_io_dict["out"]["output_zip_path"]), "w")
+        zf = zipfile.ZipFile(Path(self.sandbox_file("output_zip_path")), "w")
         for col in ser_data.columns:
             # unstack columns to prevent errors from repeated base pairs
             column_data = ser_data[[col]].unstack().dropna().reset_index(drop=True)
@@ -271,30 +240,8 @@ class HelParTimeSeries(BiobbObject):
             plt.close()
         zf.close()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def dna_timeseries(
-    input_ser_path: str,
-    output_zip_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`HelParTimeSeries <dna.dna_timeseries.HelParTimeSeries>` class and
-    execute the :meth:`launch() <dna.dna_timeseries.HelParTimeSeries.launch>` method."""
-    return HelParTimeSeries(**dict(locals())).launch()
-
-
-dna_timeseries.__doc__ = HelParTimeSeries.__doc__
-main = HelParTimeSeries.get_main(dna_timeseries, "Created time series and histogram plots for each base pair from a helical parameter series file.")
+dna_timeseries = launcher(HelParTimeSeries)
 
 if __name__ == '__main__':
-    main()
+    HelParTimeSeries.main()

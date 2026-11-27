@@ -110,9 +110,9 @@
                 },
                 "nastr": {
                     "type": "string",
-                    "default": "NA",
+                    "default": null,
                     "wf_prop": false,
-                    "description": "character string used to indicate missing data in .ser files."
+                    "description": "character string used to indicate missing data in .ser files. If not set, the tool uses its own default."
                 },
                 "cormin": {
                     "type": "number",
@@ -140,7 +140,7 @@
                 },
                 "sequence": {
                     "type": "string",
-                    "default": "Optional",
+                    "default": null,
                     "wf_prop": false,
                     "description": "sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file."
                 },
@@ -185,12 +185,6 @@
                     "default": "/data",
                     "wf_prop": false,
                     "description": "Path to an internal directory in the container."
-                },
-                "container_working_dir": {
-                    "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Path to the internal CWD in the container."
                 },
                 "container_user_id": {
                     "type": "string",

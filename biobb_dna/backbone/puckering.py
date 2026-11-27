@@ -6,10 +6,9 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 
@@ -59,50 +58,19 @@ class Puckering(BiobbObject):
 
     def __init__(
         self,
-        input_phaseC_path,
-        input_phaseW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_phaseC_path: str,
+        input_phaseW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_phaseC_path": input_phaseC_path,
-                "input_phaseW_path": input_phaseW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        self.stride = properties.get("stride", 1000)
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
-        ]
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Puckering <backbone.puckering.Puckering>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -121,10 +89,10 @@ class Puckering(BiobbObject):
 
         # read input files
         phaseC = read_series(
-            self.stage_io_dict["in"]["input_phaseC_path"], usecols=self.seqpos
+            self.sandbox_file("input_phaseC_path"), usecols=self.seqpos
         )
         phaseW = read_series(
-            self.stage_io_dict["in"]["input_phaseW_path"], usecols=self.seqpos
+            self.sandbox_file("input_phaseW_path"), usecols=self.seqpos
         )
 
         # fix angle range so its not negative
@@ -149,7 +117,7 @@ class Puckering(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Puckering (%)")
         axs.set_title("Nucleotide parameter: Puckering")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
 
         # save table
         populations = pd.DataFrame(
@@ -161,19 +129,9 @@ class Puckering(BiobbObject):
                 "South": Spop,
             }
         )
-        populations.to_csv(self.stage_io_dict["out"]["output_csv_path"], index=False)
+        populations.to_csv(self.sandbox_file("output_csv_path"), index=False)
 
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
@@ -210,21 +168,7 @@ class Puckering(BiobbObject):
         return dataset
 
 
-def puckering(
-    input_phaseC_path: str,
-    input_phaseW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`Puckering <dna.backbone.puckering.Puckering>` class and
-    execute the: meth: `launch() <dna.backbone.puckering.Puckering.launch>` method."""
-    return Puckering(**dict(locals())).launch()
-
-
-puckering.__doc__ = Puckering.__doc__
-main = Puckering.get_main(puckering, "Calculate North/East/West/South distribution of sugar puckering backbone torsions.")
+puckering = launcher(Puckering)
 
 if __name__ == "__main__":
-    main()
+    Puckering.main()

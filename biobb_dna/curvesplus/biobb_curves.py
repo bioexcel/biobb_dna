@@ -6,9 +6,8 @@ import zipfile
 from typing import Optional
 import shutil
 from pathlib import Path
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class Curves(BiobbObject):
@@ -26,7 +25,7 @@ class Curves(BiobbObject):
         properties (dict):
             * **s1range** (*str*) - (None) Range of first strand. Must be specified in the form "start:end".
             * **s2range** (*str*) - (None) Range of second strand. Must be specified in the form "start:end".
-            * **stdlib_path** (*str*) - ('standard') Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
+            * **stdlib_path** (*str*) - (None) Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory.
             * **itst** (*int*) - (0) Iteration start index.
             * **itnd** (*int*) - (0) Iteration end index.
             * **itdel** (*int*) - (1) Iteration delimiter.
@@ -35,14 +34,13 @@ class Curves(BiobbObject):
             * **line** (*bool*) - (False) if True, find the best linear helical axis.
             * **fit** (*bool*) - (True) if True, fit a standard bases to the input coordinates (important for MD snapshots to avoid base distortions leading to noisy helical parameters).
             * **axfrm** (*bool*) - (False) if True, generates closely spaced helical axis frames as input for Canal and Canion.
-            * **binary_path** (*str*) - (Cur+) Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
+            * **binary_path** (*str*) - ("Cur+") Path to Curves+ executable, otherwise the program wil look for Cur+ executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -70,46 +68,17 @@ class Curves(BiobbObject):
     """
 
     def __init__(
-            self, input_struc_path, output_lis_path,
-            output_cda_path, output_zip_path=None,
-            input_top_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_struc_path': input_struc_path,
-                'input_top_path': input_top_path
-            },
-            'out': {
-                'output_lis_path': output_lis_path,
-                'output_cda_path': output_cda_path,
-                'output_zip_path': output_zip_path
-            }
-        }
+            self, input_struc_path: str, output_lis_path: str,
+            output_cda_path: str, output_zip_path: Optional[str] = None,
+            input_top_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.s1range = properties.get('s1range', None)
-        self.binary_path = properties.get('binary_path', 'Cur+')
-        self.stdlib_path = properties.get('stdlib_path', None)
-        self.s2range = properties.get('s2range', None)
-        self.itst = properties.get('itst', 0)
-        self.itnd = properties.get('itnd', 0)
-        self.itdel = properties.get('itdel', 1)
-        self.ions = ".t." if properties.get('ions', False) else ".f."
-        self.test = ".t." if properties.get('test', False) else ".f."
-        self.line = ".t." if properties.get('line', False) else ".f."
-        self.fit = ".t." if properties.get('fit', True) else ".f."
-        self.axfrm = ".t." if properties.get('axfrm', False) else ".f."
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+        self.ions = ".t." if self.ions else ".f."
+        self.test = ".t." if self.test else ".f."
+        self.line = ".t." if self.line else ".f."
+        self.fit = ".t." if self.fit else ".f."
+        self.axfrm = ".t." if self.axfrm else ".f."
 
     def create_curvesplus_folder(self):
         """Create .curvesplus folder in the current temporal folder and copy the lib files inside."""
@@ -122,14 +91,8 @@ class Curves(BiobbObject):
         for file in lib_files:
             shutil.copy(file, dst_dir)
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.s1range is None:
             raise ValueError("property 's1range' must be specified!")
@@ -178,18 +141,10 @@ class Curves(BiobbObject):
             path_parts = str(self.stdlib_path).split(os.sep)
             relative_lib_path = '.curvesplus/' + os.sep.join(path_parts[-1:])
 
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        if self.container_path:
-            os.chdir(self.container_working_dir)
-        else:
-            os.chdir(self.stage_io_dict.get("unique_dir", ""))
-
         # define temporary file names
-        tmp_struc_input = Path(self.stage_io_dict['in']['input_struc_path']).name
+        tmp_struc_input = self.stage_io_dict['in']['input_struc_path']
         if self.stage_io_dict['in']['input_top_path'] is not None:
-            tmp_top_input = Path(self.stage_io_dict['in']['input_top_path']).name
+            tmp_top_input = self.stage_io_dict['in']['input_top_path']
 
         # create intructions
         instructions = [
@@ -226,53 +181,24 @@ class Curves(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # change back to original directory
-        os.chdir(original_directory)
-
         workdir = self.stage_io_dict.get("unique_dir", "")
-        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
 
         # create zipfile and write output inside
-        with zipfile.ZipFile(zip_host_path, "w") as zf:
-            for curves_outfile in Path(workdir).glob("curves_output*"):
-                fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
-                if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
-                    zf.write(
-                        curves_outfile,
-                        arcname=curves_outfile.name)
+        if self.io_dict["out"]["output_zip_path"]:
+            with zipfile.ZipFile(self.sandbox_file("output_zip_path"), "w") as zf:
+                for curves_outfile in Path(workdir).glob("curves_output*"):
+                    fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
+                    if curves_outfile.suffix not in (".cda", ".lis", ".zip"):
+                        zf.write(
+                            curves_outfile,
+                            arcname=curves_outfile.name)
 
         # rename cda and lis files
-        # In container mode stage_io_dict["out"] paths are container-internal
-        # (e.g. /data/file.cda), not host paths. Always rename within unique_dir
-        # so that copy_to_host() can find them by filename.
-        unique_dir = Path(self.stage_io_dict.get("unique_dir", ""))
-        (unique_dir / "curves_output.cda").rename(
-            unique_dir / Path(self.stage_io_dict["out"]["output_cda_path"]).name)
-        (unique_dir / "curves_output.lis").rename(
-            unique_dir / Path(self.stage_io_dict["out"]["output_lis_path"]).name)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
+        (Path(workdir) / "curves_output.cda").rename(self.sandbox_file("output_cda_path"))
+        (Path(workdir) / "curves_output.lis").rename(self.sandbox_file("output_lis_path"))
 
 
-def biobb_curves(
-        input_struc_path: str, output_lis_path: str, output_cda_path: str,
-        input_top_path: Optional[str] = None, output_zip_path: Optional[str] = None,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`Curves <biobb_dna.curvesplus.biobb_curves.Curves>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_curves.Curves.launch>` method."""
-    return Curves(**dict(locals())).launch()
-
-
-biobb_curves.__doc__ = Curves.__doc__
-main = Curves.get_main(biobb_curves, "Execute Cur+ form the Curves+ software suite.")
+biobb_curves = launcher(Curves)
 
 if __name__ == '__main__':
-    main()
+    Curves.main()

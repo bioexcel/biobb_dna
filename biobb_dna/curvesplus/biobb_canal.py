@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
 """Module containing the Canal class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class Canal(BiobbObject):
@@ -28,12 +26,12 @@ class Canal(BiobbObject):
             * **itdel** (*int*) - (1) Iteration delimiter.
             * **lev1** (*int*) - (0) Lower base level limit (i.e. base pairs) used for analysis.
             * **lev2** (*int*) - (0) Upper base level limit used for analysis. If lev1 > 0 and lev2 = 0, lev2 is set to lev1 (i.e. analyze lev1 only). If lev1=lev2=0, lev1 is set to 1 and lev2 is set to the length of the oligmer (i.e. analyze all levels).
-            * **nastr** (*str*) - ('NA') character string used to indicate missing data in .ser files.
+            * **nastr** (*str*) - (None) character string used to indicate missing data in .ser files. If not set, the tool uses its own default.
             * **cormin** (*float*) - (0.6) minimal absolute value for printing linear correlation coefficients between pairs of analyzed variables.
             * **series** (*bool*) - (False) if True then output spatial or time series data. Only possible for the analysis of single structures or single trajectories.
             * **histo** (*bool*) - (False) if True then output histogram data.
             * **corr** (*bool*) - (False) if True than output linear correlation coefficients between all variables.
-            * **sequence** (*str*) - (Optional) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
+            * **sequence** (*str*) - (None) sequence of the first strand of the corresponding DNA fragment, for each .cda file. If not given it will be parsed from .lis file.
             * **binary_path** (*str*) - ('Canal') Path to Canal executable, otherwise the program wil look for Canal executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -41,7 +39,6 @@ class Canal(BiobbObject):
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -67,53 +64,17 @@ class Canal(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_cda_file, input_lis_file=None,
-                 output_zip_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_cda_file': input_cda_file,
-                'input_lis_file': input_lis_file,
-            },
-            'out': {
-                'output_zip_path': output_zip_path
-            }
-        }
+    def __init__(self, input_cda_file: str, input_lis_file: Optional[str] = None,
+                 output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.bases = properties.get('bases', None)
-        self.nastr = properties.get('nastr', None)
-        self.cormin = properties.get('cormin', 0.6)
-        self.lev1 = properties.get('lev1', 0)
-        self.lev2 = properties.get('lev2', 0)
-        self.itst = properties.get('itst', 0)
-        self.itnd = properties.get('itnd', 0)
-        self.itdel = properties.get('itdel', 1)
-        self.series = ".t." if properties.get('series', False) else ".f."
-        self.histo = ".t." if properties.get('histo', False) else ".f."
-        self.corr = ".t." if properties.get('corr', False) else ".f."
-        self.sequence = properties.get('sequence', None)
-        self.binary_path = properties.get('binary_path', 'Canal')
-        self.properties = properties
+        self.series = ".t." if self.series else ".f."
+        self.histo = ".t." if self.histo else ".f."
+        self.corr = ".t." if self.corr else ".f."
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         if self.sequence is None:
             if self.stage_io_dict['in']['input_lis_file'] is None:
@@ -122,7 +83,7 @@ class Canal(BiobbObject):
                     "you must at least specify `input_lis_file` "
                     "so sequence can be parsed from there")
             lis_lines = Path(
-                self.stage_io_dict['in']['input_lis_file']).read_text().splitlines()
+                self.sandbox_file("input_lis_file")).read_text().splitlines()
             for line in lis_lines:
                 if line.strip().startswith("Strand  1"):
                     self.sequence = line.split(" ")[-1]
@@ -132,18 +93,7 @@ class Canal(BiobbObject):
                         self.out_log)
 
         # define temporary file name
-        if self.container_path:
-            tmp_cda_path = Path(self.container_working_dir).joinpath(Path(self.stage_io_dict['in']['input_cda_file']).name)
-        else:
-            tmp_cda_path = Path(self.stage_io_dict['in']['input_cda_file']).name
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        if self.container_path:
-            os.chdir(self.container_working_dir)
-        else:
-            os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        tmp_cda_path = self.stage_io_dict['in']['input_cda_file']
 
         # create intructions
         instructions = [
@@ -179,14 +129,10 @@ class Canal(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # change back to original directory
-        os.chdir(original_directory)
-
         workdir = self.stage_io_dict.get("unique_dir", "")
-        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
 
         # create zipfile and write output inside
-        with zipfile.ZipFile(zip_host_path, "w") as zf:
+        with zipfile.ZipFile(self.sandbox_file("output_zip_path"), "w") as zf:
             for canal_outfile in Path(workdir).glob("canal_output*"):
                 fu.log(f"Adding {canal_outfile} to zip file", self.out_log, self.global_log)
                 if canal_outfile.suffix != ".zip":
@@ -194,31 +140,9 @@ class Canal(BiobbObject):
                         canal_outfile,
                         arcname=canal_outfile.name)
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
-
-
-def biobb_canal(
-        input_cda_file: str,
-        output_zip_path: str,
-        input_lis_file: Optional[str] = None,
-        properties: Optional[dict] = None,
-        **kwargs) -> int:
-    """Create :class:`Canal <biobb_dna.curvesplus.biobb_canal.Canal>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canal.Canal.launch>` method."""
-    return Canal(**dict(locals())).launch()
-
-
-biobb_canal.__doc__ = Canal.__doc__
-main = Canal.get_main(biobb_canal, "Execute Canal from the Curves+ software suite.")
+biobb_canal = launcher(Canal)
 
 
 if __name__ == '__main__':
-    main()
+    Canal.main()

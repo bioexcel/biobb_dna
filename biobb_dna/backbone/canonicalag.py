@@ -6,10 +6,9 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 from biobb_dna.utils.transform import inverse_complement
 
@@ -63,54 +62,22 @@ class CanonicalAG(BiobbObject):
 
     def __init__(
         self,
-        input_alphaC_path,
-        input_alphaW_path,
-        input_gammaC_path,
-        input_gammaW_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_alphaC_path: str,
+        input_alphaW_path: str,
+        input_gammaC_path: str,
+        input_gammaW_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+        self.stride = self.properties.get("stride", 1000)
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_alphaC_path": input_alphaC_path,
-                "input_alphaW_path": input_alphaW_path,
-                "input_gammaC_path": input_gammaC_path,
-                "input_gammaW_path": input_gammaW_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        self.stride = properties.get("stride", 1000)
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
-        ]
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`CanonicalAG <backbone.canonicalag.CanonicalAG>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -129,16 +96,16 @@ class CanonicalAG(BiobbObject):
 
         # read input files
         alphaC = read_series(
-            self.stage_io_dict["in"]["input_alphaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_alphaC_path"), usecols=self.seqpos
         )
         alphaW = read_series(
-            self.stage_io_dict["in"]["input_alphaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_alphaW_path"), usecols=self.seqpos
         )
         gammaC = read_series(
-            self.stage_io_dict["in"]["input_gammaC_path"], usecols=self.seqpos
+            self.sandbox_file("input_gammaC_path"), usecols=self.seqpos
         )
         gammaW = read_series(
-            self.stage_io_dict["in"]["input_gammaW_path"], usecols=self.seqpos
+            self.sandbox_file("input_gammaW_path"), usecols=self.seqpos
         )
 
         # fix angle range so its not negative
@@ -157,7 +124,7 @@ class CanonicalAG(BiobbObject):
             {"Nucleotide": xlabels, "Canonical alpha/gamma": canonical_populations}
         )
         ag_populations_df.to_csv(
-            self.stage_io_dict["out"]["output_csv_path"], index=False
+            self.sandbox_file("output_csv_path"), index=False
         )
 
         # save plot
@@ -179,16 +146,8 @@ class CanonicalAG(BiobbObject):
         axs.set_xlabel("Nucleotide Sequence")
         axs.set_ylabel("Canonical Alpha-Gamma (%)")
         axs.set_title("Nucleotide parameter: Canonical Alpha-Gamma")
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        return 0
 
     def get_xlabels(self, strand1, strand2):
         # get list of tetramers, except first and last two bases
@@ -225,23 +184,7 @@ class CanonicalAG(BiobbObject):
         return dataset
 
 
-def canonicalag(
-    input_alphaC_path: str,
-    input_alphaW_path: str,
-    input_gammaC_path: str,
-    input_gammaW_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`CanonicalAG <dna.backbone.canonicalag.CanonicalAG>` class and
-    execute the: meth: `launch() <dna.backbone.canonicalag.CanonicalAG.launch>` method."""
-    return CanonicalAG(**dict(locals())).launch()
-
-
-canonicalag.__doc__ = CanonicalAG.__doc__
-main = CanonicalAG.get_main(canonicalag, "Calculate Canonical Alpha/Gamma distributions.")
+canonicalag = launcher(CanonicalAG)
 
 if __name__ == "__main__":
-    main()
+    CanonicalAG.main()

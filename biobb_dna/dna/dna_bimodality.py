@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """Module containing the HelParBimodality class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
@@ -11,8 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture  # type: ignore
 from biobb_dna.utils import constants
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -28,7 +26,7 @@ class HelParBimodality(BiobbObject):
         output_csv_path (str): Path to .csv file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.csv>`_. Accepted formats: csv (edam:format_3752).
         output_jpg_path (str): Path to .jpg file where output is saved. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_dna/master/biobb_dna/test/reference/dna/AT_shift_bimod.jpg>`_. Accepted formats: jpg (edam:format_3579).
         properties (dict):
-            * **helpar_name** (*str*) - (Optional) helical parameter name.
+            * **helpar_name** (*str*) - (None) helical parameter name.
             * **confidence_level** (*float*) - (5.0) Confidence level for Byes Factor test (in percentage).
             * **max_iter** (*int*) - (400) Number of maximum iterations for EM algorithm.
             * **tol** (*float*) - (1e-5) Tolerance value for EM algorithm.
@@ -61,59 +59,22 @@ class HelParBimodality(BiobbObject):
     """
 
     def __init__(self, input_csv_file, output_csv_path,
-                 output_jpg_path, input_zip_file=None,
-                 properties=None, **kwargs) -> None:
-        properties = properties or {}
+                 output_jpg_path, input_zip_file: Optional[str] = None,
+                 properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_csv_file': input_csv_file,
-                'input_zip_file': input_zip_file
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        # Properties specific for BB
-        self.confidence_level = properties.get(
-            "confidence_level", 5.0)
-        self.max_iter = properties.get(
-            "max_iter", 400)
-        self.tol = properties.get(
-            "tol", 1e-5)
-        self.helpar_name = properties.get("helpar_name", None)
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # get helical parameter from filename if not specified
         if self.helpar_name is None:
             for hp in constants.helical_parameters:
                 if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
                     condition_2 = (
-                        hp.lower() in Path(self.stage_io_dict['in']['input_zip_file']).name.lower())
+                        hp.lower() in self.stage_io_dict['in']['input_zip_file'].lower())
                 else:
                     condition_2 = False
-                condition_1 = hp.lower() in Path(
-                    self.stage_io_dict['in']['input_csv_file']).name.lower()
+                condition_1 = hp.lower() in self.stage_io_dict['in']['input_csv_file'].lower()
                 if (condition_1 or condition_2):
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -134,23 +95,20 @@ class HelParBimodality(BiobbObject):
 
         # resolve output
         output_csv_path = Path(
-            self.stage_io_dict['out']['output_csv_path']).resolve()
+            self.sandbox_file("output_csv_path")).resolve()
         output_jpg_path = Path(
-            self.stage_io_dict['out']['output_jpg_path']).resolve()
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-        os.chdir(self.stage_io_dict.get("unique_dir", ""))
+            self.sandbox_file("output_jpg_path")).resolve()
 
         # read input
         if self.stage_io_dict.get("in", {}).get("input_zip_file") is not None:
             # if zipfile is specified, extract to temporary folder
             with zipfile.ZipFile(
-                    self.stage_io_dict['in']['input_zip_file'],
+                    self.sandbox_file("input_zip_file"),
                     'r') as zip_ref:
                 zip_ref.extractall(self.stage_io_dict.get("unique_dir", ""))
 
-        data = load_data(Path(self.stage_io_dict['in']['input_csv_file']).name)
+        # the csv file, or the one extracted from the zip file, in the sandbox
+        data = load_data(self.sandbox_file("input_csv_file"))
 
         means, variances, bics, weights = self.fit_to_model(data)
         uninormal, binormal, insuf_ev = self.bayes_factor_criteria(
@@ -221,19 +179,6 @@ class HelParBimodality(BiobbObject):
         plt.savefig(output_jpg_path, format="jpg")
         plt.close()
 
-        # change back to original directory
-        os.chdir(original_directory)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
     def fit_to_model(self, data):
         """
         Fit data to Gaussian Mixture models.
@@ -286,16 +231,7 @@ class HelParBimodality(BiobbObject):
         return bimodal
 
 
-def dna_bimodality(
-        input_csv_file, output_csv_path, output_jpg_path,
-        input_zip_file: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`HelParBimodality <dna.dna_bimodality.HelParBimodality>` class and
-    execute the :meth:`launch() <dna.dna_bimodality.HelParBimodality.launch>` method."""
-    return HelParBimodality(**dict(locals())).launch()
-
-
-dna_bimodality.__doc__ = HelParBimodality.__doc__
-main = HelParBimodality.get_main(dna_bimodality, "Determine binormality/bimodality from a helical parameter dataset.")
+dna_bimodality = launcher(HelParBimodality)
 
 if __name__ == '__main__':
-    main()
+    HelParBimodality.main()

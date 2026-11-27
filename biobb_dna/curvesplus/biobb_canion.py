@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
 """Module containing the Canion class and the command line interface."""
-import os
 import zipfile
 from typing import Optional
 from pathlib import Path
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class Canion(BiobbObject):
@@ -35,14 +33,13 @@ class Canion(BiobbObject):
             * **itdel** (*int*) - (1) Spacing between analyzed snapshots.
             * **rmsf** (*bool*) - (False) If set to True uses the combination of the helical ion parameters and an average helical axis to map the ions into Cartesian space and then calculates their average position (pdb output) and their root mean square fluctuation values (rmsf output). A single pass rmsf algorithm to make this calculation possible with a single read of the trajectory file. This option is generally used for solute atoms and not for solvent molecules or ions.
             * **circ** (*bool*) - (False) If set to True, minicircles are analyzed.
-            * **binary_path** (*str*) - (Canion) Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
+            * **binary_path** (*str*) - ("Canion") Path to Canion executable, otherwise the program wil look for Canion executable in the binaries folder.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("cmip/cmip:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
             * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
     Examples:
@@ -70,55 +67,16 @@ class Canion(BiobbObject):
     """
 
     def __init__(
-            self, input_cdi_path, input_afr_path, input_avg_struc_path,
-            output_zip_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_cdi_path': input_cdi_path,
-                'input_afr_path': input_afr_path,
-                'input_avg_struc_path': input_avg_struc_path,
-            },
-            'out': {
-                'output_zip_path': output_zip_path
-            }
-        }
+            self, input_cdi_path: str, input_afr_path: str, input_avg_struc_path: str,
+            output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'Canion')
-        self.bases = properties.get('bases', None)
-        self.type = properties.get('type', '*')
-        self.dlow = properties.get('dlow', 0)
-        self.dhig = properties.get('dhig', 0)
-        self.rlow = properties.get('rlow', 0)
-        self.rhig = properties.get('rhig', 0)
-        self.alow = properties.get('alow', 0)
-        self.ahig = properties.get('ahig', 360)
-        self.itst = properties.get('itst', 0)
-        self.itnd = properties.get('itnd', 0)
-        self.itdel = properties.get('itdel', 1)
-        self.rmsf = ".t." if properties.get('rmsf', False) else ".f."
-        self.circ = ".t." if properties.get('circ', False) else ".f."
-        self.properties = properties
+        self.rmsf = ".t." if self.rmsf else ".f."
+        self.circ = ".t." if self.circ else ".f."
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         ion_type_options = [
             'Na+',
@@ -142,17 +100,9 @@ class Canion(BiobbObject):
                               f"Option include: {ion_type_options}"))
 
         # define temporary file names
-        input_cdi_file = Path(self.stage_io_dict['in']['input_cdi_path']).name
-        input_afr_file = Path(self.stage_io_dict['in']['input_afr_path']).name
-        input_avg_struc = Path(self.stage_io_dict['in']['input_avg_struc_path']).name
-
-        # change directory to temporary folder
-        original_directory = os.getcwd()
-
-        if self.container_path:
-            os.chdir(self.container_working_dir)
-        else:
-            os.chdir(self.stage_io_dict.get("unique_dir", ""))
+        input_cdi_file = self.stage_io_dict['in']['input_cdi_path']
+        input_afr_file = self.stage_io_dict['in']['input_afr_path']
+        input_avg_struc = self.stage_io_dict['in']['input_avg_struc_path']
 
         # create intructions
         instructions = [
@@ -188,14 +138,10 @@ class Canion(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # change back to original directory
-        os.chdir(original_directory)
-
         workdir = self.stage_io_dict.get("unique_dir", "")
-        zip_host_path = Path(workdir) / Path(self.io_dict["out"]["output_zip_path"]).name
 
         # create zipfile and write output inside
-        with zipfile.ZipFile(zip_host_path, "w") as zf:
+        with zipfile.ZipFile(self.sandbox_file("output_zip_path"), "w") as zf:
             for curves_outfile in Path(workdir).glob("canion_output*"):
                 fu.log(f"Adding {curves_outfile} to zip file", self.out_log, self.global_log)
                 if curves_outfile.suffix != ".zip":
@@ -203,27 +149,8 @@ class Canion(BiobbObject):
                         curves_outfile,
                         arcname=curves_outfile.name)
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
-
-
-def biobb_canion(
-        input_cdi_path: str, input_afr_path: str, input_avg_struc_path: str,
-        output_zip_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`Canion <biobb_dna.curvesplus.biobb_canion.Canion>` class and
-    execute the :meth:`launch() <biobb_dna.curvesplus.biobb_canion.Canion.launch>` method."""
-    return Canion(**dict(locals())).launch()
-
-
-biobb_canion.__doc__ = Canion.__doc__
-main = Canion.get_main(biobb_canion, "Execute Canion form the Curves+ software suite.")
+biobb_canion = launcher(Canion)
 
 if __name__ == '__main__':
-    main()
+    Canion.main()

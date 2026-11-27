@@ -7,8 +7,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -62,56 +61,23 @@ class InterHelParCorrelation(BiobbObject):
     """
 
     def __init__(
-            self, input_filename_shift, input_filename_slide,
-            input_filename_rise, input_filename_tilt,
-            input_filename_roll, input_filename_twist,
-            output_csv_path, output_jpg_path,
-            properties=None, **kwargs) -> None:
-        properties = properties or {}
+            self, input_filename_shift: str, input_filename_slide: str,
+            input_filename_rise: str, input_filename_tilt: str,
+            input_filename_roll: str, input_filename_twist: str,
+            output_csv_path: str, output_jpg_path: str,
+            properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_filename_shift': input_filename_shift,
-                'input_filename_slide': input_filename_slide,
-                'input_filename_rise': input_filename_rise,
-                'input_filename_tilt': input_filename_tilt,
-                'input_filename_roll': input_filename_roll,
-                'input_filename_twist': input_filename_twist
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        self.properties = properties
-        self.basepair = properties.get("basepair", None)
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` object."""
 
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
         # read input
-        shift = load_data(self.stage_io_dict["in"]["input_filename_shift"])
-        slide = load_data(self.stage_io_dict["in"]["input_filename_slide"])
-        rise = load_data(self.stage_io_dict["in"]["input_filename_rise"])
-        tilt = load_data(self.stage_io_dict["in"]["input_filename_tilt"])
-        roll = load_data(self.stage_io_dict["in"]["input_filename_roll"])
-        twist = load_data(self.stage_io_dict["in"]["input_filename_twist"])
+        shift = load_data(self.sandbox_file("input_filename_shift"))
+        slide = load_data(self.sandbox_file("input_filename_slide"))
+        rise = load_data(self.sandbox_file("input_filename_rise"))
+        tilt = load_data(self.sandbox_file("input_filename_tilt"))
+        roll = load_data(self.sandbox_file("input_filename_roll"))
+        twist = load_data(self.sandbox_file("input_filename_twist"))
 
         # get basepair
         if self.basepair is None:
@@ -198,7 +164,7 @@ class InterHelParCorrelation(BiobbObject):
         corr_matrix.loc["roll", "twist"] = corr_matrix.loc["twist", "roll"]
 
         # save csv data
-        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -222,19 +188,9 @@ class InterHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.basepair}\'")
         fig.tight_layout()
         fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
+            self.sandbox_file("output_jpg_path"),
             format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_corr_method(self, corrtype1, corrtype2):
         if corrtype1 == "circular" and corrtype2 == "linear":
@@ -271,19 +227,7 @@ class InterHelParCorrelation(BiobbObject):
         return correlation
 
 
-def interhpcorr(
-        input_filename_shift: str, input_filename_slide: str,
-        input_filename_rise: str, input_filename_tilt: str,
-        input_filename_roll: str, input_filename_twist: str,
-        output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`InterHelParCorrelation <interbp_correlations.interhpcorr.InterHelParCorrelation>` class and
-    execute the :meth:`launch() <interbp_correlations.interhpcorr.InterHelParCorrelation.launch>` method."""
-    return InterHelParCorrelation(**dict(locals())).launch()
-
-
-interhpcorr.__doc__ = InterHelParCorrelation.__doc__
-main = InterHelParCorrelation.get_main(interhpcorr, "Load helical parameter file and save base data individually.")
+interhpcorr = launcher(InterHelParCorrelation)
 
 if __name__ == '__main__':
-    main()
+    InterHelParCorrelation.main()

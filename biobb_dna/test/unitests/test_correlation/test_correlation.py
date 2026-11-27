@@ -104,4 +104,5 @@ class TestIntraBasepairCorrelation():
         assert fx.not_empty(self.paths['output_csv_path'])
         assert fx.not_empty(self.paths['output_jpg_path'])
         assert fx.exe_success(returncode)
-        assert fx.equal(self.paths['output_jpg_path'], self.paths['ref_jpg_output'])
+        # Plot: a few bits of its image hash change with the matplotlib version (3.11: 2 bits here)
+        assert fx.equal(self.paths['output_jpg_path'], self.paths['ref_jpg_output'], percent_tolerance=10)

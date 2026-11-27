@@ -7,9 +7,8 @@ import shutil
 from typing import Optional
 
 from biobb_dna.utils import constants
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class DnaTimeseriesUnzip(BiobbObject):
@@ -55,76 +54,43 @@ class DnaTimeseriesUnzip(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_zip_file,
-                 output_path_csv, output_path_jpg, output_list_path=None, properties=None, **kwargs) -> None:
-        properties = properties or {}
+    def __init__(self, input_zip_file: str,
+                 output_path_csv: str, output_path_jpg: str, output_list_path: Optional[str] = None, properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_zip_file': input_zip_file
-            },
-            'out': {
-                'output_path_csv': output_path_csv,
-                'output_path_jpg': output_path_jpg,
-                'output_list_path': output_list_path
-            }
-        }
-
-        # Properties specific for BB
-        self.type = properties.get('type', None)
-        self.parameter = properties.get('parameter', None)
-        self.sequence = properties.get('sequence', None)
-        self.index = properties.get('index', 1)
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Check that both properties are set
         if self.type is None or self.parameter is None or self.sequence is None:
             fu.log("Properties 'type', 'parameter' and 'sequence' are mandatory to run DnaTimeseriesUnzip. Please set them.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the type is valid
         if self.type not in ["series", "hist"]:
             fu.log(f"Type {self.type} not valid. Valid types are: series, hist.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the parameter is valid
         if self.parameter not in constants.helical_parameters:
             fu.log(f"Parameter {self.parameter} not valid. Valid parameters are: {constants.helical_parameters}.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the sequence is valid
         pattern = r'^[ACGT]+$'
         if not re.match(pattern, self.sequence):
             fu.log(f"Sequence {self.sequence} not valid. Only 'A', 'C', 'G' or 'T' bases allowed.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Check that the index is valid
         if self.index < 1 or self.index >= len(self.sequence) - 1:
             fu.log(f"Index {self.index} not valid. It should be between 0 and {len(self.sequence) - 2}.",
                    self.out_log, self.global_log)
-            exit(1)
+            raise SystemExit(1)
 
         # Get index sequence base and next base
         bp = self.sequence[self.index-1] + self.sequence[self.index]
@@ -135,63 +101,40 @@ class DnaTimeseriesUnzip(BiobbObject):
         jpg_file = f"{filename}.jpg"
 
         # Unzip the file
-        with zipfile.ZipFile(self.stage_io_dict["in"]["input_zip_file"], 'r') as zip_ref:
+        with zipfile.ZipFile(self.sandbox_file("input_zip_file"), 'r') as zip_ref:
             # Check if the csv file exists in the zip file
             if csv_file in zip_ref.namelist():
                 # Extract the file
                 fu.log(f'{csv_file} exists, copying into {self.stage_io_dict["out"]["output_path_csv"]}.',
                        self.out_log, self.global_log)
-                with zip_ref.open(csv_file) as source, open(self.stage_io_dict["out"]["output_path_csv"], "wb") as target:
+                with zip_ref.open(csv_file) as source, open(self.sandbox_file("output_path_csv"), "wb") as target:
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {csv_file} not found in the zip file.", self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
 
             # Check if the jpg file exists in the zip file
             if jpg_file in zip_ref.namelist():
                 # Extract the file
                 fu.log(f'{jpg_file} exists, copying into {self.stage_io_dict["out"]["output_path_jpg"]}.',
                        self.out_log, self.global_log)
-                with zip_ref.open(jpg_file) as source, open(self.stage_io_dict["out"]["output_path_jpg"], "wb") as target:
+                with zip_ref.open(jpg_file) as source, open(self.sandbox_file("output_path_jpg"), "wb") as target:
                     shutil.copyfileobj(source, target)
             else:
                 fu.log(f"File {jpg_file} not found in the zip file.", self.out_log, self.global_log)
-                exit(1)
+                raise SystemExit(1)
 
             # Write the list of files
-            if self.stage_io_dict["out"]["output_list_path"]:
-                with open(self.stage_io_dict["out"]["output_list_path"], "w") as f:
+            if self.stage_io_dict["out"].get("output_list_path"):
+                with open(self.sandbox_file("output_list_path"), "w") as f:
                     for name in zip_ref.namelist():
                         f.write(f"{name}\n")
 
         # Run Biobb block
         # self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
-
-
-def dna_timeseries_unzip(
-        input_zip_file: str,
-        output_path_csv: str,
-        output_path_jpg: str,
-        output_list_path: Optional[str] = None,
-        properties: Optional[dict] = None,
-        **kwargs) -> int:
-    """Create :class:`DnaTimeseriesUnzip <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip>` class and
-    execute the :meth:`launch() <biobb_dna.dna.dna_timeseries_unzip.DnaTimeseriesUnzip.launch>` method."""
-    return DnaTimeseriesUnzip(**dict(locals())).launch()
-
-
-dna_timeseries_unzip.__doc__ = DnaTimeseriesUnzip.__doc__
-main = DnaTimeseriesUnzip.get_main(dna_timeseries_unzip, "Tool for extracting dna_timeseries output files.")
+dna_timeseries_unzip = launcher(DnaTimeseriesUnzip)
 
 if __name__ == '__main__':
-    main()
+    DnaTimeseriesUnzip.main()

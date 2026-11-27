@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """Module containing the AverageStiffness class and the command line interface."""
 
-from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.tools import file_utils as fu
 
 from biobb_dna.utils import constants
-from biobb_dna.utils.common import _from_string_to_list
 from biobb_dna.utils.loader import read_series
 
 
@@ -60,49 +58,18 @@ class AverageStiffness(BiobbObject):
 
     def __init__(
         self,
-        input_ser_path,
-        output_csv_path,
-        output_jpg_path,
-        properties=None,
+        input_ser_path: str,
+        output_csv_path: str,
+        output_jpg_path: str,
+        properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+        self.seqpos = fu.str_to_list(self.seqpos, int)
 
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_ser_path": input_ser_path,
-            },
-            "out": {
-                "output_csv_path": output_csv_path,
-                "output_jpg_path": output_jpg_path,
-            },
-        }
-
-        self.properties = properties
-        self.sequence = properties.get("sequence")
-        self.KT = properties.get("KT", 0.592186827)
-        self.seqpos = [
-            int(elem) for elem in _from_string_to_list(properties.get("seqpos", None))
-        ]
-        self.helpar_name = properties.get("helpar_name", None)
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # check sequence
         if self.sequence is None or len(self.sequence) < 2:
@@ -113,7 +80,7 @@ class AverageStiffness(BiobbObject):
             for hp in constants.helical_parameters:
                 if (
                     hp.lower()
-                    in Path(self.stage_io_dict["in"]["input_ser_path"]).name.lower()
+                    in self.stage_io_dict["in"]["input_ser_path"].lower()
                 ):
                     self.helpar_name = hp
             if self.helpar_name is None:
@@ -149,7 +116,7 @@ class AverageStiffness(BiobbObject):
 
         # read input .ser file
         ser_data = read_series(
-            self.stage_io_dict["in"]["input_ser_path"], usecols=self.seqpos
+            self.sandbox_file("input_ser_path"), usecols=self.seqpos
         )
         if not self.seqpos:
             ser_data = ser_data[ser_data.columns[1:-1]]
@@ -175,41 +142,18 @@ class AverageStiffness(BiobbObject):
         axs.set_title(
             "Base Pair Helical Parameter Stiffness: " f"{self.helpar_name.capitalize()}"
         )
-        fig.savefig(self.stage_io_dict["out"]["output_jpg_path"], format="jpg")
+        fig.savefig(self.sandbox_file("output_jpg_path"), format="jpg")
 
         # save table
         dataset = pd.DataFrame(
             data=avg_stiffness, index=xlabels, columns=[f"{self.helpar_name}_stiffness"]
         )
-        dataset.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        dataset.to_csv(self.sandbox_file("output_csv_path"))
 
         plt.close()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
-
-
-def average_stiffness(
-    input_ser_path: str,
-    output_csv_path: str,
-    output_jpg_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`AverageStiffness <stiffness.average_stiffness.AverageStiffness>` class and
-    execute the :meth:`launch() <stiffness.average_stiffness.AverageStiffness.launch>` method."""
-    return AverageStiffness(**dict(locals())).launch()
-
-
-average_stiffness.__doc__ = AverageStiffness.__doc__
-main = AverageStiffness.get_main(average_stiffness, "Calculate average stiffness constants for each base pair of a trajectory's series.")
+average_stiffness = launcher(AverageStiffness)
 
 if __name__ == '__main__':
-    main()
+    AverageStiffness.main()

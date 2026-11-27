@@ -143,7 +143,7 @@
                 },
                 "stdlib_path": {
                     "type": "string",
-                    "default": "standard",
+                    "default": null,
                     "wf_prop": false,
                     "description": "Path to Curves' standard library files for nucleotides. If not specified will look for 'standard' files in current directory."
                 },
@@ -236,12 +236,6 @@
                     "default": "/data",
                     "wf_prop": false,
                     "description": "Path to an internal directory in the container."
-                },
-                "container_working_dir": {
-                    "type": "string",
-                    "default": null,
-                    "wf_prop": false,
-                    "description": "Path to the internal CWD in the container."
                 },
                 "container_user_id": {
                     "type": "string",

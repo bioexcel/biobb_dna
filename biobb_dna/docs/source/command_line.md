@@ -206,7 +206,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
 * **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
@@ -225,7 +224,6 @@ properties:
   container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: docker
   container_volume_path: /tmp
-  container_working_dir: /tmp
   corr: true
   histo: true
   sequence: CGCGAATTCGCG
@@ -238,7 +236,6 @@ properties:
   container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: singularity
   container_volume_path: /tmp
-  container_working_dir: /tmp
   corr: true
   histo: true
   sequence: CGCGAATTCGCG
@@ -271,8 +268,7 @@ biobb_canal --config config_biobb_canal.yml --input_cda_file curves_output.cda -
     "sequence": "CGCGAATTCGCG",
     "container_path": "docker",
     "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -286,8 +282,7 @@ biobb_canal --config config_biobb_canal.yml --input_cda_file curves_output.cda -
     "sequence": "CGCGAATTCGCG",
     "container_path": "singularity",
     "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -353,7 +348,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
 * **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
@@ -373,7 +367,6 @@ properties:
   container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: docker
   container_volume_path: /tmp
-  container_working_dir: /tmp
   dhig: 7.2
   dlow: 5.8
   rhig: 18
@@ -387,7 +380,6 @@ properties:
   container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: singularity
   container_volume_path: /tmp
-  container_working_dir: /tmp
   dhig: 7.2
   dlow: 5.8
   rhig: 18
@@ -423,8 +415,7 @@ biobb_canion --config config_biobb_canion.yml --input_cdi_path THGA_K.cdi --inpu
     "rhig": 18,
     "container_path": "docker",
     "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -439,8 +430,7 @@ biobb_canion --config config_biobb_canion.yml --input_cdi_path THGA_K.cdi --inpu
     "rhig": 18,
     "container_path": "singularity",
     "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -509,7 +499,6 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (cmip/cmip:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
 * **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
 ### YAML
@@ -526,7 +515,6 @@ properties:
   container_image: quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: docker
   container_volume_path: /tmp
-  container_working_dir: /tmp
   ions: true
   s1range: '1:12'
   stdlib_path: path_to_stdlib
@@ -538,7 +526,6 @@ properties:
   container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0
   container_path: singularity
   container_volume_path: /tmp
-  container_working_dir: /tmp
   ions: true
   s1range: '1:12'
   stdlib_path: path_to_stdlib
@@ -567,8 +554,7 @@ biobb_curves --config config_biobb_curves.yml --input_struc_path structure.strip
     "stdlib_path": "path_to_stdlib",
     "container_path": "docker",
     "container_image": "quay.io/biocontainers/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -581,8 +567,7 @@ biobb_curves --config config_biobb_curves.yml --input_struc_path structure.strip
     "stdlib_path": "path_to_stdlib",
     "container_path": "singularity",
     "container_image": "https://depot.galaxyproject.org/singularity/biobb_dna:5.2.1--pyhdfd78af_0",
-    "container_volume_path": "/tmp",
-    "container_working_dir": "/tmp"
+    "container_volume_path": "/tmp"
   }
 }
 ```
@@ -994,7 +979,7 @@ Config parameters for this building block:
 * **sequence** (*string*): (None) Nucleic acid sequence corresponding to the input .ser file. Length of sequence is expected to be the same as the total number of columns in the .ser file, minus the index column (even if later on a subset of columns is selected with the *usecols* option).
 * **bins** (*integer*): (None) Bins for histogram. Parameter has same options as matplotlib.pyplot.hist.
 * **helpar_name** (*string*): (None) Helical parameter name. It must match the name of the helical parameter in the .ser input file. 
-* **stride** (*integer*): (1000) granularity of the number of snapshots for plotting time series.
+* **stride** (*integer*): (10) granularity of the number of snapshots for plotting time series.
 * **seqpos** (*array*): (None) list of sequence positions (columns indices starting by 1) to analyze.  If not specified it will analyse the complete sequence.
 * **remove_tmp** (*boolean*): (True) Remove temporal files.
 * **restart** (*boolean*): (False) Do not execute if output files exist.

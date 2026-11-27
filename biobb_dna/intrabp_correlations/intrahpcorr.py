@@ -7,8 +7,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_dna.utils.loader import load_data
 
 
@@ -62,56 +61,23 @@ class IntraHelParCorrelation(BiobbObject):
     """
 
     def __init__(
-            self, input_filename_shear, input_filename_stretch,
-            input_filename_stagger, input_filename_buckle,
-            input_filename_propel, input_filename_opening,
-            output_csv_path, output_jpg_path,
-            properties=None, **kwargs) -> None:
-        properties = properties or {}
+            self, input_filename_shear: str, input_filename_stretch: str,
+            input_filename_stagger: str, input_filename_buckle: str,
+            input_filename_propel: str, input_filename_opening: str,
+            output_csv_path: str, output_jpg_path: str,
+            properties: Optional[dict] = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_filename_shear': input_filename_shear,
-                'input_filename_stretch': input_filename_stretch,
-                'input_filename_stagger': input_filename_stagger,
-                'input_filename_buckle': input_filename_buckle,
-                'input_filename_propel': input_filename_propel,
-                'input_filename_opening': input_filename_opening
-            },
-            'out': {
-                'output_csv_path': output_csv_path,
-                'output_jpg_path': output_jpg_path
-            }
-        }
-
-        self.properties = properties
-        self.base = properties.get("base", None)
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` object."""
 
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
         # read input
-        shear = load_data(self.stage_io_dict["in"]["input_filename_shear"])
-        stretch = load_data(self.stage_io_dict["in"]["input_filename_stretch"])
-        stagger = load_data(self.stage_io_dict["in"]["input_filename_stagger"])
-        buckle = load_data(self.stage_io_dict["in"]["input_filename_buckle"])
-        propel = load_data(self.stage_io_dict["in"]["input_filename_propel"])
-        opening = load_data(self.stage_io_dict["in"]["input_filename_opening"])
+        shear = load_data(self.sandbox_file("input_filename_shear"))
+        stretch = load_data(self.sandbox_file("input_filename_stretch"))
+        stagger = load_data(self.sandbox_file("input_filename_stagger"))
+        buckle = load_data(self.sandbox_file("input_filename_buckle"))
+        propel = load_data(self.sandbox_file("input_filename_propel"))
+        opening = load_data(self.sandbox_file("input_filename_opening"))
 
         # get base
         if self.base is None:
@@ -200,7 +166,7 @@ class IntraHelParCorrelation(BiobbObject):
         corr_matrix.loc["propel", "opening"] = corr_matrix.loc["opening", "propel"]
 
         # save csv data
-        corr_matrix.to_csv(self.stage_io_dict["out"]["output_csv_path"])
+        corr_matrix.to_csv(self.sandbox_file("output_csv_path"))
 
         # create heatmap
         fig, axs = plt.subplots(1, 1, dpi=300, tight_layout=True)
@@ -224,19 +190,9 @@ class IntraHelParCorrelation(BiobbObject):
             f"for Base Pair Step \'{self.base}\'")
         fig.tight_layout()
         fig.savefig(
-            self.stage_io_dict['out']['output_jpg_path'],
+            self.sandbox_file("output_jpg_path"),
             format="jpg")
         plt.close()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return 0
 
     def get_corr_method(self, corrtype1, corrtype2):
         if corrtype1 == "circular" and corrtype2 == "linear":
@@ -273,19 +229,7 @@ class IntraHelParCorrelation(BiobbObject):
         return correlation
 
 
-def intrahpcorr(
-        input_filename_shear: str, input_filename_stretch: str,
-        input_filename_stagger: str, input_filename_buckle: str,
-        input_filename_propel: str, input_filename_opening: str,
-        output_csv_path: str, output_jpg_path: str,
-        properties: Optional[dict] = None, **kwargs) -> int:
-    """Create :class:`IntraHelParCorrelation <intrabp_correlations.intrahpcorr.IntraHelParCorrelation>` class and
-    execute the :meth:`launch() <intrabp_correlations.intrahpcorr.IntraHelParCorrelation.launch>` method."""
-    return IntraHelParCorrelation(**dict(locals())).launch()
-
-
-intrahpcorr.__doc__ = IntraHelParCorrelation.__doc__
-main = IntraHelParCorrelation.get_main(intrahpcorr, "Load helical parameter file and save base data individually.")
+intrahpcorr = launcher(IntraHelParCorrelation)
 
 if __name__ == '__main__':
-    main()
+    IntraHelParCorrelation.main()
