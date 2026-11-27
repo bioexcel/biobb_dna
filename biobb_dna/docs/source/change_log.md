@@ -1,5 +1,22 @@
 # Biobb Analysis changelog
 
+## [Unreleased]
+
+## What's new in version [5.4.0](https://github.com/bioexcel/biobb_dna/releases/tag/v5.4.0)?
+
+### Changes
+
+* [UPDATE] Update to biobb_common 5.4.0.
+* [FIX] `basepair_stiffness`: the `scaling` values are no longer truncated to integers. The default `10.6` of tilt, roll and twist was applied as `10`, so their stiffness values change.
+* [FIX] `interseqcorr` and `intraseqcorr`: the angular parameters (roll, tilt, twist, buckle, ...) are correlated with the circular method and the others with Pearson; the two methods were swapped.
+* [FIX] `dna_averages`: the backbone torsions (alphaC, betaW, ...) work, with one value per nucleotide; they failed with an `AttributeError`.
+* [FIX] `biobb_curves`: `output_zip_path` is optional, as documented.
+* [FIX] `dna_timeseries_unzip`: `output_list_path` is optional, as documented.
+* [FIX] `biobb_curves`, `biobb_canal` and `biobb_canion` run in containers: they changed the host working directory to the container's `container_working_dir`.
+* [FIX] `bipopulations` no longer prints debug output.
+* [DOCS] `dna_timeseries`: the `stride` property documents its default (10).
+* [UPDATE] Python 3.11 to 3.13.
+
 ## What's new in version [5.3.0](https://github.com/bioexcel/biobb_amber/releases/tag/v5.3.0)?
 
 ### Changes
