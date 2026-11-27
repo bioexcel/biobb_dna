@@ -20,7 +20,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["adapters", "docs", "test"]),
     package_data={"biobb_dna": ["py.typed"]},
     install_requires=["biobb_common==5.3.1", "pandas>=1.3.0", "scikit-learn>=0.24.2"],
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     entry_points={
         "console_scripts": [
             "biobb_curves = biobb_dna.curvesplus.biobb_curves:Curves.main",
@@ -46,7 +46,9 @@ setuptools.setup(
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
